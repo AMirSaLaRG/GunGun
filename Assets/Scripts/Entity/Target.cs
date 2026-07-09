@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
@@ -7,7 +8,11 @@ public class Target : MonoBehaviour, IDamagable
     protected PlayerController player;
 
     public Rigidbody rb { get; private set; }
+    public Animator anim { get; private set; }
     public CapsuleCollider mycollider { private set; get; }
+
+    [Header("Visuals")]
+    [SerializeField] private GameObject visuals;
 
     [Header("TargetSetup")]
     [SerializeField] protected float moveSpeed = 5;
@@ -28,18 +33,23 @@ public class Target : MonoBehaviour, IDamagable
     public Action<RespawnBox> atEndAction;
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
-    private bool isMoving = true;
+    public bool isMoving = true;
     private bool isFacingCamera = false;
 
     private float DurationEndTime = 0;
     private bool isDurationEnded = false;
     protected bool isAtFinalPosition;
 
+
+
+    protected string boolAnimRunKeyWord = "IsRunning";
+    protected string boolAnimDieKeyWord = "IsDead";
     protected virtual void Awake()
     {
         player = FindFirstObjectByType<PlayerController>();
 
         rb = GetComponent<Rigidbody>();
+        anim = visuals.GetComponent<Animator>();
 
         mycollider = GetComponent<CapsuleCollider>();
         DurationEndTime = Mathf.Infinity;
@@ -54,6 +64,8 @@ public class Target : MonoBehaviour, IDamagable
 
         if (isMoving)
             MoveToTarget();
+        if (anim  != null) 
+            anim?.SetBool(boolAnimRunKeyWord, isMoving);
 
 
         if (isFacingCamera)
@@ -80,7 +92,6 @@ public class Target : MonoBehaviour, IDamagable
 
         if (healthPoint <= 0)
         {
-
             Die();
         }
     }
@@ -103,18 +114,24 @@ public class Target : MonoBehaviour, IDamagable
 
     protected virtual void LookAtCamera()
     {
-        Vector3 direction = Camera.main.transform.position - transform.position;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Quaternion targetRotation = GetDirectionTowardCamera();
 
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
         float angle = Quaternion.Angle(transform.rotation, targetRotation);
 
-        if (angle < 5f)
+        if (angle < .5f)
         {
             isFacingCamera = false;
             TargetAtFinalPosition();
         }
+    }
+
+    protected Quaternion GetDirectionTowardCamera()
+    {
+        Vector3 direction = Camera.main.transform.position - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        return targetRotation;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -159,7 +176,7 @@ public class Target : MonoBehaviour, IDamagable
             AtEndOfDuration();
         }
     }
-    private void AtEndOfDuration()
+    protected virtual void AtEndOfDuration()
     {
 
         AtEndOfDurationAction();
@@ -170,13 +187,15 @@ public class Target : MonoBehaviour, IDamagable
     {
         if (myRespawnManager != null)
             atEndAction?.Invoke(myRespawnBox);
+
+        transform.DOKill();
+
     }
 
     private void Die()
     {
         if (isDurationEnded)
             return;
-
 
         AtDieAction();
 
@@ -188,9 +207,11 @@ public class Target : MonoBehaviour, IDamagable
     {       
         if (myRespawnManager != null)
             atEndAction?.Invoke(myRespawnBox);
+        if (anim != null)
+            anim?.SetBool(boolAnimDieKeyWord, true);
 
+        transform.DOKill();
 
-        rb.constraints = RigidbodyConstraints.None;
     }
 
 
