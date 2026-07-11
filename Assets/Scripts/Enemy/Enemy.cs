@@ -22,6 +22,9 @@ public class Enemy : Target
     private Vector3 startingRotation;
     private Vector3 startingPos;
 
+
+
+
     public bool ShouldDance = false;
     private bool isDancing = false;
     private Sequence danceSq;
@@ -37,6 +40,7 @@ public class Enemy : Target
         startingPos = transform.position;
 
 
+
     }
 
     protected override void Update()
@@ -44,6 +48,8 @@ public class Enemy : Target
         base.Update();
 
     }
+
+
 
     protected override void AtDieAction()
     {
@@ -53,6 +59,7 @@ public class Enemy : Target
         if (shootCo != null)
             StopCoroutine(shootCo);
 
+        
         
 
     }

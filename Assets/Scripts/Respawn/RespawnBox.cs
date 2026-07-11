@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class RespawnBox : MonoBehaviour
 {
+    [Header("Respawn Setup")]
+    [SerializeField] private bool isScaling;
+
     [Header("Setup")]
     [SerializeField] private Transform rightRespawnPoint;
     [SerializeField] private Transform leftRespawnPoint;
@@ -14,6 +18,11 @@ public class RespawnBox : MonoBehaviour
     [SerializeField] private GameObject enemyDummy;
     [SerializeField] private Material DummyMaterial;
 
+    [Header("Curtain Setup")]
+    [SerializeField] private Transform myCurtain;
+    private float openZ = 1.6f;
+    private float CloseZ;
+    private float curtainTransitionTime = 1.5f;
    
     private List<Transform> respawnPoints = new List<Transform>();
 
@@ -22,17 +31,35 @@ public class RespawnBox : MonoBehaviour
     private GameObject dummyTop;
     private GameObject dummyBottom;
 
+    PlayerController player;
+    public bool isActive {  get; private set; } = false;
     public bool isSingleSummon { private set; get; } = false;
 
     private void Awake()
-    {
+    { 
         ClearDummy();
         SignUpRespawnPoints();
+
+        if (myCurtain != null )
+            CloseZ = myCurtain.localScale.z;
     }
 
 
+    public Target RespawnTargetOn(Transform onTransform, GameObject respawnObject)
+    {
+        Vector3 onPos = onTransform.position;
 
-    [ContextMenu("test")]
+        if (respawnObject == null) return null;
+
+        GameObject newTarget = Instantiate(respawnObject, onPos, Quaternion.identity);
+
+        Target targetData = newTarget.GetComponent<Target>();
+        targetData.SetUpTarget(player, isScaling);
+
+        targetData.RespawnTheTarget(ViewTracker.position);
+
+        return targetData;
+    }
 
     public Target RespawnRandomSide(GameObject respawnTargetPrefab)
     {
@@ -113,34 +140,6 @@ public class RespawnBox : MonoBehaviour
         return doubleRespawnPoint;
     }
 
-    public Target RespawnTargetOn(Vector3 onPos, GameObject respawnObject)
-    {
-        if (respawnObject == null) return null;
-
-        GameObject newTarget = Instantiate(respawnObject, onPos, Quaternion.identity);
-
-
-        Target targetData = newTarget.GetComponent<Target>();
-
-        targetData.RespawnTheTarget(ViewTracker.position);
-
-        return targetData;
-    }
-    public Target RespawnTargetOn(Transform onTransform, GameObject respawnObject)
-    {
-        Vector3 onPos = onTransform.position;
-
-        if (respawnObject == null) return null;
-
-        GameObject newTarget = Instantiate(respawnObject, onPos, Quaternion.identity);
-
-
-        Target targetData = newTarget.GetComponent<Target>();
-
-        targetData.RespawnTheTarget(ViewTracker.position);
-
-        return targetData;
-    }
 
     private void SignUpRespawnPoints()
     {
@@ -167,6 +166,25 @@ public class RespawnBox : MonoBehaviour
 
         isSingleSummon = respawnPoints.Count <= 1;
     }
+
+    private void SetActive (bool isActive) => this.isActive = isActive;
+
+    [ContextMenu("testActive")]
+    public void ActiveThisBox()
+    {
+        SetActive(true);
+        if (myCurtain != null)
+            myCurtain.DOScaleZ(openZ, curtainTransitionTime).SetEase(Ease.InOutElastic);
+    }
+    [ContextMenu("testDeActive")]
+
+    public void DeActivateThisBox()
+    {
+        SetActive(false);
+        if (myCurtain != null)
+            myCurtain.DOScaleZ(CloseZ, curtainTransitionTime);
+    }
+
     [ContextMenu ("DummyCheck")]
     public void ShowDummy()
     {
@@ -181,6 +199,7 @@ public class RespawnBox : MonoBehaviour
     }
     [ContextMenu("DummyClear")]
 
+
     public void ClearDummy()
     {
         if (dummyRight != null) 
@@ -188,4 +207,6 @@ public class RespawnBox : MonoBehaviour
         if (dummyLeft != null) 
             DestroyImmediate(dummyRight);
     }
+
+    public void SetPlayer(PlayerController player) => this.player = player;
 }

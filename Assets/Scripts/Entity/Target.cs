@@ -40,14 +40,15 @@ public class Target : MonoBehaviour, IDamagable
     private bool isDurationEnded = false;
     protected bool isAtFinalPosition;
 
+    private bool isScaling;
+    private Vector3 StartingScale;
+    private float scaleTime = 1f;
 
 
     protected string boolAnimRunKeyWord = "IsRunning";
     protected string boolAnimDieKeyWord = "IsDead";
     protected virtual void Awake()
     {
-        player = FindFirstObjectByType<PlayerController>();
-
         rb = GetComponent<Rigidbody>();
         anim = visuals.GetComponent<Animator>();
 
@@ -57,7 +58,12 @@ public class Target : MonoBehaviour, IDamagable
 
     protected virtual void Start()
     {
+        StartingScale = transform.localScale;
+
+        if (isScaling)
+            ScaleToOrginal();
     }
+
 
     protected virtual void Update()
     {
@@ -76,6 +82,25 @@ public class Target : MonoBehaviour, IDamagable
                 CheckDurationEnded();
 
     }
+
+    public void SetUpTarget(PlayerController player, bool isScaling)
+    {
+        this.player = player;
+
+        this.isScaling = isScaling;
+ 
+
+    }
+
+    private void ScaleToOrginal()
+    {
+        transform.localScale = Vector3.zero;
+
+        transform.DOScale(StartingScale, scaleTime);
+    }
+
+
+
     public virtual void TakeDamage(int damage)
     {
         if (isDurationEnded)
@@ -209,6 +234,8 @@ public class Target : MonoBehaviour, IDamagable
             atEndAction?.Invoke(myRespawnBox);
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);
+
+        rb.constraints = RigidbodyConstraints.None;
 
         transform.DOKill();
 

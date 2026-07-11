@@ -25,8 +25,11 @@ public class RespawnManager : MonoBehaviour
     private bool isOnRandomRespawn = true;
     private bool wasLastRespawnHostage = false;
 
+    PlayerController player;
+
     private void Awake()
     {
+        player = FindFirstObjectByType<PlayerController>();
         myRespawnBoxes = GetComponentsInChildren<RespawnBox>();
 
         if (myRespawnBoxes == null || myRespawnBoxes.Length == 0)
@@ -35,6 +38,15 @@ public class RespawnManager : MonoBehaviour
             enabled = false; // Stop the script from running
             return;
         }
+
+        if (player == null)
+        {
+            Debug.Log("CouldNotFindPlayer");
+            return;
+        }
+
+        foreach (var box in myRespawnBoxes)
+            box.SetPlayer(player);
 
         EmptyBoxes = myRespawnBoxes.ToList();
     }
