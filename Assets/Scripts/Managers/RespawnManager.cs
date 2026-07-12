@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 public class RespawnManager : MonoBehaviour
 {
@@ -24,6 +21,8 @@ public class RespawnManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject hostagePrefab;
+
+    public System.Action jobDone;
 
     private RespawnBox[] myRespawnBoxes;
     private List<RespawnBox> activeEmptyBoxes = new List<RespawnBox>();
@@ -66,7 +65,6 @@ public class RespawnManager : MonoBehaviour
         boxes = myRespawnBoxes.ToList();
         deActiveBoxes = myRespawnBoxes.ToList();
 
-        ActivateRandomBoxes(numActiveBoxes);
     }
 
     private void Update()
@@ -90,6 +88,8 @@ public class RespawnManager : MonoBehaviour
         respawns.AddRange(newRespawns);
 
         numActiveBoxes = newActiveBoxes;
+        ActivateRandomBoxes(numActiveBoxes);
+
 
         minMaxAvailableRespawns = newMinMaxParallarRespawns;
 
@@ -193,11 +193,19 @@ public class RespawnManager : MonoBehaviour
             CountDown--;
 
         if (CountDown <= 0)
+        {
             isSummonAll = true;
+            jobDone?.Invoke();
+        }
     }
 
-    private void ActivateRandomBoxes(int num)
+    private void ActivateRandomBoxes(int newNum)
     {
+        int currentNum = activeEmptyBoxes.Count;
+        int num = newNum - currentNum;
+        if (num <= 0)
+            return;
+
         if (num > deActiveBoxes.Count)
         {
             Debug.Log("There is No More Available Boxes");
