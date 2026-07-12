@@ -20,7 +20,7 @@ public class RespawnBox : MonoBehaviour
 
     [Header("Curtain Setup")]
     [SerializeField] private Transform myCurtain;
-    private float openZ = 1.6f;
+    private float openZ = 78f;
     private float CloseZ;
     private float curtainTransitionTime = 1.5f;
    

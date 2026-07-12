@@ -14,11 +14,16 @@ public class RespawnManager : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] float hostageRespawnChance;
     [SerializeField] [Range(0f, 1f)] float DoubleChanceEnemy;
     [SerializeField] [Range(0f, 1f)] float DoubleChanceHostage;
+    [SerializeField] private int startingActiveBoxes;
+    [Header("Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject hostagePrefab;
 
     private RespawnBox[] myRespawnBoxes;
-    private List<RespawnBox> EmptyBoxes = new List<RespawnBox>();
+    private List<RespawnBox> activeEmptyBoxes = new List<RespawnBox>();
+    private List<RespawnBox> boxes = new List<RespawnBox>();
+    private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
+
     private List<RespawnBox> doubleSpawnBoxes = new List<RespawnBox>();
 
     private float nextTimeToRespawn = 0;
@@ -48,9 +53,58 @@ public class RespawnManager : MonoBehaviour
         foreach (var box in myRespawnBoxes)
             box.SetPlayer(player);
 
-        EmptyBoxes = myRespawnBoxes.ToList();
+        boxes = myRespawnBoxes.ToList();
+        deActiveBoxes = myRespawnBoxes.ToList();
+
+        ActivateRandomBoxes(startingActiveBoxes);
     }
 
+    private void ActivateRandomBoxes(int num)
+    {
+        if (num > deActiveBoxes.Count)
+        {
+            Debug.Log("There is No More Available Boxes");
+            return;
+        }
+
+        List<RespawnBox> newActiveBoxes = new List<RespawnBox>();
+        newActiveBoxes = GetRandomBox(num, deActiveBoxes);
+
+        foreach (var box in newActiveBoxes)
+        {
+            box.ActiveThisBox();
+            activeEmptyBoxes.Add(box);
+
+            if (newActiveBoxes.Contains(box))
+                deActiveBoxes.Remove(box);
+        }
+    }
+
+    private List<RespawnBox> GetRandomBox(int num, List<RespawnBox> availableBoxes)
+    {
+        List<RespawnBox> returnBoxes = new List<RespawnBox>();
+
+        int numBoxes = availableBoxes.Count;
+
+        foreach (var i in HashRandomSelection(numBoxes, num))
+        {
+            returnBoxes.Add(availableBoxes[i]);
+        }
+        return returnBoxes;
+    }
+
+    private List<int> HashRandomSelection(int Range, int returnNum)
+    {
+        HashSet<int> resaults = new HashSet<int>();
+
+        while (resaults.Count < returnNum)
+        {
+            int num = Random.Range(0, Range);
+            resaults.Add(num);
+        }
+
+        return resaults.ToList();
+    }
 
     private void Update()
     {
@@ -82,13 +136,13 @@ public class RespawnManager : MonoBehaviour
     }
     private RespawnBox ChoseRandomEmptyBox(bool mustMulti)
     {
-        if (EmptyBoxes.Count == 0)
+        if (activeEmptyBoxes.Count == 0)
             return null;
 
         if (mustMulti == false)
         {
-            int randomIndex = Random.Range(0, EmptyBoxes.Count);
-            return EmptyBoxes[randomIndex];
+            int randomIndex = Random.Range(0, activeEmptyBoxes.Count);
+            return activeEmptyBoxes[randomIndex];
         }
         else if (mustMulti == true)
         {
@@ -105,7 +159,7 @@ public class RespawnManager : MonoBehaviour
     private List<RespawnBox> GetMultiEmptyList()
     {
         List<RespawnBox> EmptyBoxesMulty = new List<RespawnBox>();
-        foreach (var box in EmptyBoxes)
+        foreach (var box in activeEmptyBoxes)
         {
             if (box.isSingleSummon == false)
                 EmptyBoxesMulty.Add(box);
@@ -151,7 +205,7 @@ public class RespawnManager : MonoBehaviour
     {
         RespawnBox box = ChoseRandomEmptyBox(false);
 
-        if (EmptyBoxes.Contains(box) == false)
+        if (activeEmptyBoxes.Contains(box) == false)
             return;
 
         wasLastRespawnHostage = false;
@@ -163,14 +217,14 @@ public class RespawnManager : MonoBehaviour
         newTargetData.SetDanceMode(true);
         newTarget.atEndAction += OnRespawnLeftTheBox;
 
-        EmptyBoxes.Remove(box);
+        activeEmptyBoxes.Remove(box);
 
     }
     private void RespawnSingleHostage()
     {
         RespawnBox box = ChoseRandomEmptyBox(false);
 
-        if (EmptyBoxes.Contains(box) == false)
+        if (activeEmptyBoxes.Contains(box) == false)
             return;
 
         wasLastRespawnHostage = true;
@@ -180,7 +234,7 @@ public class RespawnManager : MonoBehaviour
         newTarget.SetMyRespawnManager(this);
         newTarget.atEndAction += OnRespawnLeftTheBox;
 
-        EmptyBoxes.Remove(box);
+        activeEmptyBoxes.Remove(box);
 
     }
 
@@ -188,7 +242,7 @@ public class RespawnManager : MonoBehaviour
     {
         RespawnBox box = ChoseRandomEmptyBox(true);
 
-        if (EmptyBoxes.Contains(box) == false)
+        if (activeEmptyBoxes.Contains(box) == false)
             return;
 
         wasLastRespawnHostage = true;
@@ -203,14 +257,14 @@ public class RespawnManager : MonoBehaviour
         }
 
         doubleSpawnBoxes.Add(box);
-        EmptyBoxes.Remove(box);
+        activeEmptyBoxes.Remove(box);
 
     }
     private void RespawnDoubleEnemy()
     {
         RespawnBox box = ChoseRandomEmptyBox(true);
 
-        if (EmptyBoxes.Contains(box) == false)
+        if (activeEmptyBoxes.Contains(box) == false)
             return;
 
         wasLastRespawnHostage = false;
@@ -225,7 +279,7 @@ public class RespawnManager : MonoBehaviour
         }
 
         doubleSpawnBoxes.Add(box);
-        EmptyBoxes.Remove(box);
+        activeEmptyBoxes.Remove(box);
 
     }
 
@@ -261,7 +315,7 @@ public class RespawnManager : MonoBehaviour
         if (doubleSpawnBoxes.Contains(resBox))
             doubleSpawnBoxes.Remove(resBox);
         else
-            EmptyBoxes.Add(resBox);
+            activeEmptyBoxes.Add(resBox);
     }
 
 
