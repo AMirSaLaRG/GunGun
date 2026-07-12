@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018a93e9110cd7044a506869cd09ef9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RespawnBox
+  isScaling: 0
   rightRespawnPoint: {fileID: 5849289872514416564}
   leftRespawnPoint: {fileID: 7478202452449151685}
   centerFrontRespawnPoint: {fileID: 526639267642486064}
@@ -59,7 +60,6 @@ MonoBehaviour:
   enemyDummy: {fileID: 5117032311296125721, guid: dd68061adb50f75488b2d184882d5729, type: 3}
   DummyMaterial: {fileID: 2100000, guid: afa01cda80aa8eb4d80ebaa5a5c14112, type: 2}
   myCurtain: {fileID: 9070117021764073057}
-  openZ: 190.954
 --- !u!33 &5082181240695450950
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -579,7 +579,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bed636f2b8574be42a0706afcc31900d, type: 2}
+  - {fileID: 2100000, guid: 830d81d85fc21af4da9d6ec0aeac6b23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

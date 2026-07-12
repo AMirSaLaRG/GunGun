@@ -15,6 +15,10 @@ public class RespawnManager : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] float DoubleChanceEnemy;
     [SerializeField] [Range(0f, 1f)] float DoubleChanceHostage;
     [SerializeField] private int startingActiveBoxes;
+    [Header("NumberOfRespawns")]
+    [SerializeField] private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
+    [SerializeField] private List<RespawnData> Respawns = new List<RespawnData>();
+
     [Header("Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject hostagePrefab;
@@ -59,6 +63,33 @@ public class RespawnManager : MonoBehaviour
         ActivateRandomBoxes(startingActiveBoxes);
     }
 
+    private void Update()
+    {
+
+        if (isOnRandomRespawn == false)
+            return;
+
+        RespawnRandomInterval();
+
+    }
+
+    private void RespawnRandomInterval()
+    {
+        if (Time.time > nextTimeToRespawn)
+        {
+            bool isRespawned = RandomRespawn();
+
+            if (isRespawned)
+            {
+                float cooldown = Random.Range(RespawnTime.x, RespawnTime.y);
+                nextTimeToRespawn = Time.time + cooldown;
+            }
+            else
+                nextTimeToRespawn = Time.time + (RespawnTime.x == 0 ? 1 : RespawnTime.x);
+
+        }
+    }
+
     private void ActivateRandomBoxes(int num)
     {
         if (num > deActiveBoxes.Count)
@@ -78,6 +109,12 @@ public class RespawnManager : MonoBehaviour
             if (newActiveBoxes.Contains(box))
                 deActiveBoxes.Remove(box);
         }
+    }
+
+    [ContextMenu("ActivateTestOneWindow")]
+    public void Test()
+    {
+        ActivateRandomBoxes(1);
     }
 
     private List<RespawnBox> GetRandomBox(int num, List<RespawnBox> availableBoxes)
@@ -106,33 +143,46 @@ public class RespawnManager : MonoBehaviour
         return resaults.ToList();
     }
 
-    private void Update()
-    {
 
-        if (isOnRandomRespawn == false)
-            return;
-        if (Time.time > nextTimeToRespawn)
-        {
-            bool isRespawned = RandomRespawn();
-            
-            if (isRespawned)
-            {
-                float cooldown = Random.Range(RespawnTime.x, RespawnTime.y);
-                nextTimeToRespawn = Time.time + cooldown;
-            }
-            else
-                nextTimeToRespawn = Time.time + (RespawnTime.x == 0? 1 : RespawnTime.x);
-            
-        }
-
-    }
 
 
     private bool RandomRespawn()
     {
+        int targetRespawnNum = Random.Range(minMaxAvailableRespawns.x, minMaxAvailableRespawns.y);
+        for (int i = 0; i < targetRespawnNum; i++)
+        {
+            bool isRespawned = RespawnOn();
+            if (isRespawned == false)
+                return false;
+        }
+        return true;
+    }
 
-        
-        return RespawnOn();
+    private bool RespawnOn()
+    {
+
+
+        GameObject prefabToRespaw = GetRandomPrefab();
+        if (prefabToRespaw == null)
+            return false;
+
+        if (prefabToRespaw == hostagePrefab)
+        {
+            if (RollForDouble(DoubleChanceHostage))
+                RespawnDoubleEnemyAndHostage();
+            else
+                RespawnSingleHostage();
+
+        }
+        else
+        {
+            if (RollForDouble(DoubleChanceEnemy))
+                RespawnDoubleEnemy();
+            else
+                RespawnSingleEnemy();
+        }
+
+        return true;
     }
     private RespawnBox ChoseRandomEmptyBox(bool mustMulti)
     {
@@ -167,36 +217,7 @@ public class RespawnManager : MonoBehaviour
 
         return EmptyBoxesMulty;
     }
-    private bool RespawnOn()
-    {
 
-
-        GameObject prefabToRespaw = GetRandomPrefab();
-        if (prefabToRespaw == null)
-            return false;
-
-        
-        if (prefabToRespaw == hostagePrefab)
-        {
-            if (RollForDouble(DoubleChanceHostage))
-                RespawnDoubleEnemyAndHostage();
-            else
-                RespawnSingleHostage();
-
-        }
-        else
-        {
-            if (RollForDouble(DoubleChanceEnemy))
-                RespawnDoubleEnemy();
-            else
-                RespawnSingleEnemy();
-        }
-
-
-
-
-        return true;
-    }
 
     private bool RollForDouble(float chance) => Random.Range(0f, 1f) < chance;
 
