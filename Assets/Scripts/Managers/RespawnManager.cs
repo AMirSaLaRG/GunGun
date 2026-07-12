@@ -36,6 +36,7 @@ public class RespawnManager : MonoBehaviour
 
     PlayerController player;
 
+    
     private void Awake()
     {
         player = FindFirstObjectByType<PlayerController>();
