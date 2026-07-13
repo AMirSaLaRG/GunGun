@@ -17,6 +17,9 @@ public class WaweManager : MonoBehaviour
     private bool isTimeForNextWawe = true;
     private int currentWaveIndex = 0;
 
+    private float waweTime;
+    private float waweStartTime;
+
     private void Awake()
     {
         respawnManager = FindFirstObjectByType<RespawnManager>();
