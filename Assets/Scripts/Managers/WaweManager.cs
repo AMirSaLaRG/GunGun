@@ -9,7 +9,8 @@ public class WaweManager : MonoBehaviour
 {
     private RespawnManager respawnManager;
     [Header ("Setup")]
-    [SerializeField] private List<WaweData> waweData;
+    [SerializeField] private List<WaveData> waweData;
+    //private List<WaveData> waweData = new List<WaveData>();
     public bool isStarted;
 
     private float timeLastWaweEnded = 0;
@@ -20,11 +21,42 @@ public class WaweManager : MonoBehaviour
     private float waweTime;
     private float waweStartTime;
 
+    private List<LevelEventSequenceSo> sqs = new List<LevelEventSequenceSo>();
+    private List<float> timeMarksForSqs = new List<float>();
+
+    private bool taskIsSq;
+    private int currentSqsIndex = 0;
     private void Awake()
     {
         respawnManager = FindFirstObjectByType<RespawnManager>();
 
         respawnManager.jobDone += RespawnManagerTaskOver;
+
+
+    }
+
+    private void Start()
+    {
+        List<WaveData> refrenceSqData = new List<WaveData>();
+
+        foreach (var data in waweData)
+        {
+            if (data.Type == WaveType.EventBase)
+            {
+                sqs.Add(data.eventSequenceSo);
+                refrenceSqData.Add(data);
+            }
+        }
+
+        foreach (var d in refrenceSqData)
+        {
+            waweData.Remove(d);
+        }
+
+        foreach (var sq in sqs)
+        {
+            timeMarksForSqs.Add(sq.startTime);
+        }
     }
 
     private void Update()
@@ -32,9 +64,61 @@ public class WaweManager : MonoBehaviour
         if (isStarted == false)
             return;
 
+        if (isTimeForEvent())
+            ExecuteSequence();
+
+
         StartWawe();
     }
 
+    private bool isTimeForEvent()
+    {
+        Debug.Log("a");
+
+        if (sqs.Count == 0)
+            return false;
+        Debug.Log("b");
+
+        if (currentSqsIndex >= sqs.Count)
+            return false;
+        Debug.Log("c");
+
+        return timeMarksForSqs[currentSqsIndex] < (Time.time - waweStartTime);
+    }
+
+    private void ExecuteSequence()
+    {
+        Debug.Log("Executing Event");
+        LevelEventSequenceSo currentSq = sqs[currentSqsIndex];
+        currentSqsIndex++;
+
+        if (currentSq.shouldOtherEventsGoTORest)
+            respawnManager.BreakRespawn();
+
+        isWaweEnded = false;
+        isTimeForNextWawe = false;
+        taskIsSq = true;
+
+        StartCoroutine(BreathTimeBeforeEvent(currentSq));
+    }
+
+    private IEnumerator BreathTimeBeforeEvent(LevelEventSequenceSo sq)
+    {
+
+        yield return new WaitForSeconds(2);
+
+        respawnManager.ExecuteEvent(sq);
+
+        respawnManager.onEventEnded += OnEventEnded;
+
+    }
+
+    private void OnEventEnded()
+    {
+        isWaweEnded = true;
+        isTimeForNextWawe = true;
+        taskIsSq = false;
+    }
 
     private void StartWawe()
     {
@@ -42,6 +126,9 @@ public class WaweManager : MonoBehaviour
             return;
 
         if (isTimeForNextWawe == false)
+            return;
+
+        if (taskIsSq)
             return;
 
         if (waweData == null || waweData.Count == 0)
@@ -63,18 +150,20 @@ public class WaweManager : MonoBehaviour
         ExecuteWawe(waweData[currentWaveIndex]);
     }
 
-    private void ExecuteWawe(WaweData data)
+    private void ExecuteWawe(WaveData data)
     {
         CleanData(data);
 
         isWaweEnded = false;
         isTimeForNextWawe = false;
         currentWaveIndex++;
-    
+        
+   
+
 
         respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, data.minMaxxSummon, data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
 
-        if (data.Type == WaweType.TimeBase)
+        if (data.Type == WaveType.TimeBase)
         {
 
             SetTimerForWawe(data.durationIfTimeBase);
@@ -96,14 +185,14 @@ public class WaweManager : MonoBehaviour
         isWaweEnded = true;
         StartCoroutine(BreathTimeBetweenTwoWawes());
     }
-    private void CleanData(WaweData data)
+    private void CleanData(WaveData data)
     {
         CleanRepeat(data);
         CleanProbs(data);
 
     }
 
-    private static void CleanRepeat(WaweData data)
+    private static void CleanRepeat(WaveData data)
     {
         var group = data.respawns.GroupBy(x => x.respawnType).Select(group => new RespawnData
         {
@@ -128,14 +217,19 @@ public class WaweManager : MonoBehaviour
 
     private IEnumerator BreathTimeBetweenTwoWawes()
     {
-
-        float duration = waweData[currentWaveIndex - 1].nextWaweDelay;
+        float duration = 0f;
+        if (taskIsSq)
+            duration = 2f;
+        else
+            duration = waweData[currentWaveIndex - 1].nextWaweDelay;
+        
 
         yield return new WaitForSeconds(duration);
         isTimeForNextWawe = true;
+        taskIsSq = false;
     }
 
-    private static void CleanProbs(WaweData data)
+    private static void CleanProbs(WaveData data)
     {
         List<float> probs = new List<float>();
 

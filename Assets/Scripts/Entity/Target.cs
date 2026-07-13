@@ -30,7 +30,7 @@ public class Target : MonoBehaviour, IDamagable
     private RespawnBox myRespawnBox;
     private RespawnManager myRespawnManager;
 
-    public Action<RespawnBox> atEndAction;
+    public Action<RespawnBox, Target> atEndAction;
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
     public bool isMoving = true;
@@ -211,7 +211,7 @@ public class Target : MonoBehaviour, IDamagable
     protected virtual void AtEndOfDurationAction()
     {
         if (myRespawnManager != null)
-            atEndAction?.Invoke(myRespawnBox);
+            atEndAction?.Invoke(myRespawnBox, this);
 
         transform.DOKill();
 
@@ -231,7 +231,7 @@ public class Target : MonoBehaviour, IDamagable
     protected virtual void AtDieAction()
     {       
         if (myRespawnManager != null)
-            atEndAction?.Invoke(myRespawnBox);
+            atEndAction?.Invoke(myRespawnBox, this);
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);
 
@@ -248,4 +248,6 @@ public class Target : MonoBehaviour, IDamagable
 
     public void SetMyRespawnManager(RespawnManager respawnManager) => myRespawnManager = respawnManager;
     public void SetMyBox(RespawnBox box) => myRespawnBox = box;
+
+    public void SetMyDuration(float duration) => this.duration = duration;
 }

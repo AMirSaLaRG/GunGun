@@ -11,10 +11,7 @@ public class LevelEventSequenceSo : ScriptableObject
     public float startTime = 0;
     public bool shouldOtherEventsGoTORest = false;
 
-    public WaweType sequenceBaseOn;
-    public float durationIfTimeBase;
-    public int countDownIfUnitBase;
-    public RespawnType respawnTypeCountDownIfUnitBase;
+
 
     public List<eventData> eventDatas = new List<eventData>();
 
@@ -29,7 +26,7 @@ public class eventData
     public float startTimeAfterEventStarted;
     public float duration;
 
-    public RespawnBox respawnBox;
+    public string respawnBoxName;
 
     public RespawnData respawnData;
 

@@ -8,6 +8,17 @@ public class RespawnData
     public GameObject prefab;
     [Range(0, 1)] public float respawnProb;
 
+
+    public RespawnData Clone()
+    {
+        return new RespawnData
+        {
+            respawnType = this.respawnType,
+            targetType = this.targetType,
+            prefab = this.prefab,
+            respawnProb = this.respawnProb
+        };
+    }
 }
 
 public enum RespawnType
