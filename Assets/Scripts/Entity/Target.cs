@@ -7,9 +7,9 @@ public class Target : MonoBehaviour, IDamagable
 {
     protected PlayerController player;
 
-    public Rigidbody rb { get; private set; }
-    public Animator anim { get; private set; }
-    public CapsuleCollider mycollider { private set; get; }
+    public Rigidbody rb { get; protected set; }
+    public Animator anim { get; protected set; }
+    public CapsuleCollider mycollider { protected set; get; }
 
     [Header("Visuals")]
     [SerializeField] private GameObject visuals;

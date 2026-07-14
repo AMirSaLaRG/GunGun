@@ -41,7 +41,7 @@ public class WaweManager : MonoBehaviour
 
         foreach (var data in waweData)
         {
-            if (data.Type == WaveType.EventBase)
+            if (data.Type == WaveType.EventBase || data.eventSequenceSo != null)
             {
                 sqs.Add(data.eventSequenceSo);
                 refrenceSqData.Add(data);
@@ -133,15 +133,20 @@ public class WaweManager : MonoBehaviour
 
         if (waweData == null || waweData.Count == 0)
         {
+    
             Debug.Log("Plz write Wawe Data first!");
             return;
         }
 
         if (currentWaveIndex == waweData.Count)
         {
-            Debug.Log("all wawes executed!");
-            isWaweEnded = true;
-            isTimeForNextWawe = false;
+            if (respawnManager.isSceenClear)
+            {
+                Debug.Log("all wawes executed!");
+                isWaweEnded = true;
+                isTimeForNextWawe = false;
+            }
+
             return;
         }
 
@@ -161,7 +166,7 @@ public class WaweManager : MonoBehaviour
    
 
 
-        respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, data.minMaxxSummon, data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
+        respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, data.minMaxRandomIntervalSummon, data.minMaxNumSummon, data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
 
         if (data.Type == WaveType.TimeBase)
         {
@@ -198,7 +203,6 @@ public class WaweManager : MonoBehaviour
         {
             respawnType = group.Key,
             respawnProb = group.Average(x => x.respawnProb),
-            targetType = group.First().targetType,
             prefab = group.First().prefab,
         }) .ToList();
 

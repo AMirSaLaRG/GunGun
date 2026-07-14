@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         ResetCombo();
 
+        uiManager.UiOnHostageKill(currentHostageKilled);
 
         if (hostageKillAlowed >= currentHostageKilled)
             Debug.Log("GameOver you killed alot of hostaged you are fired!");

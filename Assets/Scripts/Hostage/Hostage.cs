@@ -14,4 +14,5 @@ public class Hostage : Target
         Destroy(gameObject, 1);
 
     }
+
 }

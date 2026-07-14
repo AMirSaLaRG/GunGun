@@ -39,7 +39,7 @@ public class UiManager : MonoBehaviour
     {
         for (int i = 0; i < hostageKilled; i++)
         {
-            if (HostageImages.Count > i)
+            if (HostageImages.Count <= i)
                 return;
             HostageImages[i].CrossHostage(true);
         }

@@ -2,20 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 public class RespawnManager : MonoBehaviour
 {
     PlayerController player;
 
     [Header("Setup")]
-    private List<RespawnData> respawns = new List<RespawnData>();
-    private int numActiveBoxes;
+    private List<RespawnData> respawnsInfo = new List<RespawnData>();
     private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
 
     [Header("RandomRespawnSetup")]
-    private Vector2 RespawnTime = new Vector2(1, 3);
+    private Vector2 respawnTime = new Vector2(1, 3);
 
     [Header("basicSetup")]
     [SerializeField] private List<RespawnData> respawnsBasicSetup = new List<RespawnData>();
@@ -30,7 +27,7 @@ public class RespawnManager : MonoBehaviour
     private List<RespawnBox> activeEmptyBoxes = new List<RespawnBox>();
     private List<RespawnBox> boxes = new List<RespawnBox>();
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
-    private List<Target> eventTracker = new List<Target>();
+    private List<Target> targetTracker = new List<Target>();
 
     private bool isOnRandomRespawn = false;
 
@@ -43,143 +40,60 @@ public class RespawnManager : MonoBehaviour
     private bool wasLastRespawnHostage = false;
 
     private bool onEventMode;
-    private bool isEventClear;
-    private bool isEventDataExecuted;
+    public bool isSceenClear { private set; get; }
+    private bool isEventEnded;
     public System.Action onEventEnded;
-    private float eventStartTime;
     
     private void Awake()
     {
-        player = FindFirstObjectByType<PlayerController>();
-        myRespawnBoxes = GetComponentsInChildren<RespawnBox>();
 
-        if (myRespawnBoxes == null || myRespawnBoxes.Length == 0)
-        {
-            Debug.LogError("NO RESPAWN BOXES FOUND! Disabling RespawnManager.");
-            enabled = false; // Stop the script from running
-            return;
-        }
-
-        if (player == null)
-        {
-            Debug.Log("CouldNotFindPlayer");
-            return;
-        }
-
-        foreach (var box in myRespawnBoxes)
-            box.SetPlayer(player);
-
-        boxes = myRespawnBoxes.ToList();
-        deActiveBoxes = myRespawnBoxes.ToList();
-
+        GetAndCheckElements();
     }
+
+
 
     private void Update()
     {
-        if (onEventMode)
+        bool flowControl = CheckRandomConditionals();
+        if (!flowControl)
+        {
             return;
-
-        if (isOnRandomRespawn == false)
-            return;
-
-        if (shouldCountDown && isSummonAll)
-            return;
-
-
+        }
 
         RespawnRandomInterval();
 
     }
 
-    public void ExecuteEvent(LevelEventSequenceSo sq)
+    private bool CheckRandomConditionals()
     {
-        eventStartTime = Time.time;
-        onEventMode = true;
+        if (onEventMode)
+            return false;
 
-        StartCoroutine(EventCo(sq.eventDatas));
-    }
+        if (isOnRandomRespawn == false)
+            return false;
 
-    private IEnumerator EventCo(List<eventData> datas)
-    {
-        isEventDataExecuted = false;
+        if (shouldCountDown && isSummonAll)
+            return false;
 
-        foreach (var data in datas)
-        {
-            yield return new WaitForSeconds(data.startTimeAfterEventStarted);
-            ExecuteEventData(data);
-        }
-
-        isEventDataExecuted = true;
-    }
-
-    private void ExecuteEventData(eventData data)
-    {
-        string myBoxName = data.respawnBoxName;
-
-        RespawnBox myBox = myRespawnBoxes.FirstOrDefault(x => x.gameObject.name == myBoxName);
-
-        if (myBox == null)
-        {
-            Debug.Log("This Name is Not on THis scene plz Change it : __" + myBoxName);
-            return;
-        }
-
-        RespawnData myRespawn = data.respawnData;
-        GameObject myPrefab = myRespawn.prefab;
-
-        if (myPrefab == null)
-        {
-            myPrefab = respawnsBasicSetup.Find(x => x.respawnType == myRespawn.respawnType).prefab;
-        }
-
-        ActiveBox(myBox);
-
-        Target myTarget = myBox.RespawnRandomSide(myPrefab);
-
-        myTarget.SetMyBox(myBox);
-        myTarget.SetMyRespawnManager(this);
-
-        if (data.duration != 0)
-            myTarget.SetMyDuration(data.duration);
-
-        eventTracker.Add(myTarget);
-
-        isEventClear = false;
-
-        myTarget.atEndAction += OnRespawnLeftTheBox;
-
+        return true;
     }
 
     public void SetupRandom(List<RespawnData> newRespawns, int newActiveBoxes,
+        Vector2 newMinMaxIntervalSummon,
         Vector2Int newMinMaxParallarRespawns,
         int newCountDown = 0, RespawnType newCountDownType = RespawnType.BaseEnemy)
     {
-        respawns.Clear();
-        respawns.AddRange(newRespawns);
+        ReplcaeRespawnInfo(newRespawns);
 
-        numActiveBoxes = newActiveBoxes;
-        ActivateRandomBoxes(numActiveBoxes);
+        SetNewRespawnTime(newMinMaxIntervalSummon);
 
+        ActivateRandomBoxes(newActiveBoxes);
 
-        minMaxAvailableRespawns = newMinMaxParallarRespawns;
+        SetNewRespawnNumber(newMinMaxParallarRespawns);
 
-        if (newCountDown != 0)
-        {
-            CountDown = newCountDown;
-            countDownType = newCountDownType;
-            shouldCountDown = true;
-        }
-        else
-        {
-            shouldCountDown = false;
-        }
+        CheckAndSetRespawnBase(newCountDown, newCountDownType);
 
         isOnRandomRespawn = true;
-    }
-
-    public void BreakRespawn()
-    {
-        isOnRandomRespawn = false;
     }
 
     private void RespawnRandomInterval()
@@ -190,12 +104,11 @@ public class RespawnManager : MonoBehaviour
 
             if (isRespawned)
             {
-                float cooldown = Random.Range(RespawnTime.x, RespawnTime.y);
+                float cooldown = Random.Range(respawnTime.x, respawnTime.y);
                 nextTimeToRespawn = Time.time + cooldown;
             }
             else
-                nextTimeToRespawn = Time.time + (RespawnTime.x == 0 ? 1 : RespawnTime.x);
-
+                nextTimeToRespawn = Time.time + (respawnTime.x == 0 ? 1 : respawnTime.x);
         }
     }
 
@@ -217,38 +130,132 @@ public class RespawnManager : MonoBehaviour
     private bool REspawnRandomly()
     {
 
-        RespawnData prefabToRespaw = GetRandomPrefab();
+        RespawnData respawnToSummon = GetRandomRespawn();
 
-        if (prefabToRespaw == null)
+        if (respawnToSummon == null)
             return false;
 
-        RespawnSingleTargetRandomly(prefabToRespaw);
+        RespawnTargetRandomly(respawnToSummon);
 
         return true;
     }
 
-    private void RespawnSingleTargetRandomly(RespawnData respawnData)
+    private RespawnData GetRandomRespawn()
+    {
+
+        float random = Random.Range(0f, 1f);
+
+        float currentChance = 0;
+
+        RespawnData resault = null;
+        RespawnData basicEnemyData = respawnsBasicSetup.Find(x => x.respawnType == RespawnType.BaseEnemy);
+
+        foreach (var possibleRespawn in respawnsInfo)
+        {
+            currentChance += possibleRespawn.respawnProb;
+
+            if (random <= currentChance)
+            {
+                resault = possibleRespawn;
+
+                if (resault.respawnType == RespawnType.Hostage && wasLastRespawnHostage)
+                    resault = basicEnemyData;
+
+                wasLastRespawnHostage = resault.respawnType == RespawnType.Hostage;
+
+                return resault;
+            }
+        }
+        return resault;
+    }
+
+    public void ExecuteEvent(LevelEventSequenceSo sq)
+    {
+        onEventMode = true;
+        StartCoroutine(EventCo(sq.eventDatas));
+    }
+
+    private IEnumerator EventCo(List<eventData> datas)
+    {
+        isEventEnded = false;
+
+        foreach (var data in datas)
+        {
+            yield return new WaitForSeconds(data.startTimeAfterEventStarted);
+            ExecuteEventData(data);
+        }
+
+        isEventEnded = true;
+    }
+
+    private void ExecuteEventData(eventData data)
+    {
+        RespawnBox myBox = GetBoxByName(data.respawnBoxName);
+
+        if (myBox == null)
+        {
+            Debug.Log("This Name is Not on THis scene plz Change it : __" + data.respawnBoxName);
+
+            return;
+        }
+        
+        ActiveBox(myBox);
+
+        Target newTarget = RespawnTargetOn(data.respawnData, myBox, data.duration);
+
+        if (newTarget == null)
+            Debug.Log("Could not respawn on box " +  newTarget.name + "box: " + myBox.gameObject.name);
+
+    }
+
+    public void BreakRespawn()
+    {
+        isOnRandomRespawn = false;
+    }
+
+    private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0)
+    {
+        GameObject myPrefab = targetData.prefab;
+
+        if (myPrefab == null)
+        {
+            myPrefab = respawnsBasicSetup.Find(x => x.respawnType == targetData.respawnType).prefab;
+        }
+
+
+        Target myTarget = respawnBox.RespawnRandomSide(myPrefab);
+
+        myTarget.SetMyBox(respawnBox);
+        myTarget.SetMyRespawnManager(this);
+
+        if (duration != 0)
+            myTarget.SetMyDuration(duration);
+
+        targetTracker.Add(myTarget);
+
+        isSceenClear = false;
+
+        myTarget.atEndAction += OnRespawnLeftTheBox;
+
+        return myTarget;
+    }
+
+    private void RespawnTargetRandomly(RespawnData respawnData)
     {
         RespawnBox box = ChoseRandomEmptyBox(false);
-        GameObject prefab;
+        GameObject prefab = respawnData.prefab;
 
         if (activeEmptyBoxes.Contains(box) == false)
             return;
 
-        if (respawnData.prefab == null)
-        {
-            prefab = enemyPrefab;
-            if (shouldCountDown)
-                CheckForCountDown(RespawnType.BaseEnemy);
-        }
-        else
-        {
-            prefab = respawnData.prefab;
-            if (shouldCountDown)
-                CheckForCountDown(respawnData.respawnType);
-        }
+        if (prefab == null)
+            prefab = respawnsBasicSetup.Find(x => x.respawnType == respawnData.respawnType).prefab;
+
+        if (shouldCountDown)
+            CheckForCountDown(respawnData.respawnType);
 
         Target newTarget = box.RespawnRandomSide(prefab);
+        targetTracker.Add(newTarget);
         newTarget.SetMyBox(box);
         newTarget.SetMyRespawnManager(this);
 
@@ -267,6 +274,26 @@ public class RespawnManager : MonoBehaviour
             isSummonAll = true;
             jobDone?.Invoke();
         }
+    }
+    private RespawnBox GetBoxByName(string name)
+    {
+        RespawnBox myBox;
+
+        myBox = myRespawnBoxes.FirstOrDefault(x => x.gameObject.name == name);
+
+        return myBox;
+    }
+    private List<RespawnBox> GetRandomBox(int num, List<RespawnBox> availableBoxes)
+    {
+        List<RespawnBox> returnBoxes = new List<RespawnBox>();
+
+        int numBoxes = availableBoxes.Count;
+
+        foreach (var i in HashRandomSelection(numBoxes, num))
+        {
+            returnBoxes.Add(availableBoxes[i]);
+        }
+        return returnBoxes;
     }
 
     private void ActivateRandomBoxes(int newNum)
@@ -305,18 +332,6 @@ public class RespawnManager : MonoBehaviour
         deActiveBoxes.Remove(box);
     }
 
-    private List<RespawnBox> GetRandomBox(int num, List<RespawnBox> availableBoxes)
-    {
-        List<RespawnBox> returnBoxes = new List<RespawnBox>();
-
-        int numBoxes = availableBoxes.Count;
-
-        foreach (var i in HashRandomSelection(numBoxes, num))
-        {
-            returnBoxes.Add(availableBoxes[i]);
-        }
-        return returnBoxes;
-    }
 
     private List<int> HashRandomSelection(int Range, int returnNum)
     {
@@ -329,12 +344,6 @@ public class RespawnManager : MonoBehaviour
         }
 
         return resaults.ToList();
-    }
-
-    [ContextMenu("ActivateTestOneWindow")]
-    public void Test()
-    {
-        ActivateRandomBoxes(1);
     }
 
     private RespawnBox ChoseRandomEmptyBox(bool mustMulti)
@@ -356,9 +365,8 @@ public class RespawnManager : MonoBehaviour
         }
 
         return null;
-
-
     }
+
     private List<RespawnBox> GetMultiEmptyList()
     {
         List<RespawnBox> EmptyBoxesMulty = new List<RespawnBox>();
@@ -371,39 +379,6 @@ public class RespawnManager : MonoBehaviour
         return EmptyBoxesMulty;
     }
 
-
-    private RespawnData GetRandomPrefab()
-    {
-
-        float random = Random.Range(0f, 1f);
-
-        float currentChance = 0;
-
-
-        foreach (var possibleRespawn in respawns)
-        {
-            currentChance += possibleRespawn.respawnProb;
-
-            if (random < currentChance)
-            {
-                if (possibleRespawn.respawnType == RespawnType.Hostage && wasLastRespawnHostage)
-                {
-                    wasLastRespawnHostage = false;
-                    return null;
-                }
-
-                wasLastRespawnHostage = possibleRespawn.respawnType == RespawnType.Hostage;
-                
-
-            
-                return possibleRespawn;
-            }           
-        }
-
-        return null;
-    }
-
-
     public void OnRespawnLeftTheBox(RespawnBox respawnBox, Target target)
     {
         StartCoroutine(onRepawnLefCo(respawnBox, target));
@@ -413,15 +388,16 @@ public class RespawnManager : MonoBehaviour
     private IEnumerator onRepawnLefCo(RespawnBox resBox, Target target)
     {
         yield return new WaitForSeconds(1f);
-        
+
+        targetTracker.Remove(target);
+
+
+        if (targetTracker.Count == 0)
+            isSceenClear = true;
+
         if (onEventMode)
         {
-            eventTracker.Remove(target);
-
-            if (eventTracker.Count == 0)
-                isEventClear = true;
-
-            if (isEventClear && isEventDataExecuted)
+            if (isSceenClear && isEventEnded)
             {
                 onEventMode = false;
                 onEventEnded?.Invoke();
@@ -431,6 +407,64 @@ public class RespawnManager : MonoBehaviour
         activeEmptyBoxes.Add(resBox);
     }
 
+    private void CheckAndSetRespawnBase(int newCountDown, RespawnType newCountDownType)
+    {
+        if (newCountDown == 0)
+        {
+            shouldCountDown = false;
+        }
+        else
+        {
+            CountDown = newCountDown;
+            countDownType = newCountDownType;
+            shouldCountDown = true;
+        }
+    }
+
+    private void SetNewRespawnNumber(Vector2Int newMinMaxParallarRespawns)
+    {
+        minMaxAvailableRespawns = newMinMaxParallarRespawns;
+        if (minMaxAvailableRespawns == Vector2Int.zero)
+            minMaxAvailableRespawns = new Vector2Int(1, 1);
+    }
+
+    private void SetNewRespawnTime(Vector2 newMinMaxIntervalSummon)
+    {
+        respawnTime = newMinMaxIntervalSummon;
+        if (respawnTime == Vector2.zero)
+            respawnTime = new Vector2(1, 1);
+    }
+
+    private void ReplcaeRespawnInfo(List<RespawnData> newRespawns)
+    {
+        respawnsInfo.Clear();
+        respawnsInfo.AddRange(newRespawns);
+    }
+
+    private void GetAndCheckElements()
+    {
+        player = FindFirstObjectByType<PlayerController>();
+        myRespawnBoxes = GetComponentsInChildren<RespawnBox>();
+
+        if (myRespawnBoxes == null || myRespawnBoxes.Length == 0)
+        {
+            Debug.LogError("NO RESPAWN BOXES FOUND! Disabling RespawnManager.");
+            enabled = false; // Stop the script from running
+            return;
+        }
+
+        if (player == null)
+        {
+            Debug.Log("CouldNotFindPlayer");
+            return;
+        }
+
+        foreach (var box in myRespawnBoxes)
+            box.SetPlayer(player);
+
+        boxes = myRespawnBoxes.ToList();
+        deActiveBoxes = myRespawnBoxes.ToList();
+    }
 
 }
 
