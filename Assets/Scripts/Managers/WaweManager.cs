@@ -18,7 +18,6 @@ public class WaweManager : MonoBehaviour
     private bool isTimeForNextWawe = true;
     private int currentWaveIndex = 0;
 
-    private float waweTime;
     private float waweStartTime;
 
     private List<LevelEventSequenceSo> sqs = new List<LevelEventSequenceSo>();
@@ -150,8 +149,6 @@ public class WaweManager : MonoBehaviour
             return;
         }
 
-
-
         ExecuteWawe(waweData[currentWaveIndex]);
     }
 
@@ -166,7 +163,9 @@ public class WaweManager : MonoBehaviour
    
 
 
-        respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, data.minMaxRandomIntervalSummon, data.minMaxNumSummon, data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
+        respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, 
+            data.minMaxRandomIntervalSummon, data.minMaxNumSummon, 
+            data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
 
         if (data.Type == WaveType.TimeBase)
         {

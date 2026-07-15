@@ -17,7 +17,7 @@ public class WaveData
     public int ActiveBoxes;
 
     public Vector2Int minMaxNumSummon = new Vector2Int(1,1);
-    public Vector2Int minMaxRandomIntervalSummon = new Vector2Int(1,1);
+    public Vector2 minMaxRandomIntervalSummon = new Vector2(1,1);
     public List<RespawnData> respawns = new List<RespawnData>();
 
     public bool isWaweEnded = false;

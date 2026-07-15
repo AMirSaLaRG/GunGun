@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private TouchControls controls;
     private UiManager uiManager;
     public GameObject TestBullet;
+    private MagazineManager magazineManager;
 
     [Header("Setup")]
     [SerializeField] private int healthPoint = 1;
@@ -19,9 +20,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     [Header("GunSetup")]
     [SerializeField] private float gunForce = 100f;
     [SerializeField] private int gunDamage = 1;
-    [SerializeField] private int gunAmoCap = 7;
+    [SerializeField] private int gunAmoCap = 6;
+
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
     [SerializeField] private LayerMask whatIsUntargetable;
+
+
 
 
     private float points = 0;
@@ -38,6 +42,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         controls = new TouchControls();
         uiManager = FindFirstObjectByType<UiManager>();
+        magazineManager = GetComponentInChildren<MagazineManager>();
 
 
         controls.TouchScreen.Shoot.performed += ctx => OnTap(ctx);
@@ -73,6 +78,8 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Shoot(Vector2 aimPosition)
     {
+        magazineManager.OnShotBullet();
+
         if (currentAmo <= 0)
         {
             ShootWithEmptyMagazine();
@@ -98,7 +105,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void Reload()
     {
-        Debug.Log("Reload");
+        magazineManager.OnReloadBullets();
         currentAmo = gunAmoCap;
         UpdateUi();
     }
@@ -111,6 +118,12 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnHit(RaycastHit hit, Vector3 shotPos)
     {
+        if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
+        {
+            Reload();
+            return;
+        }
+
         if (hit.collider.TryGetComponent(out Target target) == false)
         {
             ResetCombo();

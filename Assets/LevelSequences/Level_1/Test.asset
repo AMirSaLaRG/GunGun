@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b8c042d96e26b418bbcc1855f6eb4b, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: Assembly-CSharp::LevelEventSequenceSo
-  sequenceName: 
+  sequenceName: test
   description: 
-  startTime: 0
-  shouldOtherEventsGoTORest: 0
-  sequenceBaseOn: 0
-  durationIfTimeBase: 0
-  countDownIfUnitBase: 0
-  respawnTypeCountDownIfUnitBase: 0
-  eventDatas: []
+  startTime: 4
+  shouldOtherEventsGoTORest: 1
+  eventDatas:
+  - eventType: 0
+    startTimeAfterEventStarted: 4
+    duration: 10
+    respawnBoxName: RespawnBox
+    respawnData:
+      respawnType: 1
+      prefab: {fileID: 0}
+      respawnProb: 0

@@ -12,3 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b8c042d96e26b418bbcc1855f6eb4b, type: 3}
   m_Name: NewEventSequence
   m_EditorClassIdentifier: Assembly-CSharp::LevelEventSequenceSo
+  sequenceName: 
+  description: 
+  startTime: 0
+  shouldOtherEventsGoTORest: 0
+  eventDatas:
+  - eventType: 0
+    startTimeAfterEventStarted: 0
+    duration: 0
+    respawnBoxName: 
+    respawnData:
+      respawnType: 1
+      prefab: {fileID: 0}
+      respawnProb: 0

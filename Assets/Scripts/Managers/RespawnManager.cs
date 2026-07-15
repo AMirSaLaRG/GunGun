@@ -8,7 +8,7 @@ public class RespawnManager : MonoBehaviour
     PlayerController player;
 
     [Header("Setup")]
-    private List<RespawnData> respawnsInfo = new List<RespawnData>();
+    public List<RespawnData> respawnsInfo = new List<RespawnData>();
     private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
 
     [Header("RandomRespawnSetup")]
@@ -255,7 +255,10 @@ public class RespawnManager : MonoBehaviour
             CheckForCountDown(respawnData.respawnType);
 
         Target newTarget = box.RespawnRandomSide(prefab);
+
         targetTracker.Add(newTarget);
+        isSceenClear = false;
+
         newTarget.SetMyBox(box);
         newTarget.SetMyRespawnManager(this);
 
@@ -298,7 +301,7 @@ public class RespawnManager : MonoBehaviour
 
     private void ActivateRandomBoxes(int newNum)
     {
-        int currentNum = activeEmptyBoxes.Count;
+        int currentNum = myRespawnBoxes.Length - deActiveBoxes.Count;
         int num = newNum - currentNum;
         if (num <= 0)
             return;
