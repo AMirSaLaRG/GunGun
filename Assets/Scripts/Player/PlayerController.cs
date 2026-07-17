@@ -11,7 +11,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     public GameObject TestBullet;
     private MagazineManager magazineManager;
 
+
     [Header("Setup")]
+
     [SerializeField] private int healthPoint = 1;
     [SerializeField] private int hostageKillAlowed = 3;
     [SerializeField] private float comboIntervalCooldown = 2;
@@ -20,7 +22,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [Header("GunSetup")]
     [SerializeField] private float gunForce = 100f;
     [SerializeField] private int gunDamage = 1;
-    [SerializeField] private int gunAmoCap = 6;
+    private int gunAmoCap = 6;
 
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
     [SerializeField] private LayerMask whatIsUntargetable;
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        gunAmoCap = magazineManager.GetAmoCap();
         currentAmo = gunAmoCap;
         UpdateUi();
     }
@@ -74,20 +77,31 @@ public class PlayerController : MonoBehaviour, IDamagable
             uiManager.SetComboTimer(0);
         else
             uiManager.SetComboTimer(comboIntervalCooldown);
+
+        uiManager.WarningReloadBtn(currentAmo <= 1);
+
     }
 
     private void Shoot(Vector2 aimPosition)
     {
-        magazineManager.OnShotBullet();
+
+        bool shouldReturn = false;
 
         if (currentAmo <= 0)
         {
             ShootWithEmptyMagazine();
-            return;
+            shouldReturn = true ;
         }
 
-        currentAmo--;
-        UpdateUi();
+        if (magazineManager.isReloading)
+            return;
+
+        if (shouldReturn == false)
+        {
+            currentAmo--;
+            UpdateUi();
+        }
+
 
         Ray ray = Camera.main.ScreenPointToRay(aimPosition);
         
@@ -95,7 +109,23 @@ public class PlayerController : MonoBehaviour, IDamagable
         {
             Debug.Log($"Hit:{hit.collider.name}");
             Vector3 shotPos = hit.point;
+
+            if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
+            {
+                Reload();
+                return;
+            }
+
+            if (shouldReturn)
+            {
+                shouldReturn = false;
+                return;
+            }
+
             GameObject bullet = Instantiate(TestBullet, shotPos, Quaternion.Euler(0, 180, 0));
+            magazineManager.OnShotBullet();
+
+
 
             OnHit(hit, shotPos);
         }
@@ -113,16 +143,13 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void ShootWithEmptyMagazine()
     {
         Debug.Log("Out Of Amo!!!!");
+        magazineManager.OnShotBullet();
 
     }
 
     private void OnHit(RaycastHit hit, Vector3 shotPos)
     {
-        if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
-        {
-            Reload();
-            return;
-        }
+  
 
         if (hit.collider.TryGetComponent(out Target target) == false)
         {

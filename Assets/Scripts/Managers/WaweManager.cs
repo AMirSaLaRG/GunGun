@@ -11,7 +11,7 @@ public class WaweManager : MonoBehaviour
     [Header ("Setup")]
     [SerializeField] private List<WaveData> waweData;
     //private List<WaveData> waweData = new List<WaveData>();
-    public bool isStarted;
+    public bool isStarted = true;
 
     private float timeLastWaweEnded = 0;
     private bool isWaweEnded = true;

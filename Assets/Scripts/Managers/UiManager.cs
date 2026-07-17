@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -23,6 +24,8 @@ public class UiManager : MonoBehaviour
     private float comboTimerReminder;
 
     public Action onReloadBtn;
+
+    private Coroutine reloadWarningCo;
     private void Awake()
     {
         AssignButtons();
@@ -51,6 +54,36 @@ public class UiManager : MonoBehaviour
         {
             image?.CrossHostage(false);
         }
+    }
+
+    public void WarningReloadBtn(bool enable)
+    {
+        if (reloadWarningCo != null)
+            StopCoroutine(reloadWarningCo);
+        reloadWarningCo = StartCoroutine(WarningCo(enable));
+    }
+
+    private IEnumerator WarningCo(bool enable)
+    {
+        Image btnImage = reloadBtn.GetComponent<Image>();
+        Color btnImageColor = btnImage.color;
+
+        int direction = 1;
+
+        while (enable)
+        {
+            btnImageColor.a += .005f * direction;
+            if (btnImageColor.a > .3f)
+                direction = -1;
+            else if (btnImageColor.a <= .01f)
+                direction = 1;
+
+            btnImage.color = btnImageColor;
+            yield return null;
+        }
+
+        btnImageColor.a = 0;
+        btnImage.color = btnImageColor;
     }
 
     public void SetComboTimer(float Timer)

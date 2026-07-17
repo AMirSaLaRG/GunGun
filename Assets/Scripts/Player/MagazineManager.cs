@@ -7,21 +7,24 @@ public class MagazineManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField] Transform[] bulletHolders;
     [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float switchTIme = .3f;
-    [SerializeField] float reloadTime = .5f;
+    [SerializeField] private float switchTIme = .3f;
+    [SerializeField] private float reloadTime = .5f;
+
+    public bool isReloading { get; private set; }
 
     private Transform[] mybullets;
     private Rigidbody[] mybulletsRb;
 
     private int currentBulletIndex = 0;
 
-
+    private Quaternion startRotation;
 
     private void Start()
     {
         mybullets = new Transform[bulletHolders.Length];
         mybulletsRb = new Rigidbody[bulletHolders.Length];
 
+        startRotation = transform.rotation;
 
         for ( int i = 0; i < bulletHolders.Length; i++ )
         {
@@ -38,31 +41,50 @@ public class MagazineManager : MonoBehaviour
 
     public void OnShotBullet()
     {
+        if (isReloading)
+            return;
+
         Transform currentBullet = mybullets[currentBulletIndex];
+        Rigidbody currentBulletRb = mybulletsRb[currentBulletIndex];
+
+        Quaternion currentRotation = transform.localRotation;
+        transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic);
+
+        if (currentBullet.localPosition != Vector3.zero)
+        {
+            Debug.Log("Emoyt magazine");
+            return;
+        }
 
         float torgueforce = UnityEngine.Random.Range(-4f, 5f);
         float jumpForce = UnityEngine.Random.Range(100, 200);
 
-        Quaternion currentRotation = transform.localRotation;
 
         currentBullet.DOLocalMoveY(-2, switchTIme /2).OnComplete(() =>
         {
-            mybulletsRb[currentBulletIndex].AddForce(Vector2.up * jumpForce);
-            mybulletsRb[currentBulletIndex].isKinematic = false;
-            mybulletsRb[currentBulletIndex].AddTorque(Vector3.forward * torgueforce, ForceMode.Impulse);
+            currentBulletRb.AddForce(Vector2.up * jumpForce);
+            currentBulletRb.isKinematic = false;
+            currentBulletRb.AddTorque(Vector3.forward * torgueforce, ForceMode.Impulse);
             currentBullet.parent = null;
 
-            currentBulletIndex++;
-            currentBulletIndex %= bulletHolders.Length;
+    
         });
 
-        transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic);
+        currentBulletIndex++;
+        currentBulletIndex %= bulletHolders.Length;
+
+
     }
 
     [ContextMenu("Test")]
 
     public void OnReloadBullets()
     {
+        isReloading = true;
+
+        transform.DORotate(startRotation.eulerAngles, reloadTime).OnComplete(() => isReloading = false);
+        currentBulletIndex = 0;
+
         for (int i=0; i<bulletHolders.Length; i++)
         {
             Transform bullet = mybullets[i];
@@ -74,11 +96,14 @@ public class MagazineManager : MonoBehaviour
 
 
                 bullet.localPosition = new Vector3(0, -3, 0);
-                bullet.localRotation = Quaternion.Euler(0,0,0);
-                bullet.DOLocalMove(Vector3.zero, reloadTime);
+                bullet.localRotation = Quaternion.Euler(0, 0, 0);
+                bullet.DOLocalMove(Vector3.zero, reloadTime); 
             }
+  
 
         }
 
     }
+
+    public int GetAmoCap() => bulletHolders.Length; 
 }

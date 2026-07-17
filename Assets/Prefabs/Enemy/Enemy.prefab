@@ -1188,8 +1188,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1409154431824683189}
-  - component: {fileID: 217104930207151122}
   - component: {fileID: 1888331759046746058}
+  - component: {fileID: 217104930207151122}
   - component: {fileID: 7007143274546093265}
   m_Layer: 0
   m_Name: Enemy
@@ -1214,6 +1214,36 @@ Transform:
   - {fileID: 2601626660052640111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1888331759046746058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5117032311296125721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c7d499c34fc7149894b2f362501c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  visuals: {fileID: 2184719389273361409}
+  moveSpeed: 5
+  rotationSpeed: 5
+  duration: 5
+  healthPoint: 1
+  bodyDispearAfterDeath: 1.5
+  points: 100
+  comboValue: 1
+  targetPos: {x: 0, y: 0, z: 0}
+  isMoving: 1
+  attackTime: 2.25
+  damage: 1
+  projectal: {fileID: 1842304394038328753, guid: 6fc813f758a259548b15bf243c66c816, type: 3}
+  projectalSpeed: 25
+  danceTime: 2
+  danceMoveRange: 0
+  danceRotationRange: 5
+  ShouldDance: 0
 --- !u!54 &217104930207151122
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1241,36 +1271,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1888331759046746058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5117032311296125721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94c7d499c34fc7149894b2f362501c44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  visuals: {fileID: 2184719389273361409}
-  moveSpeed: 5
-  rotationSpeed: 5
-  duration: 5
-  healthPoint: 1
-  bodyDispearAfterDeath: 1.5
-  points: 100
-  comboValue: 1
-  targetPos: {x: 0, y: 0, z: 0}
-  isMoving: 1
-  attackTime: 3
-  damage: 1
-  projectal: {fileID: 5210616146899259467, guid: 6fc813f758a259548b15bf243c66c816, type: 3}
-  projectalSpeed: 100
-  danceTime: 2
-  danceMoveRange: 0
-  danceRotationRange: 5
-  ShouldDance: 0
 --- !u!136 &7007143274546093265
 CapsuleCollider:
   m_ObjectHideFlags: 0
