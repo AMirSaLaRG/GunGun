@@ -18,8 +18,8 @@ public class LevelItem : MonoBehaviour
         levelIndex = index;
         levelNameText.text = data.levelName;
         thumbnailImage.sprite = data.thumbnail;
-        scoreText.text = $"Score: {data.score}";
-        SetStars(data.starsEarned);
+        scoreText.text = $"Score: {SaveManager.instance.GetPoints(index)}";
+        SetStars(SaveManager.instance.GetStarts(index));
     }
 
     void SetStars(int earned)

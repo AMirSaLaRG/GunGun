@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+[System.Serializable]
+public class PlayerData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string name;
+    public float currentCoins;
+    public int[] levelStars;      // stars per level
+    public int[] levelPoints;     // points per level
+    public int unlockedLevel = 1;
+    public float musicVolume;
+    public float sfxVolume;
+    
 }

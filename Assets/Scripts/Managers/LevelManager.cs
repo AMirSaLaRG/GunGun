@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     public List<LevelItemData> levels = new List<LevelItemData>();
 
     private WaweManager currentWawes;
-
+    
     private void Start()
     {
         PopulateLevels();
@@ -22,12 +22,15 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        GameManager.instance.PlayerData;
+
+        PlayerData progressData = SaveManager.instance.data;
         // Create level items
         for (int i = 0; i < levels.Count; i++)
         {
             GameObject newItem = Instantiate(levelItemPrefab, contentParent);
             LevelItem itemScript = newItem.GetComponent<LevelItem>();
+
+            
 
             if (itemScript != null)
             {
@@ -39,7 +42,7 @@ public class LevelManager : MonoBehaviour
             if (btn == null)
                 btn = newItem.AddComponent<Button>();
 
-            if (levels[i].isLock == true && i != 0)
+            if (i > progressData.unlockedLevel)
                 btn.interactable = false;
 
             int index = i; // Capture for closure
@@ -82,4 +85,6 @@ public class LevelManager : MonoBehaviour
 
         }
     }
+
+
 }
