@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
     [SerializeField] private LayerMask whatIsUntargetable;
 
-
+    private bool gameStarted = false;
 
 
     private float points = 0;
@@ -237,6 +237,8 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnTap(InputAction.CallbackContext context)
     {
+        if (gameStarted == false) return;
+
         StartCoroutine(CheckUITap());
     }
 
@@ -275,4 +277,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (healthPoint <= 0)
             Debug.Log("You took shot you are dead");
     }
+
+    public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
 }

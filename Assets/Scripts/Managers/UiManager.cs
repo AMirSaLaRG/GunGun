@@ -9,7 +9,18 @@ using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
-    [Header("Elements")]
+    [Header("Pannels")]
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject settings;
+    [SerializeField] private GameObject credits;
+    [SerializeField] private GameObject levelSelection;
+    [SerializeField] private GameObject ready;
+    [SerializeField] private GameObject inGame;
+    [SerializeField] private GameObject pause;
+    [SerializeField] private GameObject victory;
+    [SerializeField] private GameObject gameOver;
+
+    [Header("In Game Elements")]
     [SerializeField] private TextMeshProUGUI gunAmoText;
     [SerializeField] private Button reloadBtn;
     [SerializeField] private GameObject hostageImageHolder;
@@ -18,6 +29,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PointsText;
     [SerializeField] private TextMeshProUGUI ComboRemindSecText;
 
+    private EPanel currentPanel;
 
     private List<HostageImage> HostageImages = new List<HostageImage>();
 
@@ -36,7 +48,20 @@ public class UiManager : MonoBehaviour
         HostageImages = hostageImageHolder.GetComponentsInChildren<HostageImage>().ToList();
     }
 
-    
+    public void SetPanel(EPanel panel)
+    {
+        mainMenu?.SetActive(panel == EPanel.MainMenu);
+        settings?.SetActive(panel == EPanel.Settings);
+        credits?.SetActive(panel == EPanel.Credits);
+        ready?.SetActive(panel == EPanel.Ready);
+        levelSelection?.SetActive(panel == EPanel.LevelSelection);
+        inGame?.SetActive(panel == EPanel.InGame);
+        pause?.SetActive(panel == EPanel.Pause);
+        victory?.SetActive(panel == EPanel.Victory);
+        gameOver?.SetActive(panel == EPanel.GameOver);
+
+        currentPanel = panel;
+    }
 
     public void UiOnHostageKill(int hostageKilled)
     {

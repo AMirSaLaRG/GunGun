@@ -6,6 +6,7 @@ public class ElevatorMainMenu : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private Transform Door;
     [SerializeField] private Transform button;
+    public float actionTime = 1;
 
     private Vector3 startingPos;
     private void Start()
@@ -14,35 +15,35 @@ public class ElevatorMainMenu : MonoBehaviour
     }
 
     [ContextMenu("Test look at level change")]
-    private void ChangeLevelAnimation()
+    public void ChangeLevelAnimation()
     {
-        transform.DORotate(new Vector3(0, 90, 0), 1);
+        transform.DORotate(new Vector3(0, 90, 0), actionTime);
     }
     [ContextMenu("Test look at level")]
-    private void LevelView()
+    public void LevelView()
     {
-        transform.DORotate(new Vector3(0, 0, 0), 1);
+        transform.DORotate(new Vector3(0, 0, 0), actionTime);
     }
     [ContextMenu("Test EnterScene")]
-    private void OpenScene()
+    public void EnterTheLevel()
     {
-        transform.DORotate(new Vector3(0, 180, 0), 1).OnComplete(() => {
+        transform.DORotate(new Vector3(0, 180, 0), actionTime).OnComplete(() => {
 
-            Door.DOScaleX(20, 1).OnComplete(() => { transform.DOMoveZ(-2, 1); });
+            Door.DOScaleX(20, actionTime).OnComplete(() => { transform.DOMoveZ(-2, actionTime); });
                
         });
     }
     [ContextMenu("Test LeaveScene")]
-    private void LeaveScene()
+    public void LeaveScene()
     {
-        transform.DOMoveZ(startingPos.z, 1).OnComplete(() => {
+        transform.DOMoveZ(startingPos.z, actionTime).OnComplete(() => {
 
-            Door.DOScaleX(100, 1).OnComplete(() => { transform.DORotate(new Vector3(0, 0, 0), 1); });
+            Door.DOScaleX(100, actionTime).OnComplete(() => { transform.DORotate(new Vector3(0, 0, 0), actionTime); });
                
         });
     }
     [ContextMenu("Level Change scene change")]
-    private void SceneChangeAnim()
+    public void SceneChangeAnim()
     {
         transform.DOLocalMove(new Vector3(0, startingPos.y + .05f, 0), .3f).SetEase(Ease.InOutElastic).OnComplete(() =>
         {

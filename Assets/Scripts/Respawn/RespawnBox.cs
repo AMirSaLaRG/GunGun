@@ -18,11 +18,9 @@ public class RespawnBox : MonoBehaviour
     [SerializeField] private GameObject enemyDummy;
     [SerializeField] private Material DummyMaterial;
 
-    [Header("Curtain Setup")]
-    [SerializeField] private Transform myCurtain;
-    private float openZ = 78f;
-    private float CloseZ;
-    private float curtainTransitionTime = 1.5f;
+    [Header("Activate Setup")]
+    [SerializeField] private EntityActivator myActivateItem;
+
    
     private List<Transform> respawnPoints = new List<Transform>();
 
@@ -40,8 +38,7 @@ public class RespawnBox : MonoBehaviour
         ClearDummy();
         SignUpRespawnPoints();
 
-        if (myCurtain != null )
-            CloseZ = myCurtain.localScale.z;
+        
     }
 
 
@@ -79,6 +76,12 @@ public class RespawnBox : MonoBehaviour
 
         return newTarget;
     }
+    [ContextMenu("RespawnTest")]
+    public void RepawnTest()
+    {
+        RespawnRandomSide(enemyDummy);
+    }
+
     public Target[] DoubleRespawnRandomSide(GameObject respawnTargetPrefab1, GameObject RespawnTargetPrefab2)
     {
         Target[] targets = new Target[2];
@@ -169,20 +172,20 @@ public class RespawnBox : MonoBehaviour
 
     private void SetActive (bool isActive) => this.isActive = isActive;
 
+    //TODO SomeTImes Activing some box take seconds i should implant time to make them active if needed
     [ContextMenu("testActive")]
     public void ActiveThisBox()
     {
         SetActive(true);
-        if (myCurtain != null)
-            myCurtain.DOScaleZ(openZ, curtainTransitionTime).SetEase(Ease.InOutElastic);
+        myActivateItem.SetActive();
     }
     [ContextMenu("testDeActive")]
 
     public void DeActivateThisBox()
     {
         SetActive(false);
-        if (myCurtain != null)
-            myCurtain.DOScaleZ(CloseZ, curtainTransitionTime);
+        myActivateItem.SetDeActive();
+
     }
 
     [ContextMenu ("DummyCheck")]

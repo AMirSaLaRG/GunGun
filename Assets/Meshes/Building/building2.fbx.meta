@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2f60611faf8c79f4d8f06c7f9d9a0a23
+guid: 37be530a553832b4fb32fe616ecbd1d8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: faa03ff6102ae5949a0dcb93a12aade2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Material.001
-    second: {fileID: 2100000, guid: 914b877a03a2d1d4db583d1f7449d27f, type: 2}
+    second: {fileID: 2100000, guid: 5d0efa9c5ea6cce4da796ed3ab0c4dc3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 05003670fc59aa74288fda4272855338, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 7cef48edeb60e5647926ee461f2c6053, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: emision
+    second: {fileID: 2100000, guid: 216cf6f9a26edc941a18b644928d869f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

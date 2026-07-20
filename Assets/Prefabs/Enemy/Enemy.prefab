@@ -1227,7 +1227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   visuals: {fileID: 2184719389273361409}
-  moveSpeed: 5
+  moveSpeed: 7
   rotationSpeed: 5
   duration: 5
   healthPoint: 1

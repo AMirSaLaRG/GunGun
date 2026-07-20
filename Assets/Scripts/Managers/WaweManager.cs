@@ -9,6 +9,7 @@ public class WaweManager : MonoBehaviour
 {
     private RespawnManager respawnManager;
     [Header ("Setup")]
+
     [SerializeField] private List<WaveData> waweData;
     //private List<WaveData> waweData = new List<WaveData>();
     public bool isStarted = true;
@@ -25,14 +26,6 @@ public class WaweManager : MonoBehaviour
 
     private bool taskIsSq;
     private int currentSqsIndex = 0;
-    private void Awake()
-    {
-        respawnManager = FindFirstObjectByType<RespawnManager>();
-
-        respawnManager.jobDone += RespawnManagerTaskOver;
-
-
-    }
 
     private void Start()
     {
@@ -244,4 +237,14 @@ public class WaweManager : MonoBehaviour
         for (int i = 0; i < probs.Count; i++)
             data.respawns[i].respawnProb = data.respawns[i].respawnProb / sumProbs;
     }
+
+    public void BreakOnWawe()
+    {
+        respawnManager.BreakRespawn();
+
+        respawnManager.jobDone += RespawnManagerTaskOver;
+
+    }
+
+    public void SetRespawnManager(RespawnManager respawnManager) => this.respawnManager = respawnManager;
 }
