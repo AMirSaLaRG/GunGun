@@ -34,10 +34,21 @@ public class SaveManager : MonoBehaviour
             data = new PlayerData();
             data.unlockedLevel = 0;
             data.levelStars = new int[100];
-            data.levelPoints = new int[100];
+            data.levelPoints = new float[100];
         }
     }
 
     public int GetStarts(int levelIndex) => data.levelStars[levelIndex];
     public float GetPoints(int levelIndex) => data.levelPoints[levelIndex];
+
+    [ContextMenu("DeleteSave")]
+    private void DeleteSave()
+    {
+        data = new PlayerData();
+        data.unlockedLevel = 0;
+        data.levelStars = new int[100];
+        data.levelPoints = new float[100];
+
+        Save();
+    }
 }

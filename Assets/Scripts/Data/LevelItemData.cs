@@ -8,6 +8,6 @@ public class LevelItemData
     public Sprite thumbnail;
     public WaweManager waveManager;
     public RespawnManager respawnManager;
-    public Transform items;
+    public Transform[] items;
     public bool isLock = true;
 }

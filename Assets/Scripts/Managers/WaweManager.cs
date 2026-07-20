@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -134,7 +135,7 @@ public class WaweManager : MonoBehaviour
         {
             if (respawnManager.isSceenClear)
             {
-                Debug.Log("all wawes executed!");
+                GameManager.instance.LevelCompleted();
                 isWaweEnded = true;
                 isTimeForNextWawe = false;
             }
@@ -242,9 +243,29 @@ public class WaweManager : MonoBehaviour
     {
         respawnManager.BreakRespawn();
 
-        respawnManager.jobDone += RespawnManagerTaskOver;
 
     }
 
-    public void SetRespawnManager(RespawnManager respawnManager) => this.respawnManager = respawnManager;
+    public void ClearScene()
+    {
+        BreakOnWawe();
+
+
+        foreach (var target in FindObjectsByType<Target>(FindObjectsSortMode.InstanceID))
+        {
+            target.DOKill();
+            Destroy(target.gameObject);
+        }
+        foreach (var target in FindObjectsByType<EnemyProjectal>(FindObjectsSortMode.InstanceID))
+        {
+            target.DOKill();
+            Destroy(target.gameObject);
+        }
+    }
+    public void SetRespawnManager(RespawnManager respawnManager)
+    {
+        this.respawnManager = respawnManager;
+        this.respawnManager.jobDone += RespawnManagerTaskOver;
+
+    }
 }

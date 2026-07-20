@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     public List<LevelItemData> levels = new List<LevelItemData>();
 
     private WaweManager currentWawes;
+
+    public int currentLevelIndex {  get; private set; }
     
     private void Start()
     {
@@ -61,12 +63,16 @@ public class LevelManager : MonoBehaviour
         LevelItemData levelToLoad = levels[index];
 
         foreach (var level in levels)
-            level.items.gameObject.SetActive(false);
+            foreach (var item in level.items)
+                item.gameObject.SetActive(false);
 
-        levelToLoad.items.gameObject.SetActive(true);
+        foreach (var item in levelToLoad.items)
+            item.gameObject.SetActive(true);
+
         currentWawes = levelToLoad.waveManager;
         currentWawes.SetRespawnManager(levelToLoad.respawnManager);
 
+        currentLevelIndex = index;
 
         GameManager.instance.OnLevelSelected();
     }
@@ -86,5 +92,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void ClearScene()
+    {
+        currentWawes.ClearScene();
+    }
 
 }

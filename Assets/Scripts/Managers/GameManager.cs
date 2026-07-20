@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
     private UiManager uiManager;
     private ElevatorMainMenu elevator;
     private PlayerController playerController;
+    private PlayerData playerData;
+
+
+    private int currenLevelIndex = 0;
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.MainMenu);
         playerController.SetGameStarted(false);
 
+        playerData = SaveManager.instance.data;
     }
 
 
@@ -91,5 +96,64 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.InGame);
         playerController.SetGameStarted(true);
         levelManager.SetGameStart(true);
+
+        
+    }
+
+    public void LevelCompleted()
+    {
+        uiManager.SetPanel(EPanel.None);
+        StartCoroutine(LevelCompletedCo());
+    }
+
+    private IEnumerator LevelCompletedCo()
+    {
+        elevator.LeaveScene();
+        yield return new WaitForSeconds(elevator.actionTime * 2);
+        uiManager.SetPanel(EPanel.Victory);
+        playerController.SetGameStarted(false);
+        levelManager.SetGameStart(false);
+
+        SaveLevelCompleted();
+    }
+    public void GameOver()
+    {
+        uiManager.SetPanel(EPanel.None);
+        levelManager.ClearScene();
+        StartCoroutine(GameOverCo());
+    }
+
+    private IEnumerator GameOverCo()
+    {
+        elevator.LeaveScene();
+        yield return new WaitForSeconds(elevator.actionTime * 2);
+        uiManager.SetPanel(EPanel.GameOver);
+        playerController.SetGameStarted(false);
+        levelManager.SetGameStart(false);
+
+        SaveGameOver();
+    }
+
+    private void SaveLevelCompleted()
+    {
+        float points = playerController.points;
+        int currentLevelIndex = levelManager.currentLevelIndex;
+
+        playerData.levelPoints[currentLevelIndex] = points;
+ 
+        if (playerData.unlockedLevel < currentLevelIndex + 1)
+            playerData.unlockedLevel = currentLevelIndex + 1;
+
+        SaveManager.instance.Save();
+    }
+    private void SaveGameOver()
+    {
+        float points = playerController.points;
+        int currentLevelIndex = levelManager.currentLevelIndex;
+
+        playerData.levelPoints[currentLevelIndex] = points;
+ 
+
+        SaveManager.instance.Save();
     }
 }

@@ -5347,6 +5347,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542229559}
   m_CullTransparentMesh: 1
+--- !u!1 &547599297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 547599298}
+  m_Layer: 0
+  m_Name: RespawnManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &547599298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547599297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.1541, y: 7.53953, z: 36.35812}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1325263372}
+  - {fileID: 1719459934}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &555210440
 GameObject:
   m_ObjectHideFlags: 0
@@ -14331,7 +14364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1318622557
 Transform:
   m_ObjectHideFlags: 0
@@ -14346,7 +14379,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 361496756}
-  - {fileID: 1719459934}
   m_Father: {fileID: 1778445844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1325263371
@@ -14375,7 +14407,7 @@ Transform:
   m_GameObject: {fileID: 1325263371}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.01755, y: -3.73069, z: -50.00001}
+  m_LocalPosition: {x: -5.1541, y: -7.53953, z: -36.35812}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14386,7 +14418,7 @@ Transform:
   - {fileID: 1234226530}
   - {fileID: 1817104507}
   - {fileID: 582597959}
-  m_Father: {fileID: 1599106808}
+  m_Father: {fileID: 547599298}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1325263373
 MonoBehaviour:
@@ -17262,7 +17294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1599106808
 Transform:
   m_ObjectHideFlags: 0
@@ -17277,7 +17309,6 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1930241814}
-  - {fileID: 1325263372}
   m_Father: {fileID: 1778445844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1603851125
@@ -17596,9 +17627,109 @@ MonoBehaviour:
   data:
     name: 
     currentCoins: 0
-    levelStars: 
-    levelPoints: 
-    unlockedLevel: 1
+    levelStars: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    levelPoints:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    unlockedLevel: 0
     musicVolume: 0
     sfxVolume: 0
 --- !u!4 &1645523078
@@ -18064,7 +18195,7 @@ Transform:
   m_GameObject: {fileID: 1719459932}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.01755, y: -3.73069, z: -50.00001}
+  m_LocalPosition: {x: -5.1541, y: -7.53953, z: -36.35812}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18080,7 +18211,7 @@ Transform:
   - {fileID: 663898685}
   - {fileID: 1254392427}
   - {fileID: 860202072}
-  m_Father: {fileID: 1318622557}
+  m_Father: {fileID: 547599298}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1721856237
 GameObject:
@@ -19200,7 +19331,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1360148652}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6938254
+  m_Size: 0.6060465
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19332,6 +19463,10 @@ PrefabInstance:
     - target: {fileID: 7478202452449151685, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.z
       value: 7.167
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528239074816719276, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20247,13 +20382,15 @@ MonoBehaviour:
     thumbnail: {fileID: 21300018, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
     waveManager: {fileID: 2016192283}
     respawnManager: {fileID: 1325263373}
-    items: {fileID: 1599106808}
+    items:
+    - {fileID: 1599106808}
     isLock: 1
-  - levelName: Level 1
+  - levelName: Level2
     thumbnail: {fileID: 21300018, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
     waveManager: {fileID: 771490949}
     respawnManager: {fileID: 1719459933}
-    items: {fileID: 1318622557}
+    items:
+    - {fileID: 1318622557}
     isLock: 1
 --- !u!4 &1998019054
 Transform:
@@ -20560,7 +20697,7 @@ MonoBehaviour:
   waweData:
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
+    durationIfTimeBase: 20
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
     nextWaweDelay: 0
@@ -20570,27 +20707,10 @@ MonoBehaviour:
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
-      respawnProb: 0.818
+      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
-      respawnProb: 0.19
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 20
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 6
-    minMaxNumSummon: {x: 0, y: 0}
-    minMaxRandomIntervalSummon: {x: 0, y: 0}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      respawnProb: 0.818
-    - respawnType: 1
-      prefab: {fileID: 0}
-      respawnProb: 0.19
+      respawnProb: 1
     isWaweEnded: 0
   isStarted: 0
 --- !u!4 &2016192284
@@ -24419,7 +24539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElevatorMainMenu
   Door: {fileID: 5773848367923650541}
   button: {fileID: 0}
-  actionTime: 1
+  actionTime: 0.5
 --- !u!4 &9047889830658391926
 Transform:
   m_ObjectHideFlags: 0
@@ -24489,6 +24609,7 @@ SceneRoots:
   - {fileID: 2062707314}
   - {fileID: 1645523078}
   - {fileID: 1998019054}
+  - {fileID: 547599298}
   - {fileID: 1778445844}
   - {fileID: 832575519}
   - {fileID: 849324135}

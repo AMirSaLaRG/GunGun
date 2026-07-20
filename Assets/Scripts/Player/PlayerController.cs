@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private bool gameStarted = false;
 
 
-    private float points = 0;
+    public float points { private set; get; } = 0;
     private int currentKills = 0;
     private int currentCombo = 0;
     private bool isOnCombo = false;
@@ -157,7 +157,6 @@ public class PlayerController : MonoBehaviour, IDamagable
             return;
         }
      
-        target.TakeDamage(gunDamage);
         ShotForce(hit, shotPos, target);
 
         if (target.TryGetComponent(out Enemy enemy))
@@ -168,6 +167,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         else
             ResetCombo();
 
+        target.TakeDamage(gunDamage);
+
         UpdateUi();
 
     }
@@ -176,7 +177,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         isOnCombo = false;
 
-        if (target.isDead == false)
+        if (target.isDead)
             return;
 
         currentHostageKilled++;
@@ -186,8 +187,8 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         uiManager.UiOnHostageKill(currentHostageKilled);
 
-        if (hostageKillAlowed >= currentHostageKilled)
-            Debug.Log("GameOver you killed alot of hostaged you are fired!");
+        if (hostageKillAlowed <= currentHostageKilled)
+            GameManager.instance.GameOver();
     }
 
     private void OnEnemyHit(Enemy target)
@@ -275,7 +276,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         healthPoint -= damage;
         if (healthPoint <= 0)
-            Debug.Log("You took shot you are dead");
+            GameManager.instance.GameOver();
+
     }
 
     public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
