@@ -25,7 +25,6 @@ public class RespawnManager : MonoBehaviour
 
     private RespawnBox[] myRespawnBoxes;
     private List<RespawnBox> activeEmptyBoxes = new List<RespawnBox>();
-    private List<RespawnBox> boxes = new List<RespawnBox>();
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
     private List<Target> targetTracker = new List<Target>();
 
@@ -335,6 +334,20 @@ public class RespawnManager : MonoBehaviour
         deActiveBoxes.Remove(box);
     }
 
+    public void DeActiveAllBoxes()
+    {
+        foreach (var box in myRespawnBoxes)
+            box.DeActivateThisBox();
+
+        activeEmptyBoxes.Clear();
+
+        deActiveBoxes.Clear();
+        deActiveBoxes.AddRange(myRespawnBoxes);
+
+        targetTracker.Clear();
+
+
+    }
 
     private List<int> HashRandomSelection(int Range, int returnNum)
     {
@@ -465,7 +478,6 @@ public class RespawnManager : MonoBehaviour
         foreach (var box in myRespawnBoxes)
             box.SetPlayer(player);
 
-        boxes = myRespawnBoxes.ToList();
         deActiveBoxes = myRespawnBoxes.ToList();
     }
 

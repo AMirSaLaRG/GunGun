@@ -13,9 +13,8 @@ public class WaweManager : MonoBehaviour
 
     [SerializeField] private List<WaveData> waweData;
     //private List<WaveData> waweData = new List<WaveData>();
-    public bool isStarted = true;
+    private bool isStarted = false;
 
-    private float timeLastWaweEnded = 0;
     private bool isWaweEnded = true;
     private bool isTimeForNextWawe = true;
     private int currentWaveIndex = 0;
@@ -28,8 +27,11 @@ public class WaweManager : MonoBehaviour
     private bool taskIsSq;
     private int currentSqsIndex = 0;
 
+
     private void Start()
     {
+        ResetWaweManager();
+
         List<WaveData> refrenceSqData = new List<WaveData>();
 
         foreach (var data in waweData)
@@ -64,17 +66,35 @@ public class WaweManager : MonoBehaviour
         StartWawe();
     }
 
+    public void StartWaves()
+    {
+        isStarted = true;
+
+        isWaweEnded = true;
+        isTimeForNextWawe = true;
+
+        waweStartTime = Time.time;
+    }
+
+    public void StopWaves()
+    {
+        BreakOnWawe();
+        ClearScene();
+        respawnManager.DeActiveAllBoxes();
+    }
+    private void ResetWaweManager()
+    {
+        currentWaveIndex = 0;
+        currentSqsIndex = 0;
+    }
     private bool isTimeForEvent()
     {
-        Debug.Log("a");
 
         if (sqs.Count == 0)
             return false;
-        Debug.Log("b");
 
         if (currentSqsIndex >= sqs.Count)
             return false;
-        Debug.Log("c");
 
         return timeMarksForSqs[currentSqsIndex] < (Time.time - waweStartTime);
     }
@@ -250,6 +270,7 @@ public class WaweManager : MonoBehaviour
     {
         BreakOnWawe();
 
+        ResetWaweManager();
 
         foreach (var target in FindObjectsByType<Target>(FindObjectsSortMode.InstanceID))
         {

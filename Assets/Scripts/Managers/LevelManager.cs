@@ -17,7 +17,7 @@ public class LevelManager : MonoBehaviour
         PopulateLevels();
     }
 
-    private void PopulateLevels()
+    public void PopulateLevels()
     {
         // Clear existing items
         foreach (Transform child in contentParent)
@@ -76,20 +76,36 @@ public class LevelManager : MonoBehaviour
 
         GameManager.instance.OnLevelSelected();
     }
+    public void LoadNextLevel()
+    {
+        currentLevelIndex++;
+
+        int index = currentLevelIndex;
+        LevelItemData levelToLoad = levels[index];
+
+        foreach (var level in levels)
+            foreach (var item in level.items)
+                item.gameObject.SetActive(false);
+
+        foreach (var item in levelToLoad.items)
+            item.gameObject.SetActive(true);
+
+        currentWawes = levelToLoad.waveManager;
+        currentWawes.SetRespawnManager(levelToLoad.respawnManager);
+
+        currentLevelIndex = index;
+
+        GameManager.instance.OnLevelSelected();
+    }
 
 
     public void SetGameStart(bool gameStart)
     {
         if (gameStart)
-        {
-            currentWawes.isStarted = true;
-        }
-        else
-        {
-            currentWawes.isStarted = false;
-            currentWawes.BreakOnWawe();
+            currentWawes.StartWaves();
 
-        }
+        else
+            currentWawes.StopWaves();
     }
 
     public void ClearScene()

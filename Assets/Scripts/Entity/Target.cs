@@ -237,6 +237,9 @@ public class Target : MonoBehaviour, IDamagable
 
         rb.constraints = RigidbodyConstraints.None;
 
+        isMoving = false;
+        isFacingCamera = false;
+
         transform.DOKill();
 
     }

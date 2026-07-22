@@ -65,6 +65,9 @@ public class UiManager : MonoBehaviour
 
     public void UiOnHostageKill(int hostageKilled)
     {
+        foreach (var image in HostageImages)
+            image.CrossHostage(false);
+
         for (int i = 0; i < hostageKilled; i++)
         {
             if (HostageImages.Count <= i)

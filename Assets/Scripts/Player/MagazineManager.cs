@@ -53,6 +53,7 @@ public class MagazineManager : MonoBehaviour
         if (currentBullet.localPosition != Vector3.zero)
         {
             Debug.Log("Emoyt magazine");
+            //this should handle gun amo but i have track in player and here
             return;
         }
 
@@ -90,7 +91,6 @@ public class MagazineManager : MonoBehaviour
             Transform bullet = mybullets[i];
             if (bullet.localPosition != Vector3.zero)
             {
-                Debug.Log(i);
                 mybulletsRb[i].isKinematic = true;
                 bullet.parent = bulletHolders[i];
 

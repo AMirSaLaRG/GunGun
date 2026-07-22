@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     [Header("Setup")]
 
-    [SerializeField] private int healthPoint = 1;
+    [SerializeField] private int healthPointCap = 1;
     [SerializeField] private int hostageKillAlowed = 3;
     [SerializeField] private float comboIntervalCooldown = 2;
 
@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private bool isOnCombo = false;
     private int currentAmo;
     private int currentHostageKilled = 0;
+    private int healthPoint;
 
     private float lastComboTime = 0;
 
@@ -54,8 +55,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        gunAmoCap = magazineManager.GetAmoCap();
-        currentAmo = gunAmoCap;
+        ResetPlayer();
         UpdateUi();
     }
 
@@ -193,12 +193,13 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnEnemyHit(Enemy target)
     {
-        if (target.isDead == false)
+        if (target.isDead)
             return;
         if(lastKill == target)
             return;
 
         lastKill = target;
+        
 
         float targetBasePoints = target.GetTargetPoints();
         points += targetBasePoints + (targetBasePoints * currentCombo * ComboToPointMultiPlyer);
@@ -280,5 +281,15 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
+    public void ResetPlayer()
+    {
+        currentHostageKilled = 0;
+        currentAmo = gunAmoCap;
+        points = 0;
+        currentKills = 0;
+        currentCombo = 0;
+        healthPoint = healthPointCap;
+        UpdateUi();
+    }
     public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
 }

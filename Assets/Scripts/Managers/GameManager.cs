@@ -5,11 +5,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    private LevelManager levelManager;
-    private UiManager uiManager;
-    private ElevatorMainMenu elevator;
-    private PlayerController playerController;
-    private PlayerData playerData;
+    public LevelManager levelManager { private set; get; }
+    public UiManager uiManager {private set; get;}
+    public ElevatorMainMenu elevator {private set; get;}
+    public PlayerController playerController {private set; get;}
+    public PlayerData playerData {private set; get;}
 
 
     private int currenLevelIndex = 0;
@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     public void LevelSelection()
     {
         uiManager.SetPanel(EPanel.None);
+        levelManager.PopulateLevels();
+
         StartCoroutine(levelSelectionCo());
     }
     private IEnumerator levelSelectionCo()
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void OnLevelSelected()
     {
         uiManager.SetPanel(EPanel.None);
+
         StartCoroutine(OnLevelSelectedCo());
     }
 
@@ -70,6 +73,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void MainMenuFromLevelView()
+    {
+        uiManager.SetPanel(EPanel.MainMenu);
+
+    }
     public void MainMenuFromLevelSelection()
     {
         uiManager.SetPanel(EPanel.None);
@@ -92,12 +100,30 @@ public class GameManager : MonoBehaviour
     private IEnumerator StartGameCo()
     {
         elevator.EnterTheLevel();
+        playerController.ResetPlayer();
         yield return new WaitForSeconds(elevator.actionTime * 2);
         uiManager.SetPanel(EPanel.InGame);
         playerController.SetGameStarted(true);
         levelManager.SetGameStart(true);
+    }
 
-        
+    public void SetToNextLevel()
+    {
+        uiManager.SetPanel(EPanel.None);
+        StartCoroutine(SetToNextLevelCo());
+    }
+
+    private IEnumerator SetToNextLevelCo()
+    {
+        elevator.ChangeLevelAnimation();
+        yield return new WaitForSeconds(elevator.actionTime);
+        levelManager.LoadNextLevel();
+        elevator.SceneChangeAnim();
+        yield return new WaitForSeconds(elevator.actionTime * (.6f));
+        elevator.LevelView();
+        yield return new WaitForSeconds(elevator.actionTime);
+        uiManager.SetPanel(EPanel.Ready);
+
     }
 
     public void LevelCompleted()
@@ -113,6 +139,8 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.Victory);
         playerController.SetGameStarted(false);
         levelManager.SetGameStart(false);
+        levelManager.ClearScene();
+
 
         SaveLevelCompleted();
     }
@@ -129,17 +157,24 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(elevator.actionTime * 2);
         uiManager.SetPanel(EPanel.GameOver);
         playerController.SetGameStarted(false);
+
         levelManager.SetGameStart(false);
+        levelManager.ClearScene();
+
 
         SaveGameOver();
     }
 
     private void SaveLevelCompleted()
     {
+        
         float points = playerController.points;
         int currentLevelIndex = levelManager.currentLevelIndex;
 
-        playerData.levelPoints[currentLevelIndex] = points;
+        if (playerData.levelPoints[currenLevelIndex] < points)
+            playerData.levelPoints[currentLevelIndex] = points;
+
+        //starts
  
         if (playerData.unlockedLevel < currentLevelIndex + 1)
             playerData.unlockedLevel = currentLevelIndex + 1;
