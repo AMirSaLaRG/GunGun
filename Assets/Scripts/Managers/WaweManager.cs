@@ -9,6 +9,8 @@ using UnityEngine;
 public class WaweManager : MonoBehaviour
 {
     private RespawnManager respawnManager;
+
+  
     [Header ("Setup")]
 
     [SerializeField] private List<WaveData> waweData;
@@ -78,7 +80,6 @@ public class WaweManager : MonoBehaviour
 
     public void StopWaves()
     {
-        BreakOnWawe();
         ClearScene();
         respawnManager.DeActiveAllBoxes();
     }
@@ -86,6 +87,7 @@ public class WaweManager : MonoBehaviour
     {
         currentWaveIndex = 0;
         currentSqsIndex = 0;
+        isStarted = false;
     }
     private bool isTimeForEvent()
     {
@@ -259,16 +261,9 @@ public class WaweManager : MonoBehaviour
             data.respawns[i].respawnProb = data.respawns[i].respawnProb / sumProbs;
     }
 
-    public void BreakOnWawe()
-    {
-        respawnManager.BreakRespawn();
-
-
-    }
-
     public void ClearScene()
     {
-        BreakOnWawe();
+        respawnManager.BreakRespawn();
 
         ResetWaweManager();
 

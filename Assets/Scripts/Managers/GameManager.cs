@@ -136,10 +136,10 @@ public class GameManager : MonoBehaviour
     {
         elevator.LeaveScene();
         yield return new WaitForSeconds(elevator.actionTime * 2);
-        uiManager.SetPanel(EPanel.Victory);
         playerController.SetGameStarted(false);
         levelManager.SetGameStart(false);
-        levelManager.ClearScene();
+
+        uiManager.SetPanel(EPanel.Victory);
 
 
         SaveLevelCompleted();
@@ -147,7 +147,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         uiManager.SetPanel(EPanel.None);
-        levelManager.ClearScene();
         StartCoroutine(GameOverCo());
     }
 
@@ -157,14 +156,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(elevator.actionTime * 2);
         uiManager.SetPanel(EPanel.GameOver);
         playerController.SetGameStarted(false);
-
         levelManager.SetGameStart(false);
-        levelManager.ClearScene();
 
 
         SaveGameOver();
     }
 
+    public void OnSettingClick()
+    {
+        uiManager.SetPanel(EPanel.Settings);
+    }
     private void SaveLevelCompleted()
     {
         
@@ -174,7 +175,9 @@ public class GameManager : MonoBehaviour
         if (playerData.levelPoints[currenLevelIndex] < points)
             playerData.levelPoints[currentLevelIndex] = points;
 
-        //starts
+        int earnedStart = ChecklevelStarsEarned();
+        if (playerData.levelStars[currenLevelIndex] < earnedStart)
+            playerData.levelStars[currenLevelIndex] = earnedStart;
  
         if (playerData.unlockedLevel < currentLevelIndex + 1)
             playerData.unlockedLevel = currentLevelIndex + 1;
@@ -186,9 +189,43 @@ public class GameManager : MonoBehaviour
         float points = playerController.points;
         int currentLevelIndex = levelManager.currentLevelIndex;
 
-        playerData.levelPoints[currentLevelIndex] = points;
- 
+        if (playerData.levelPoints[currenLevelIndex] < points)
+            playerData.levelPoints[currentLevelIndex] = points;
 
         SaveManager.instance.Save();
+    }
+
+    public int ChecklevelStarsEarned()
+    {
+        float[] requirepoints =levelManager.currentLevelStarPoints;
+        if (requirepoints == null || requirepoints.Length == 0)
+            return 0;
+
+
+
+        for (int i = 0; i < requirepoints.Length; i++)
+        {
+       
+            if (playerController.points < requirepoints[i])
+                return i;
+        }
+
+        return 3;
+    }
+
+
+    public void CreaditWindow()
+    {
+        uiManager.SetPanel(EPanel.Credits);
+
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

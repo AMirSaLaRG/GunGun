@@ -8,7 +8,8 @@ public class LevelManager : MonoBehaviour
     public Transform contentParent; // Assign the Content object
     public List<LevelItemData> levels = new List<LevelItemData>();
 
-    private WaweManager currentWawes;
+    private WaweManager currentWaves;
+    public float[] currentLevelStarPoints { private set; get; } = new float[3];
 
     public int currentLevelIndex {  get; private set; }
     
@@ -69,13 +70,13 @@ public class LevelManager : MonoBehaviour
         foreach (var item in levelToLoad.items)
             item.gameObject.SetActive(true);
 
-        currentWawes = levelToLoad.waveManager;
-        currentWawes.SetRespawnManager(levelToLoad.respawnManager);
+        SetUpLevelData(levelToLoad);
 
         currentLevelIndex = index;
 
         GameManager.instance.OnLevelSelected();
     }
+
     public void LoadNextLevel()
     {
         currentLevelIndex++;
@@ -90,27 +91,42 @@ public class LevelManager : MonoBehaviour
         foreach (var item in levelToLoad.items)
             item.gameObject.SetActive(true);
 
-        currentWawes = levelToLoad.waveManager;
-        currentWawes.SetRespawnManager(levelToLoad.respawnManager);
+        SetUpLevelData(levelToLoad);
+
 
         currentLevelIndex = index;
 
         GameManager.instance.OnLevelSelected();
     }
 
+    private void SetUpLevelData(LevelItemData levelToLoad)
+    {
+        currentWaves = levelToLoad.waveManager;
+        currentWaves.SetRespawnManager(levelToLoad.respawnManager);
+
+        if (levelToLoad.pointsForOneStar == 0 || levelToLoad.pointsFortwoStar == 0 || levelToLoad.pointsForthreeStar == 0)
+            Debug.LogWarning("Set The Star Points of Level");
+
+
+        currentLevelStarPoints[0] = levelToLoad.pointsForOneStar;
+        currentLevelStarPoints[1] = levelToLoad.pointsFortwoStar;
+        currentLevelStarPoints[2] = levelToLoad.pointsForthreeStar;
+    }
 
     public void SetGameStart(bool gameStart)
     {
         if (gameStart)
-            currentWawes.StartWaves();
+        {
+
+            currentWaves.StartWaves();
+        }
 
         else
-            currentWawes.StopWaves();
+        {
+            currentWaves.StopWaves();
+            currentWaves.ClearScene();
+        }
     }
 
-    public void ClearScene()
-    {
-        currentWawes.ClearScene();
-    }
 
 }

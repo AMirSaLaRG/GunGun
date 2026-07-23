@@ -29,7 +29,7 @@ public class ElevatorMainMenu : MonoBehaviour
     {
         transform.DORotate(new Vector3(0, 180, 0), actionTime).OnComplete(() => {
 
-            Door.DOScaleX(20, actionTime).OnComplete(() => { transform.DOMoveZ(-2, actionTime); });
+            Door.DOScaleX(20, actionTime).OnComplete(() => { transform.DOMoveZ(-5, actionTime); });
                
         });
     }

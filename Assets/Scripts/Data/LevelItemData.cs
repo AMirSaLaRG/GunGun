@@ -10,4 +10,8 @@ public class LevelItemData
     public RespawnManager respawnManager;
     public Transform[] items;
     public bool isLock = true;
+    public float pointsForOneStar;
+    public float pointsFortwoStar;
+    public float pointsForthreeStar;
+
 }

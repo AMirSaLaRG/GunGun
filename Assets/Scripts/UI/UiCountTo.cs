@@ -1,10 +1,10 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class UiCountTo : MonoBehaviour
 {
     private float numberToReach;
-    private float currentNumber;
 
     [SerializeField] float timeToReach = 1.1f;
 
@@ -17,44 +17,66 @@ public class UiCountTo : MonoBehaviour
     }
 
 
-    public void StartSettingTheNumber(float number, float timeToReach = 0)
+    public void StartSettingTheNumber(float number, float newTImeToReach = 0)
     {
-        if(timeToReach > 0)
-            this.timeToReach = timeToReach;
+
+        if (newTImeToReach > 0)
+            timeToReach = newTImeToReach;
+
+
 
         numberToReach = number;
-        InvokeRepeating(nameof(CountingTo), 0, timeToReach / numberToReach);
+
+        Debug.Log($"passed number {number} this made numbertoreach to {numberToReach}");
+
+        if (numberToReach < 0)
+            return;
+
+        StartCoroutine(CountToCo(timeToReach));
+
+    }
+
+    private IEnumerator CountToCo(float duration)
+    {
+        Debug.Log("StartCo" + duration);
+
+        float elaps = 0;
+        float currentNum = 0;
+        while (elaps < duration)
+        {
+
+            currentNum = Mathf.Lerp(0, numberToReach, elaps / duration);
+            Debug.Log("passing number" + currentNum);
+
+            WriteToTextHole(currentNum);
+
+
+            yield return null;
+            elaps += Time.deltaTime;
+        }
+        Debug.Log("Ended");
+
+        WriteToTextHole(numberToReach);
+
     }
 
     public void ResetNumber()
     {
         numberToReach = 0;
-        currentNumber = 0;
-        WriteToText(0);
+        WriteToTextHole(0);
 
     }
-    private void CountingTo()
-    {
 
-        if (currentNumber < numberToReach)
-        {
-            WriteToTextHole(currentNumber);
-            currentNumber++;
-        } else
-        {
-            WriteToTextHole(numberToReach);
-            CancelInvoke(nameof(CountingTo));
-        }
-    }
-
-    private void WriteToText(float num)
-    {
-        
-        text.text = num.ToString(".0");
-    }
     private void WriteToTextHole(float num)
     {
-        
+        if (text == null)
+            text = GetComponent<TextMeshProUGUI>();
+        if (text == null)
+        {
+            Debug.Log("Could not find Text mesh pro");
+            return; 
+        }
+        Debug.Log("writing number" +  num);
         text.text = num.ToString(".");
     }
 }
