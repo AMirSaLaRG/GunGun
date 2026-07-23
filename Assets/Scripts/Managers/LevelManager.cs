@@ -52,6 +52,11 @@ public class LevelManager : MonoBehaviour
             btn.onClick.AddListener(() => OnLevelSelected(index));
         }
     }
+    public void Test(int index)
+    {
+        OnLevelSelected(index);
+
+    }
 
     private void OnLevelSelected(int index)
     {

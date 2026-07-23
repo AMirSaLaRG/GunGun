@@ -277,6 +277,8 @@ public class WaweManager : MonoBehaviour
             target.DOKill();
             Destroy(target.gameObject);
         }
+
+        StopAllCoroutines();
     }
     public void SetRespawnManager(RespawnManager respawnManager)
     {

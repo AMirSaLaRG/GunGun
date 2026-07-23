@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public bool isTesting = false;
+
     public LevelManager levelManager { private set; get; }
     public UiManager uiManager {private set; get;}
     public ElevatorMainMenu elevator {private set; get;}
@@ -37,6 +39,12 @@ public class GameManager : MonoBehaviour
         playerController.SetGameStarted(false);
 
         playerData = SaveManager.instance.data;
+
+        if (isTesting)
+        {
+            StartGame();
+            levelManager.Test(0);
+        }
     }
 
 

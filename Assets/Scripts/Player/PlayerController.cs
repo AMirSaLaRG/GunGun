@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Processors;
 
 public class PlayerController : MonoBehaviour, IDamagable
 {
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     public GameObject TestBullet;
     private MagazineManager magazineManager;
 
+    [Header("PlayerCanvas")]
+    [SerializeField] private PlayerCanvas myCanvas;
 
     [Header("Setup")]
 
@@ -41,6 +44,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     private float lastComboTime = 0;
 
     private Enemy lastKill;
+    private bool isDead;
+
     private void Awake()
     {
         controls = new TouchControls();
@@ -275,14 +280,22 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
+        if (isDead)
+            return;
+
         healthPoint -= damage;
+        myCanvas.OnTakingDamage();
         if (healthPoint <= 0)
+        {
+            isDead = true;
             GameManager.instance.GameOver();
+        }
 
     }
 
     public void ResetPlayer()
     {
+        isDead = false;
         currentHostageKilled = 0;
         currentAmo = gunAmoCap;
         points = 0;

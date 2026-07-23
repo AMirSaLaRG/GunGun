@@ -847,11 +847,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hostage
   visuals: {fileID: 3835717565138771309}
-  moveSpeed: 5
-  rotationSpeed: 5
-  duration: 2
+  moveSpeed: 7.5
+  rotationSpeed: 7.5
+  duration: 0.5
   healthPoint: 1
-  bodyDispearAfterDeath: 2
+  bodyDispearAfterDeath: 1
   points: 100
   comboValue: 1
   targetPos: {x: 0, y: 0, z: 0}
