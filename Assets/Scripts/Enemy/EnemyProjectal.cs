@@ -17,7 +17,7 @@ public class EnemyProjectal : MonoBehaviour
         if (transform.position.z < Camera.main.transform.position.z + 1)
         {
             Instantiate(onHitVfx.gameObject, transform.position, Quaternion.identity, null);
-            player.TakeDamage(damage);
+            player.TakeDamage(damage, transform.position);
             Destroy(gameObject);
         }
     }

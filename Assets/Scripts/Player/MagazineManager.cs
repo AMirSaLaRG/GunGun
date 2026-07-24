@@ -19,7 +19,7 @@ public class MagazineManager : MonoBehaviour
 
     private Quaternion startRotation;
 
-    private void Start()
+    private void Awake()
     {
         mybullets = new Transform[bulletHolders.Length];
         mybulletsRb = new Rigidbody[bulletHolders.Length];

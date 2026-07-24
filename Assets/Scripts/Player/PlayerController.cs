@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
     [SerializeField] private LayerMask whatIsUntargetable;
 
+    public Camera mainCamera {  get; private set; }
+
     private bool gameStarted = false;
 
 
@@ -45,9 +48,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private Enemy lastKill;
     private bool isDead;
-
+    private int khalasShotCount;
+    private float currentCahsPoint;
     private void Awake()
     {
+        mainCamera = Camera.main;
         controls = new TouchControls();
         uiManager = FindFirstObjectByType<UiManager>();
         magazineManager = GetComponentInChildren<MagazineManager>();
@@ -108,7 +113,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
 
 
-        Ray ray = Camera.main.ScreenPointToRay(aimPosition);
+        Ray ray = mainCamera.ScreenPointToRay(aimPosition);
         
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
         {
@@ -154,10 +159,13 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnHit(RaycastHit hit, Vector3 shotPos)
     {
-  
+        Vector3 point = mainCamera.WorldToScreenPoint(hit.point);
+        float distance = hit.point.z - transform.position.z;
 
         if (hit.collider.TryGetComponent(out Target target) == false)
         {
+            myCanvas.Onhit(point, distance, "MISSED", UnityEngine.Color.yellow);
+
             ResetCombo();
             return;
         }
@@ -167,12 +175,19 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (target.TryGetComponent(out Enemy enemy))
             OnEnemyHit(enemy);
 
-        else if (target.TryGetComponent(out Hostage hostage))
-            OnHostageHit(hostage);
-        else
-            ResetCombo();
 
-        target.TakeDamage(gunDamage);
+        else if (target.TryGetComponent(out Hostage hostage))
+        {
+            myCanvas.Onhit(point, distance, "HOSTAGE", UnityEngine.Color.red);
+            OnHostageHit(hostage);
+        }
+        else
+        {
+            myCanvas.Onhit(point, distance, "MISSED", UnityEngine.Color.yellow);
+            ResetCombo();
+        }
+
+        target.TakeDamage(gunDamage, hit.point);
 
         UpdateUi();
 
@@ -198,31 +213,57 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnEnemyHit(Enemy target)
     {
+        Vector3 point = mainCamera.WorldToScreenPoint(target.transform.position);
+        float distance = target.transform.position.z - transform.position.z;
+
         if (target.isDead)
+        {
+            khalasShotCount++;
+            myCanvas.OnHitKhalas(point, distance, khalasShotCount, UnityEngine.Color.orange);
             return;
-        if(lastKill == target)
-            return;
+        }
 
         lastKill = target;
-        
+
+        khalasShotCount = 0;
 
         float targetBasePoints = target.GetTargetPoints();
+
+        if (target.isMoving)
+        {
+            myCanvas.Onhit(point, distance, "BOUNUS On Move", UnityEngine.Color.peru);
+
+
+        } else
+        {
+            myCanvas.Onhit(point, distance, "HIT", UnityEngine.Color.green);
+
+        }
+
         points += targetBasePoints + (targetBasePoints * currentCombo * ComboToPointMultiPlyer);
+        currentCahsPoint += targetBasePoints + (targetBasePoints * currentCombo * ComboToPointMultiPlyer);
         currentKills++;
 
-        AddToCombo(target.GetComboValue());
+        AddToCombo(target.GetComboValue(), target.transform.position);
 
     }
 
-    private void AddToCombo(int combo = 1)
+    private void AddToCombo(int combo, Vector3 targetPos)
     {
         currentCombo += combo;
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(targetPos);
+
+        myCanvas.OnCombo(screenPos, screenPos.z - transform.position.z, currentCombo);
+
         isOnCombo = true;
         lastComboTime = Time.time;
     }
 
     private void ResetCombo()
     {
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(transform.position);
+        myCanvas.OnCashPoint(screenPos, 1, currentCahsPoint);
+        currentCahsPoint = 0;
         isOnCombo = false;
         currentCombo = 0;
         UpdateUi();
@@ -278,16 +319,18 @@ public class PlayerController : MonoBehaviour, IDamagable
         controls.Disable();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Vector3 worldSpaceTakingDamage)
     {
         if (isDead)
             return;
 
+
         healthPoint -= damage;
-        myCanvas.OnTakingDamage();
+        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(worldSpaceTakingDamage));
         if (healthPoint <= 0)
         {
             isDead = true;
+            ResetCombo();
             GameManager.instance.GameOver();
         }
 
@@ -301,8 +344,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         points = 0;
         currentKills = 0;
         currentCombo = 0;
+        currentCahsPoint = 0;
         healthPoint = healthPointCap;
         UpdateUi();
+        magazineManager.OnReloadBullets();
     }
     public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
 }

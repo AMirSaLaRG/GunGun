@@ -23,6 +23,7 @@ public class Target : MonoBehaviour, IDamagable
     [SerializeField] protected float bodyDispearAfterDeath = 4f;
     [Header("TargetPoints")]
     [SerializeField] protected float points;
+    [SerializeField] protected float bounusMovingPoint = .1f;
     [SerializeField] protected int comboValue = 1;
 
     [SerializeField] protected Vector3 targetPos;
@@ -101,7 +102,7 @@ public class Target : MonoBehaviour, IDamagable
 
 
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, Vector3 worldSpaceOfDamageTaken)
     {
         if (isDurationEnded)
             return;
@@ -245,7 +246,14 @@ public class Target : MonoBehaviour, IDamagable
     }
 
 
-    public float GetTargetPoints() => points;
+    public float GetTargetPoints()
+    {
+        if (isMoving)
+            return points + (points * bounusMovingPoint);
+        else
+            return points;
+
+    }
 
     public int GetComboValue() => comboValue;
 

@@ -54,7 +54,6 @@ public class UiCountTo : MonoBehaviour
             yield return null;
             elaps += Time.deltaTime;
         }
-        Debug.Log("Ended");
 
         WriteToTextHole(numberToReach);
 
@@ -76,7 +75,6 @@ public class UiCountTo : MonoBehaviour
             Debug.Log("Could not find Text mesh pro");
             return; 
         }
-        Debug.Log("writing number" +  num);
         text.text = num.ToString(".");
     }
 }
