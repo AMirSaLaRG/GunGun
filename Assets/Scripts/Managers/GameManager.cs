@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-
+        
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(StartGameCo());
 
@@ -110,6 +110,9 @@ public class GameManager : MonoBehaviour
     {
         elevator.EnterTheLevel();
         yield return new WaitForSeconds(elevator.actionTime * 2);
+        playerController.SetGameStarted(false);
+        levelManager.SetGameStart(false);
+
         uiManager.SetPanel(EPanel.InGame);
         playerController.ResetPlayer();
 

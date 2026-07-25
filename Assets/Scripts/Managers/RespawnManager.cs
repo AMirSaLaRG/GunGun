@@ -15,7 +15,10 @@ public class RespawnManager : MonoBehaviour
     private Vector2 respawnTime = new Vector2(1, 3);
 
     [Header("basicSetup")]
-    [SerializeField] private List<RespawnData> respawnsBasicSetup = new List<RespawnData>();
+    [SerializeField] private GameObject basicEnemyPrefab;
+    [SerializeField] private GameObject enemyWithHostagePrefab;
+    [SerializeField] private GameObject HostagePrefab;
+    private List<RespawnData> respawnsBasicSetup = new List<RespawnData>();
 
     [Header("Prefabs")]
     [SerializeField] private GameObject enemyPrefab;
@@ -45,7 +48,7 @@ public class RespawnManager : MonoBehaviour
     
     private void Awake()
     {
-
+        CreateBasicRepspawnSetUpByPrefabs();
         GetAndCheckElements();
     }
 
@@ -210,6 +213,7 @@ public class RespawnManager : MonoBehaviour
     public void BreakRespawn()
     {
         isOnRandomRespawn = false;
+        activeEmptyBoxes.Clear();
     }
 
     private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0)
@@ -241,19 +245,36 @@ public class RespawnManager : MonoBehaviour
 
     private void RespawnTargetRandomly(RespawnData respawnData)
     {
-        RespawnBox box = ChoseRandomEmptyBox(false);
         GameObject prefab = respawnData.prefab;
-
-        if (activeEmptyBoxes.Contains(box) == false)
-            return;
-
+        
         if (prefab == null)
             prefab = respawnsBasicSetup.Find(x => x.respawnType == respawnData.respawnType).prefab;
 
         if (shouldCountDown)
             CheckForCountDown(respawnData.respawnType);
 
-        Target newTarget = box.RespawnRandomSide(prefab);
+        RespawnBox box = ChoseRandomEmptyBox(false);
+
+        if (activeEmptyBoxes.Contains(box) == false)
+            return;
+
+        Target newTarget = RespawnPrefabOn(prefab, box);
+
+        if (respawnData.respawnType == RespawnType.Hostage)
+        {
+            Hostage newHostage = newTarget.GetComponent<Hostage>();
+            targetTracker.Remove(newHostage);
+
+            RespawnEnemyWithHostage(box, newHostage);
+
+        }
+    }
+
+    private Target RespawnPrefabOn(GameObject prefab, RespawnBox box, bool usingLastSide = false)
+    {
+
+
+        Target newTarget = box.RespawnRandomSide(prefab, usingLastSide);
 
         targetTracker.Add(newTarget);
         isSceenClear = false;
@@ -263,7 +284,19 @@ public class RespawnManager : MonoBehaviour
 
         newTarget.atEndAction += OnRespawnLeftTheBox;
 
-        activeEmptyBoxes.Remove(box);
+        if (activeEmptyBoxes.Contains(box))
+            activeEmptyBoxes.Remove(box);
+
+        return newTarget;
+    }
+    
+    private void RespawnEnemyWithHostage(RespawnBox box, Hostage hostage)
+    {
+        Target newEnemyWithHostage = RespawnPrefabOn(enemyWithHostagePrefab, box, true);
+        EnemyWithHostage enemyWithHostage = newEnemyWithHostage.GetComponent<EnemyWithHostage>();
+
+        enemyWithHostage.Setup(hostage);
+        hostage.Setup(enemyWithHostage);
     }
 
     private void CheckForCountDown(RespawnType type)
@@ -420,7 +453,8 @@ public class RespawnManager : MonoBehaviour
             }
         }
 
-        activeEmptyBoxes.Add(resBox);
+        if (activeEmptyBoxes.Contains(resBox) == false)
+            activeEmptyBoxes.Add(resBox);
     }
 
     private void CheckAndSetRespawnBase(int newCountDown, RespawnType newCountDownType)
@@ -481,6 +515,19 @@ public class RespawnManager : MonoBehaviour
         deActiveBoxes = myRespawnBoxes.ToList();
     }
 
+    private void CreateBasicRepspawnSetUpByPrefabs()
+    {
+        RespawnData basicEnemy = new RespawnData();
+        basicEnemy.prefab = basicEnemyPrefab;
+        basicEnemy.respawnType = RespawnType.BaseEnemy;
+        respawnsBasicSetup.Add(basicEnemy);
+
+
+        RespawnData Hostage = new RespawnData();
+        Hostage.prefab = HostagePrefab;
+        Hostage.respawnType = RespawnType.Hostage;
+        respawnsBasicSetup.Add(Hostage);
+    }
 }
 
 

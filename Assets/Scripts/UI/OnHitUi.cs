@@ -36,7 +36,7 @@ public class OnHitUi : MonoBehaviour
     public void SetUpKhalas(int combo)
     {
         onHitText.text = combo.ToString();
-
+        
         DOTween.Kill(this.gameObject);
         transform.localScale = Vector3.one * myScale;
         float newScale = myScale * combo * 1.2f;

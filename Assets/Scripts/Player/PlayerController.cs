@@ -88,6 +88,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         else
             uiManager.SetComboTimer(comboIntervalCooldown);
 
+        if (currentAmo <= 1)
+        {
+            myCanvas.OnLowAmo();
+        }
         uiManager.WarningReloadBtn(currentAmo <= 1);
 
     }
@@ -147,6 +151,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         magazineManager.OnReloadBullets();
         currentAmo = gunAmoCap;
+        myCanvas.OnReload();
         UpdateUi();
     }
 
@@ -164,7 +169,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (hit.collider.TryGetComponent(out Target target) == false)
         {
-            myCanvas.Onhit(point, distance, "MISSED", UnityEngine.Color.yellow);
+            myCanvas.Onhit(point, distance, EHit.Missed);
 
             ResetCombo();
             return;
@@ -178,12 +183,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         else if (target.TryGetComponent(out Hostage hostage))
         {
-            myCanvas.Onhit(point, distance, "HOSTAGE", UnityEngine.Color.red);
             OnHostageHit(hostage);
         }
         else
         {
-            myCanvas.Onhit(point, distance, "MISSED", UnityEngine.Color.yellow);
+            myCanvas.Onhit(point, distance, EHit.Missed);
             ResetCombo();
         }
 
@@ -193,8 +197,13 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
-    private void OnHostageHit(Hostage target)
+    public void OnHostageHit(Hostage target)
     {
+        Vector3 point = mainCamera.WorldToScreenPoint(target.transform.position);
+        float distance = target.transform.position.z - transform.position.z;
+
+        myCanvas.Onhit(point, distance, EHit.Hostage);
+
         isOnCombo = false;
 
         if (target.isDead)
@@ -219,6 +228,9 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (target.isDead)
         {
             khalasShotCount++;
+
+            KhalasComboHandler();
+
             myCanvas.OnHitKhalas(point, distance, khalasShotCount, UnityEngine.Color.orange);
             return;
         }
@@ -231,12 +243,12 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (target.isMoving)
         {
-            myCanvas.Onhit(point, distance, "BOUNUS On Move", UnityEngine.Color.peru);
+            myCanvas.Onhit(point, distance, EHit.MovingEnemy);
 
 
         } else
         {
-            myCanvas.Onhit(point, distance, "HIT", UnityEngine.Color.green);
+            myCanvas.Onhit(point, distance, EHit.Enemy);
 
         }
 
@@ -259,6 +271,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         lastComboTime = Time.time;
     }
 
+    private void KhalasComboHandler()
+    {
+        if (khalasShotCount < 3)
+            return;
+        if (khalasShotCount < 5)
+            AddToCombo(1, lastKill.transform.position);
+        if (khalasShotCount >= 5)
+            AddToCombo(2, lastKill.transform.position);
+
+    }
     private void ResetCombo()
     {
         Vector3 screenPos = mainCamera.WorldToScreenPoint(transform.position);

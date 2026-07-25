@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class RespawnBox : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class RespawnBox : MonoBehaviour
     [Header("Activate Setup")]
     [SerializeField] private EntityActivator myActivateItem;
 
+    private Transform myLastSide;
    
     private List<Transform> respawnPoints = new List<Transform>();
 
@@ -58,10 +60,22 @@ public class RespawnBox : MonoBehaviour
         return targetData;
     }
 
-    public Target RespawnRandomSide(GameObject respawnTargetPrefab)
+    public Target RespawnRandomSide(GameObject respawnTargetPrefab, bool useLast = false)
     {
+        Transform randomTransform = null;
 
-        Transform randomTransform = GetRandomRespawnPoint();
+        if (useLast == false || myLastSide == null)
+        {
+
+            randomTransform = GetRandomRespawnPoint();
+            myLastSide = randomTransform;
+        }
+        else
+        {
+            randomTransform = myLastSide.transform;
+        }
+
+
         if (randomTransform == null)
         {
             Debug.Log("there is no respawnPoint. plz sign them up");

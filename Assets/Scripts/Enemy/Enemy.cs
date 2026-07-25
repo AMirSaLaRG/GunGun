@@ -19,6 +19,8 @@ public class Enemy : Target
     [SerializeField] private float danceRotationRange = 15f;
     private float danceCycleDelay = .4f;
 
+    
+
     private Vector3 startingRotation;
     private Vector3 startingPos;
 
@@ -58,10 +60,6 @@ public class Enemy : Target
 
         if (shootCo != null)
             StopCoroutine(shootCo);
-
-        
-        
-
     }
 
     protected override void AtEndOfDurationAction()
@@ -102,12 +100,11 @@ public class Enemy : Target
         Shoot();
     }
 
-    private void Shoot()
+    protected virtual void Shoot()
     {
         anim.SetTrigger(triggerAnimAttackKeyWord);
-        GameObject newBullet = Instantiate(projectal, transform.position, GetDirectionTowardCamera());
+        GameObject newBullet = Instantiate(projectal, transform.position, GetDirectionTowardLookPosition(facingPosition));
         newBullet.GetComponent<EnemyProjectal>().SetUP(projectalSpeed, damage, player);
-
     }
     
     protected virtual void Aiming()

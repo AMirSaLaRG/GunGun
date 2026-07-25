@@ -28,14 +28,15 @@ public class Target : MonoBehaviour, IDamagable
 
     [SerializeField] protected Vector3 targetPos;
 
-    private RespawnBox myRespawnBox;
-    private RespawnManager myRespawnManager;
+    protected RespawnBox myRespawnBox;
+    protected RespawnManager myRespawnManager;
 
     public Action<RespawnBox, Target> atEndAction;
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
     public bool isMoving = true;
-    private bool isFacingCamera = false;
+    public bool isRotating = false;
+    protected Vector3 facingPosition;
 
     private float DurationEndTime = 0;
     private bool isDurationEnded = false;
@@ -70,15 +71,15 @@ public class Target : MonoBehaviour, IDamagable
     {
 
         if (isMoving)
-            MoveToTarget();
+            MoveForward();
         if (anim  != null) 
             anim?.SetBool(boolAnimRunKeyWord, isMoving);
 
 
-        if (isFacingCamera)
-            LookAtCamera();
+        if (isRotating)
+            LookAt(facingPosition);
 
-        if (isMoving == false && isFacingCamera == false)
+        if (isMoving == false && isRotating == false)
             if (isDurationEnded == false)
                 CheckDurationEnded();
 
@@ -87,16 +88,12 @@ public class Target : MonoBehaviour, IDamagable
     public void SetUpTarget(PlayerController player, bool isScaling)
     {
         this.player = player;
-
         this.isScaling = isScaling;
- 
-
     }
 
     private void ScaleToOrginal()
     {
         transform.localScale = Vector3.zero;
-
         transform.DOScale(StartingScale, scaleTime);
     }
 
@@ -115,7 +112,6 @@ public class Target : MonoBehaviour, IDamagable
 
         healthPoint -= (int)damage;
 
-
         if (healthPoint <= 0)
         {
             Die();
@@ -133,14 +129,25 @@ public class Target : MonoBehaviour, IDamagable
         transform.forward = facingDirection;
     }
 
-    protected virtual void MoveToTarget()
+    protected virtual void MoveForward()
     {
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
-
-    protected virtual void LookAtCamera()
+    protected virtual void MoveBackrward()
     {
-        Quaternion targetRotation = GetDirectionTowardCamera();
+        transform.position -= transform.forward * moveSpeed * Time.deltaTime;
+    }
+
+    public virtual void SetUpMove(float newMoveSpeed, bool newIsMoving, Vector3 toward)
+    {
+        moveSpeed = newMoveSpeed;
+        isMoving = newIsMoving;
+        transform.LookAt(toward);
+    }
+
+    protected virtual void LookAt(Vector3 lookPosition)
+    {
+        Quaternion targetRotation = GetDirectionTowardLookPosition(lookPosition);
 
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
@@ -148,14 +155,14 @@ public class Target : MonoBehaviour, IDamagable
 
         if (angle < .5f)
         {
-            isFacingCamera = false;
+            isRotating = false;
             TargetAtFinalPosition();
         }
     }
 
-    protected Quaternion GetDirectionTowardCamera()
+    protected Quaternion GetDirectionTowardLookPosition(Vector3 lookPosition)
     {
-        Vector3 direction = Camera.main.transform.position - transform.position;
+        Vector3 direction = lookPosition - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         return targetRotation;
     }
@@ -166,11 +173,20 @@ public class Target : MonoBehaviour, IDamagable
             return;
         if (other.gameObject.TryGetComponent(out ViewTracker tracked))
         {
+            OnEnteringViewTracker(tracked.transform.position);
 
-            isMoving = false;
-            isFacingCamera = true;
         }
 
+    }
+
+    protected virtual void OnEnteringViewTracker(Vector3 centerOfTracker)
+    {
+        isMoving = false;
+
+        if (facingPosition == null)
+            facingPosition = player.mainCamera.transform.position;
+
+        isRotating = true;
     }
 
     private void TargetAtFinalPosition()
@@ -239,7 +255,7 @@ public class Target : MonoBehaviour, IDamagable
         rb.constraints = RigidbodyConstraints.None;
 
         isMoving = false;
-        isFacingCamera = false;
+        isRotating = false;
 
         transform.DOKill();
 
@@ -255,6 +271,7 @@ public class Target : MonoBehaviour, IDamagable
 
     }
 
+    public float GetMoveSpeed() => moveSpeed;
     public int GetComboValue() => comboValue;
 
     public void SetMyRespawnManager(RespawnManager respawnManager) => myRespawnManager = respawnManager;

@@ -849,13 +849,15 @@ MonoBehaviour:
   visuals: {fileID: 3835717565138771309}
   moveSpeed: 7.5
   rotationSpeed: 7.5
-  duration: 0.5
+  duration: 9
   healthPoint: 1
   bodyDispearAfterDeath: 1
   points: 100
+  bounusMovingPoint: 0.1
   comboValue: 1
   targetPos: {x: 0, y: 0, z: 0}
   isMoving: 1
+  isRotating: 0
 --- !u!136 &7150236270903673828
 CapsuleCollider:
   m_ObjectHideFlags: 0
