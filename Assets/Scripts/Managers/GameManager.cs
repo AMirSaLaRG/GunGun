@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator levelSelectionCo()
     {
-        elevator.ChangeLevelAnimation();
+        elevator.ChangeSideViewAnimation();
         yield return new WaitForSeconds(elevator.actionTime);
         uiManager.SetPanel(EPanel.LevelSelection);
     }
@@ -81,12 +81,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void MainMenuFromLevelView()
-    {
-        uiManager.SetPanel(EPanel.MainMenu);
 
-    }
-    public void MainMenuFromLevelSelection()
+    public void MainMenuFromSideView()
     {
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(MainMenuFromLevelSelectionCo());
@@ -128,7 +124,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SetToNextLevelCo()
     {
-        elevator.ChangeLevelAnimation();
+        elevator.ChangeSideViewAnimation();
         yield return new WaitForSeconds(elevator.actionTime);
         levelManager.LoadNextLevel();
         elevator.SceneChangeAnim();
@@ -177,7 +173,29 @@ public class GameManager : MonoBehaviour
 
     public void OnSettingClick()
     {
+        uiManager.SetPanel(EPanel.None);
+        StartCoroutine(OnSettingClickCo());
+    }
+
+    private IEnumerator OnSettingClickCo()
+    {
+        elevator.ChangeSideViewAnimation();
+        yield return new WaitForSeconds(elevator.actionTime);
         uiManager.SetPanel(EPanel.Settings);
+    }
+
+    public void CreaditWindow()
+    {
+        uiManager.SetPanel(EPanel.None);
+        StartCoroutine(CreaditWindowCo());
+
+    }
+
+    private IEnumerator CreaditWindowCo()
+    {
+        elevator.ChangeSideViewAnimation();
+        yield return new WaitForSeconds(elevator.actionTime);
+        uiManager.SetPanel(EPanel.Credits);
     }
     private void SaveLevelCompleted()
     {
@@ -227,11 +245,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void CreaditWindow()
-    {
-        uiManager.SetPanel(EPanel.Credits);
 
-    }
 
     public void QuitGame()
     {

@@ -1231,14 +1231,14 @@ MonoBehaviour:
   rotationSpeed: 5
   duration: 5
   healthPoint: 1
-  bodyDispearAfterDeath: 4
-  points: 0
+  bodyDispearAfterDeath: 1.5
+  points: 175
   bounusMovingPoint: 0.1
   comboValue: 1
   targetPos: {x: 0, y: 0, z: 0}
   isMoving: 1
   isRotating: 0
-  attackTime: 3
+  attackTime: 2.5
   damage: 1
   projectal: {fileID: 1842304394038328753, guid: 6fc813f758a259548b15bf243c66c816, type: 3}
   projectalSpeed: 175

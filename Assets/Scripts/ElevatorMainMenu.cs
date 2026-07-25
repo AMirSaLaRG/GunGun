@@ -15,7 +15,7 @@ public class ElevatorMainMenu : MonoBehaviour
     }
 
     [ContextMenu("Test look at level change")]
-    public void ChangeLevelAnimation()
+    public void ChangeSideViewAnimation()
     {
         transform.DORotate(new Vector3(0, 90, 0), actionTime);
     }

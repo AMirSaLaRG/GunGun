@@ -69,8 +69,14 @@ public class LevelManager : MonoBehaviour
         LevelItemData levelToLoad = levels[index];
 
         foreach (var level in levels)
+        {
             foreach (var item in level.items)
                 item.gameObject.SetActive(false);
+
+            level.respawnManager.gameObject.SetActive(false);
+        }
+
+        levels[index].respawnManager.gameObject.SetActive(true);
 
         foreach (var item in levelToLoad.items)
             item.gameObject.SetActive(true);
@@ -87,21 +93,8 @@ public class LevelManager : MonoBehaviour
         currentLevelIndex++;
 
         int index = currentLevelIndex;
-        LevelItemData levelToLoad = levels[index];
 
-        foreach (var level in levels)
-            foreach (var item in level.items)
-                item.gameObject.SetActive(false);
-
-        foreach (var item in levelToLoad.items)
-            item.gameObject.SetActive(true);
-
-        SetUpLevelData(levelToLoad);
-
-
-        currentLevelIndex = index;
-
-        GameManager.instance.OnLevelSelected();
+        LoadLevel(index);
     }
 
     private void SetUpLevelData(LevelItemData levelToLoad)
