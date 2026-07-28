@@ -153,7 +153,7 @@ public class UiManager : MonoBehaviour
 
     public void PointChange(float points)
     {
-        PointsText.text = points.ToString();
+        PointsText.text = points.ToString(".0");
     }
 
     private void AssignButtons()

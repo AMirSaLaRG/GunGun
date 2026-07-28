@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private int healthPointCap = 1;
     [SerializeField] private int hostageKillAlowed = 3;
     [SerializeField] private float comboIntervalCooldown = 2;
+    [SerializeField] private float onMoveHitPointBonuse = 1.2f;
+    [SerializeField] private float khalasHitPointBonuse = 1.1f;
+    
 
 
     [Header("GunSetup")]
@@ -214,7 +217,15 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         ResetCombo();
 
+        if (GameManager.instance.isTesting)
+        {
+            uiManager.UiOnHostageKill(currentHostageKilled >= hostageKillAlowed ? hostageKillAlowed : currentHostageKilled);
+            return;
+        }
+
         uiManager.UiOnHostageKill(currentHostageKilled);
+
+    
 
         if (hostageKillAlowed <= currentHostageKilled)
             GameManager.instance.GameOver();
@@ -225,11 +236,15 @@ public class PlayerController : MonoBehaviour, IDamagable
         Vector3 point = mainCamera.WorldToScreenPoint(target.transform.position);
         float distance = target.transform.position.z - transform.position.z;
 
+        float targetBasePoints = target.GetTargetPoints();
+
         if (target.isDead)
         {
             khalasShotCount++;
 
-            KhalasComboHandler();
+
+
+            KhalasComboHandler(targetBasePoints);
 
             myCanvas.OnHitKhalas(point, distance, khalasShotCount, UnityEngine.Color.orange);
             return;
@@ -239,11 +254,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         khalasShotCount = 0;
 
-        float targetBasePoints = target.GetTargetPoints();
 
         if (target.isMoving)
         {
             myCanvas.Onhit(point, distance, EHit.MovingEnemy);
+            targetBasePoints *= onMoveHitPointBonuse;
 
 
         } else
@@ -252,8 +267,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         }
 
-        points += targetBasePoints + (targetBasePoints * currentCombo * ComboToPointMultiPlyer);
-        currentCahsPoint += targetBasePoints + (targetBasePoints * currentCombo * ComboToPointMultiPlyer);
+        AddPoints(targetBasePoints);
         currentKills++;
 
         AddToCombo(target.GetComboValue(), target.transform.position);
@@ -271,8 +285,11 @@ public class PlayerController : MonoBehaviour, IDamagable
         lastComboTime = Time.time;
     }
 
-    private void KhalasComboHandler()
+    private void KhalasComboHandler(float targetPoints)
     {
+        targetPoints *= khalasHitPointBonuse;
+        AddPoints(targetPoints);
+
         if (khalasShotCount < 3)
             return;
         if (khalasShotCount < 5)
@@ -281,6 +298,13 @@ public class PlayerController : MonoBehaviour, IDamagable
             AddToCombo(2, lastKill.transform.position);
 
     }
+
+    private void AddPoints(float targetPoints)
+    {
+        points += targetPoints + (targetPoints * currentCombo * ComboToPointMultiPlyer);
+        currentCahsPoint += targetPoints + (targetPoints * currentCombo * ComboToPointMultiPlyer);
+    }
+
     private void ResetCombo()
     {
         Vector3 screenPos = mainCamera.WorldToScreenPoint(transform.position);
@@ -346,13 +370,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (isDead)
             return;
 
+        ResetCombo();
 
         healthPoint -= damage;
         myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(worldSpaceTakingDamage));
         if (healthPoint <= 0)
         {
+            if (GameManager.instance.isTesting)
+                return;
+
             isDead = true;
-            ResetCombo();
             GameManager.instance.GameOver();
         }
 

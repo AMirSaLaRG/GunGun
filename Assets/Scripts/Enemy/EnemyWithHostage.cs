@@ -47,9 +47,6 @@ public class EnemyWithHostage : Enemy
 
     }
 
-
-
-
     public void AtHostageDeath()
     {
         AtEndOfDuration();

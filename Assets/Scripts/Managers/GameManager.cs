@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public bool isTesting = false;
+    public void TogleTestMode() => isTesting = !isTesting;
 
     public LevelManager levelManager { private set; get; }
     public UiManager uiManager {private set; get;}
@@ -81,6 +82,10 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void MainMenuFromLevelScene()
+    {
+        uiManager.SetPanel(EPanel.MainMenu);
+    }
 
     public void MainMenuFromSideView()
     {
@@ -203,12 +208,12 @@ public class GameManager : MonoBehaviour
         float points = playerController.points;
         int currentLevelIndex = levelManager.currentLevelIndex;
 
-        if (playerData.levelPoints[currenLevelIndex] < points)
+        if (playerData.levelPoints[currentLevelIndex] < points)
             playerData.levelPoints[currentLevelIndex] = points;
 
         int earnedStart = ChecklevelStarsEarned();
-        if (playerData.levelStars[currenLevelIndex] < earnedStart)
-            playerData.levelStars[currenLevelIndex] = earnedStart;
+        if (playerData.levelStars[currentLevelIndex] < earnedStart)
+            playerData.levelStars[currentLevelIndex] = earnedStart;
  
         if (playerData.unlockedLevel < currentLevelIndex + 1)
             playerData.unlockedLevel = currentLevelIndex + 1;
@@ -222,6 +227,11 @@ public class GameManager : MonoBehaviour
 
         if (playerData.levelPoints[currenLevelIndex] < points)
             playerData.levelPoints[currentLevelIndex] = points;
+
+
+        int earnedStart = ChecklevelStarsEarned();
+        if (playerData.levelStars[currenLevelIndex] < earnedStart)
+            playerData.levelStars[currenLevelIndex] = earnedStart;
 
         SaveManager.instance.Save();
     }

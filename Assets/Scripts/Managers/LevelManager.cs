@@ -48,6 +48,9 @@ public class LevelManager : MonoBehaviour
             if (i > progressData.unlockedLevel)
                 btn.interactable = false;
 
+            if (GameManager.instance.isTesting)
+                btn.interactable = true;
+
             int index = i; // Capture for closure
             btn.onClick.AddListener(() => OnLevelSelected(index));
         }

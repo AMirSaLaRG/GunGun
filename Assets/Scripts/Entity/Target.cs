@@ -264,11 +264,7 @@ public class Target : MonoBehaviour, IDamagable
 
     public float GetTargetPoints()
     {
-        if (isMoving)
-            return points + (points * bounusMovingPoint);
-        else
             return points;
-
     }
 
     public float GetMoveSpeed() => moveSpeed;
