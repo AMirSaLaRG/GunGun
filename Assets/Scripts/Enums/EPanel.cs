@@ -12,4 +12,5 @@ public enum EPanel
     Pause = 7,
     None = 8,
     Ready = 9,
+    LeaderBoard = 10,
 }

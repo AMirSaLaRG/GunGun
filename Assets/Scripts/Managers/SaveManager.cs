@@ -8,7 +8,7 @@ public class SaveManager : MonoBehaviour
     private string savePath;
     public PlayerData data;
     private string leaderBoardSavePath;
-    public List<LeaderBoardData> LeaderBoardDataList = new List<LeaderBoardData>();
+    public List<LeaderBoardData> leaderBoardDataList = new List<LeaderBoardData>();
     public int LeaderBoardMaxEnteries = 20;
 
     public static SaveManager instance;
@@ -63,7 +63,7 @@ public class SaveManager : MonoBehaviour
         OrganizeTheLeaderBoard();
 
         LeaderBoardDataListWrapper wrapper = new LeaderBoardDataListWrapper();
-        wrapper.list = LeaderBoardDataList;
+        wrapper.list = leaderBoardDataList;
 
         string json = JsonUtility.ToJson(wrapper, true);
         File.WriteAllText(leaderBoardSavePath, json);
@@ -76,28 +76,28 @@ public class SaveManager : MonoBehaviour
             string json = File.ReadAllText(leaderBoardSavePath);
             LeaderBoardDataListWrapper wrapper = JsonUtility.FromJson<LeaderBoardDataListWrapper>(json);
 
-            LeaderBoardDataList = wrapper.list ?? new List<LeaderBoardData>();
+            leaderBoardDataList = wrapper.list ?? new List<LeaderBoardData>();
 
             OrganizeTheLeaderBoard();
 
         }
         else
         {
-            LeaderBoardDataList = new List<LeaderBoardData>();
+            leaderBoardDataList = new List<LeaderBoardData>();
         }
     }
 
     private void OrganizeTheLeaderBoard()
     {
-        LeaderBoardDataList.Sort((a, b) => b.points.CompareTo(a.points));
+        leaderBoardDataList.Sort((a, b) => b.points.CompareTo(a.points));
 
-        if (LeaderBoardMaxEnteries < LeaderBoardDataList.Count)
+        if (LeaderBoardMaxEnteries < leaderBoardDataList.Count)
         {
-            LeaderBoardDataList.RemoveRange(LeaderBoardMaxEnteries, LeaderBoardDataList.Count - LeaderBoardMaxEnteries);
+            leaderBoardDataList.RemoveRange(LeaderBoardMaxEnteries, leaderBoardDataList.Count - LeaderBoardMaxEnteries);
         }
     }
 
-    public void AddLeaderBoardEntry(string name, float points, int kills = 0, int level = 0)
+    public void AddLeaderBoardEntry(string name, float points, int kills, string levelName, out int rank)
     {
         LeaderBoardData newEntry = new LeaderBoardData
         {
@@ -105,17 +105,20 @@ public class SaveManager : MonoBehaviour
             points = points,
             date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),  // ISO format like Python
             kills = kills,
-            level = level
+            levelName = levelName
         };
 
-        LeaderBoardDataList.Add(newEntry);
+        leaderBoardDataList.Add(newEntry);
         SaveLeaderBoard(); // This will organize and save
+        if (leaderBoardDataList.Contains(newEntry))
+            rank = leaderBoardDataList.IndexOf(newEntry) + 1;
+        else rank = 0;
     }
 
     [ContextMenu("ClearLeaderBoard")]
     private void ClearLeaderBoard()
     {
-        LeaderBoardDataList.Clear();
+        leaderBoardDataList.Clear();
         SaveLeaderBoard();
     }
 }

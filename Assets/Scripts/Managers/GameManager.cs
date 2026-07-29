@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     private int currenLevelIndex = 0;
 
+    public int currentLeaderBoardRank { private set; get; } = 0;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -188,6 +190,18 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(elevator.actionTime);
         uiManager.SetPanel(EPanel.Settings);
     }
+    public void OnLeaderBoardClick()
+    {
+        uiManager.SetPanel(EPanel.None);
+        StartCoroutine(OnLeaderBoardClickCo());
+    }
+
+    private IEnumerator OnLeaderBoardClickCo()
+    {
+        elevator.ChangeSideViewAnimation();
+        yield return new WaitForSeconds(elevator.actionTime);
+        uiManager.SetPanel(EPanel.LeaderBoard);
+    }
 
     public void CreaditWindow()
     {
@@ -219,6 +233,9 @@ public class GameManager : MonoBehaviour
             playerData.unlockedLevel = currentLevelIndex + 1;
 
         SaveManager.instance.Save();
+        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, playerController.GetKills(), levelManager.GetLevelName(currentLevelIndex), out int rank);
+        currentLeaderBoardRank = rank;
+
     }
     private void SaveGameOver()
     {
@@ -234,6 +251,9 @@ public class GameManager : MonoBehaviour
             playerData.levelStars[currenLevelIndex] = earnedStart;
 
         SaveManager.instance.Save();
+        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, playerController.GetKills(), levelManager.GetLevelName(currentLevelIndex), out int rank);
+        currentLeaderBoardRank = rank;
+
     }
 
     public int ChecklevelStarsEarned()

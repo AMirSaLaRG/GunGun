@@ -399,4 +399,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         magazineManager.OnReloadBullets();
     }
     public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
+
+    public int GetKills() => currentKills;
 }

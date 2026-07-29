@@ -8,6 +8,13 @@ using UnityEngine.UI;
 public class UiVictoryPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI pointText;
+    [SerializeField] private TextMeshProUGUI LeaderBoardText;
+    [SerializeField] private Image leaderBoardIcon;
+    [SerializeField] private Sprite firstIcon;
+    [SerializeField] private Sprite secondIcon;
+    [SerializeField] private Sprite thirdIcon;
+    [SerializeField] private Sprite lesThanThirdIcon;
+    [SerializeField] private Sprite LessThanTwentyIcon;
     [SerializeField] private bool hasStar;
     [SerializeField] private Image[] StarImages;
     [SerializeField] private Color earnedStarColor = Color.yellow;
@@ -20,16 +27,30 @@ public class UiVictoryPanel : MonoBehaviour
     PlayerController playerController;
     private UiCountTo pointCount;
 
+
+
+
     private void OnEnable()
     {
-        
+        Debug.Log("Enable");
+        StartCoroutine(InitiateOnEnableCo());
+    }
+
+
+    private IEnumerator InitiateOnEnableCo()
+    {
+        yield return new WaitForEndOfFrame();
+        InitiateOnEnable();
+    }
+    private void InitiateOnEnable()
+    {
         if (pointCount == null)
             pointCount = pointText.AddComponent<UiCountTo>();
 
         if (playerController == null)
             playerController = GameManager.instance.playerController;
 
-        pointCount.StartSettingTheNumber(playerController?.points?? 0, 1);
+        pointCount.StartSettingTheNumber(playerController?.points ?? 0, 1);
 
         if (hasStar == false)
             return;
@@ -39,11 +60,11 @@ public class UiVictoryPanel : MonoBehaviour
             GetStartingPosAndScale();
         }
 
-        int starEarned = GameManager.instance?.ChecklevelStarsEarned()?? 0;
+        int starEarned = GameManager.instance?.ChecklevelStarsEarned() ?? 0;
 
+        GetAndSetRank();
         StarAnimation(starEarned);
     }
-
     private void GetStartingPosAndScale()
     {
         startStarPos = new Vector3[StarImages.Length];
@@ -58,7 +79,13 @@ public class UiVictoryPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        pointCount.ResetNumber();
+        Debug.Log("Disable");
+        if (this != null && gameObject != null)
+        {
+            if (pointCount != null)
+                pointCount.ResetNumber();
+        }
+
     }
 
     private void StarAnimation(int earnedStars)
@@ -85,5 +112,24 @@ public class UiVictoryPanel : MonoBehaviour
             StarImages[i].transform.DOLocalMove(startStarPos[i], 1f).SetEase(Ease.InOutElastic);
             StarImages[i].transform.DOScale(startStarScale[i], 1f);
         }
+    }
+
+    private void GetAndSetRank()
+    {
+        int rank = GameManager.instance.currentLeaderBoardRank;
+
+        LeaderBoardText.text = rank == 0 ? "--" : rank.ToString();
+
+        if (rank == 1)
+            leaderBoardIcon.sprite = firstIcon;
+        else if (rank == 2)
+            leaderBoardIcon.sprite = secondIcon;
+        else if (rank == 3)
+            leaderBoardIcon.sprite = thirdIcon;
+        else if (rank <= 20)
+            leaderBoardIcon.sprite = lesThanThirdIcon;
+        else
+            leaderBoardIcon.sprite = LessThanTwentyIcon;
+
     }
 }

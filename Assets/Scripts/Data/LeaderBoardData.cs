@@ -8,7 +8,7 @@ public class LeaderBoardData
     public float points;
     public string date;
     public int kills;
-    public int level;
+    public string levelName;
 }
 
 [System.Serializable]

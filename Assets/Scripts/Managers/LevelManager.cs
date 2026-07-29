@@ -129,5 +129,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public string GetLevelName(int index) => levels[index].levelName;
 
 }
