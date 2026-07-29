@@ -4,8 +4,22 @@ using UnityEngine;
 public class Hostage : Target
 {
     protected EnemyWithHostage myTaker;
+    protected Transform myStandPoint;
     protected string triggerAnimSurvivedKeyWord = "Survived";
 
+    private Vector3 standPointPos;
+
+    protected override void Start()
+    {
+        base.Start();
+        if (myRespawnBox != null)
+            myStandPoint = myRespawnBox.GetHostagePoint();
+        if (myStandPoint != null)
+            standPointPos = myStandPoint.position;
+        else
+            Debug.Log("Set Hostage Stand Point");
+
+    }
     protected override void AtEndOfDuration()
     {
         Destroy(rb);
@@ -18,10 +32,22 @@ public class Hostage : Target
 
     protected override void OnEnteringViewTracker(Vector3 centerPoint)
     {
-        transform.DOMove(new Vector3 (centerPoint.x, transform.position.y, centerPoint.z), 0.3f).OnComplete(() =>
+
+        if (myTaker == null)
         {
             base.OnEnteringViewTracker(centerPoint);
-        });
+        } else
+        {
+            Vector3 targetPos = new Vector3(standPointPos.x, transform.position.y, standPointPos.z);
+            float distance = Vector3.Distance(transform.position, targetPos);
+            float duration = distance / moveSpeed;
+
+            transform.DOMove(targetPos, duration).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                base.OnEnteringViewTracker(centerPoint);
+            });
+        }
+            
     }
     protected override void AtDieAction()
     {
@@ -39,4 +65,6 @@ public class Hostage : Target
         isMoving = false;
         AtEndOfDuration();
     }
+
+    public void SetStandPod(Transform standPoint) => myStandPoint = standPoint;
 }

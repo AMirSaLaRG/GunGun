@@ -13,6 +13,7 @@ public class RespawnBox : MonoBehaviour
     [SerializeField] private Transform leftRespawnPoint;
     [SerializeField] private Transform centerFrontRespawnPoint;
     [SerializeField] private Transform centerBackRespawnPoint;
+    [SerializeField] private Transform hostageStandPoint;
     [SerializeField] private Transform ViewTracker;
 
     [Header("DummySetup")]
@@ -33,14 +34,16 @@ public class RespawnBox : MonoBehaviour
 
     PlayerController player;
     public bool isActive {  get; private set; } = false;
-    public bool isSingleSummon { private set; get; } = false;
+    public bool isSingleSummon;
 
     private void Awake()
     { 
         ClearDummy();
         SignUpRespawnPoints();
 
-        
+        if (hostageStandPoint == null)
+            isSingleSummon = true;
+  
     }
 
 
@@ -181,6 +184,9 @@ public class RespawnBox : MonoBehaviour
             respawnPoints.Add(centerBackRespawnPoint);
         }
 
+        if (hostageStandPoint != null)
+            hostageStandPoint.GetComponent<MeshRenderer>().enabled = false;
+
         isSingleSummon = respawnPoints.Count <= 1;
     }
 
@@ -226,4 +232,5 @@ public class RespawnBox : MonoBehaviour
     }
 
     public void SetPlayer(PlayerController player) => this.player = player;
+    public Transform GetHostagePoint() => hostageStandPoint;
 }

@@ -9,12 +9,12 @@ using UnityEngine.InputSystem.Processors;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private TouchControls controls;
-    private UiManager uiManager;
     public GameObject TestBullet;
     private MagazineManager magazineManager;
 
-    [Header("PlayerCanvas")]
+    [Header("Uis")]
     [SerializeField] private PlayerCanvas myCanvas;
+    [SerializeField] private UiInGame inGameUi;
 
     [Header("Setup")]
 
@@ -57,13 +57,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         mainCamera = Camera.main;
         controls = new TouchControls();
-        uiManager = FindFirstObjectByType<UiManager>();
         magazineManager = GetComponentInChildren<MagazineManager>();
 
 
         controls.TouchScreen.Shoot.performed += ctx => OnTap(ctx);
 
-        uiManager.onReloadBtn += Reload;
+        inGameUi.onReloadBtn += Reload;
     }
 
     private void Start()
@@ -81,21 +80,21 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void UpdateUi()
     {
-        uiManager.AmoChange(currentAmo);
-        uiManager.ComboChange(currentCombo);
-        uiManager.KillChange(currentKills);
-        uiManager.PointChange(points);
-        uiManager.UiOnHostageKill(currentHostageKilled);
+        inGameUi.AmoChange(currentAmo);
+        inGameUi.ComboChange(currentCombo);
+        inGameUi.KillChange(currentKills);
+        inGameUi.PointChange(points);
+        inGameUi.UiOnHostageKill(currentHostageKilled);
         if (currentCombo == 0)
-            uiManager.SetComboTimer(0);
+            inGameUi.SetComboTimer(0);
         else
-            uiManager.SetComboTimer(comboIntervalCooldown);
+            inGameUi.SetComboTimer(comboIntervalCooldown);
 
         if (currentAmo <= 1)
         {
             myCanvas.OnLowAmo();
         }
-        uiManager.WarningReloadBtn(currentAmo <= 1);
+        inGameUi.WarningReloadBtn(currentAmo <= 1);
 
     }
 
@@ -219,11 +218,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (GameManager.instance.isTesting)
         {
-            uiManager.UiOnHostageKill(currentHostageKilled >= hostageKillAlowed ? hostageKillAlowed : currentHostageKilled);
+            inGameUi.UiOnHostageKill(currentHostageKilled >= hostageKillAlowed ? hostageKillAlowed : currentHostageKilled);
             return;
         }
 
-        uiManager.UiOnHostageKill(currentHostageKilled);
+        inGameUi.UiOnHostageKill(currentHostageKilled);
 
     
 

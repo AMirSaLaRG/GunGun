@@ -156,7 +156,6 @@ public class Target : MonoBehaviour, IDamagable
         if (angle < .5f)
         {
             isRotating = false;
-            TargetAtFinalPosition();
         }
     }
 
@@ -185,6 +184,8 @@ public class Target : MonoBehaviour, IDamagable
 
         if (facingPosition == null)
             facingPosition = player.mainCamera.transform.position;
+
+        TargetAtFinalPosition();
 
         isRotating = true;
     }

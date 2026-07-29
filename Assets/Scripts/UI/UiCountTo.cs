@@ -46,7 +46,6 @@ public class UiCountTo : MonoBehaviour
         {
 
             currentNum = Mathf.Lerp(0, numberToReach, elaps / duration);
-            Debug.Log("passing number" + currentNum);
 
             WriteToTextHole(currentNum);
 

@@ -10,9 +10,7 @@ public class EnemyWithHostage : Enemy
     protected override void Start()
     {
         base.Start();
-        moveSpeed = .8f * myHostage.GetMoveSpeed();
-
-        
+       facingPosition = myRespawnBox.GetHostagePoint().position;
     }
 
     protected override void Update()
@@ -24,6 +22,7 @@ public class EnemyWithHostage : Enemy
     public void Setup(Hostage hostage)
     {
         myHostage = hostage;
+        myHostage.SetMyDuration(duration * 1.1f);
     }
 
     protected override void Shoot()

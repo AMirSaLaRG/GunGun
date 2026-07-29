@@ -32,7 +32,6 @@ public class UiVictoryPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("Enable");
         StartCoroutine(InitiateOnEnableCo());
     }
 
@@ -79,7 +78,6 @@ public class UiVictoryPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("Disable");
         if (this != null && gameObject != null)
         {
             if (pointCount != null)
