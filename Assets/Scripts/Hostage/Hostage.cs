@@ -53,7 +53,9 @@ public class Hostage : Target
     {
         myRespawnManager = null;
         base.AtDieAction();
-        myTaker.AtHostageDeath();
+
+        if (myTaker != null)
+            myTaker.AtHostageDeath();
     }
     public void Setup(EnemyWithHostage taker)
     {

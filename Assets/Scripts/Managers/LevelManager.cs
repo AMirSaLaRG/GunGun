@@ -4,15 +4,26 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
+    public static LevelManager instance;
+
     public GameObject levelItemPrefab;
     public Transform contentParent; // Assign the Content object
     public List<LevelItemData> levels = new List<LevelItemData>();
 
     private WaweManager currentWaves;
     public float[] currentLevelStarPoints { private set; get; } = new float[3];
+    public float threeStarPoint { private set; get; } = 1;
 
     public int currentLevelIndex {  get; private set; }
-    
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     private void Start()
     {
         PopulateLevels();
@@ -70,6 +81,8 @@ public class LevelManager : MonoBehaviour
     private void LoadLevel(int index)
     {
         LevelItemData levelToLoad = levels[index];
+
+        threeStarPoint = levelToLoad.pointsForthreeStar;
 
         foreach (var level in levels)
         {
@@ -130,5 +143,7 @@ public class LevelManager : MonoBehaviour
     }
 
     public string GetLevelName(int index) => levels[index].levelName;
+
+
 
 }

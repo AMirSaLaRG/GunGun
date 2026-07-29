@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,16 @@ public class UiInGame : MonoBehaviour
     [SerializeField] private TextMeshProUGUI killText;
     [SerializeField] private TextMeshProUGUI PointsText;
     [SerializeField] private TextMeshProUGUI ComboRemindSecText;
+    [Header("PointAndStarTracker")]
+    [SerializeField] private Slider pointsSlider;
+    [SerializeField] private Transform oneStarIcon;
+    [SerializeField] private Transform twoStarIcon;
+    [SerializeField] private Transform threeStarIcon;
+    [SerializeField] private float starScaleAnimationTime;
+
+    private float oneStarPoint;
+    private float twoStarPoint;
+    private float threeStarPoint;
 
     private List<HostageImage> HostageImages = new List<HostageImage>();
 
@@ -124,6 +135,7 @@ public class UiInGame : MonoBehaviour
     public void PointChange(float points)
     {
         PointsText.text = points.ToString(".0");
+        HandleSliderOnPointChange(points);
     }
 
     private void AssignButtons()
@@ -133,4 +145,46 @@ public class UiInGame : MonoBehaviour
             onReloadBtn?.Invoke();
         });
     }
+
+    private void HandleSliderOnPointChange(float points)
+    {
+        //if (gameObject.activeInHierarchy == false)
+        //    return;
+
+        if (points == 0)
+        {
+
+            pointsSlider.maxValue = LevelManager.instance.threeStarPoint;
+            oneStarIcon.localScale = Vector3.zero;
+            twoStarIcon.localScale = Vector3.zero;
+            threeStarIcon.localScale = Vector3.zero;
+        }
+
+        pointsSlider.value = points;
+
+        if (points >= LevelManager.instance.currentLevelStarPoints[0] && oneStarIcon.localScale == Vector3.zero)
+        {
+            AnimateStarsInPop(oneStarIcon, 1);
+        }
+        if (points >= LevelManager.instance.currentLevelStarPoints[1] && twoStarIcon.localScale == Vector3.zero)
+        {
+            AnimateStarsInPop(twoStarIcon, 1);
+        }
+        if (points >= LevelManager.instance.currentLevelStarPoints[2] && threeStarIcon.localScale == Vector3.zero)
+        {
+            AnimateStarsInPop(threeStarIcon, 1);
+        }
+        
+    }
+
+    private void AnimateStarsInPop(Transform star, float scale)
+    {
+        star.localScale = Vector3.zero;
+        star.DOScale(scale, starScaleAnimationTime)
+       .SetEase(Ease.OutBack);
+
+        star.DOLocalRotate(new Vector3(0, 0, 360 * 4), starScaleAnimationTime, RotateMode.LocalAxisAdd)
+            .SetEase(Ease.OutQuad);
+    }
+
 }
