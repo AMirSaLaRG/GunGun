@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 
 public class RespawnBox : MonoBehaviour
 {
+    private BoxManager myManager;
+
     [Header("Respawn Setup")]
     [SerializeField] private bool isScaling;
 
@@ -32,7 +34,8 @@ public class RespawnBox : MonoBehaviour
     private GameObject dummyTop;
     private GameObject dummyBottom;
 
-    PlayerController player;
+    private PlayerController player;
+
     public bool isActive {  get; private set; } = false;
     public bool isSingleSummon;
 
@@ -43,9 +46,12 @@ public class RespawnBox : MonoBehaviour
 
         if (hostageStandPoint == null)
             isSingleSummon = true;
-  
     }
 
+    public void MakeEmpty()
+    {
+        myManager.ReturnBox(this);
+    }
 
     public Target RespawnTargetOn(Transform onTransform, GameObject respawnObject)
     {
@@ -232,5 +238,7 @@ public class RespawnBox : MonoBehaviour
     }
 
     public void SetPlayer(PlayerController player) => this.player = player;
+
+    public void SetManager(BoxManager manager) => myManager = manager;
     public Transform GetHostagePoint() => hostageStandPoint;
 }

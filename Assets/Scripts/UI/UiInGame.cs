@@ -14,23 +14,23 @@ public class UiInGame : MonoBehaviour
     [SerializeField] private Button reloadBtn;
     [SerializeField] private GameObject hostageImageHolder;
     [SerializeField] private TextMeshProUGUI comboText;
+    [SerializeField] private Slider comboSlider;
+
     [SerializeField] private TextMeshProUGUI killText;
-    [SerializeField] private TextMeshProUGUI PointsText;
     [SerializeField] private TextMeshProUGUI ComboRemindSecText;
     [Header("PointAndStarTracker")]
+    [SerializeField] private TextMeshProUGUI PointsText;
     [SerializeField] private Slider pointsSlider;
     [SerializeField] private Transform oneStarIcon;
     [SerializeField] private Transform twoStarIcon;
     [SerializeField] private Transform threeStarIcon;
     [SerializeField] private float starScaleAnimationTime;
 
-    private float oneStarPoint;
-    private float twoStarPoint;
-    private float threeStarPoint;
+    private Coroutine pointSliderCo;
 
     private List<HostageImage> HostageImages = new List<HostageImage>();
 
-    private float comboTimerReminder;
+    private float currentComboTimerRemind;
     public Action onReloadBtn;
     private Coroutine reloadWarningCo;
 
@@ -67,6 +67,8 @@ public class UiInGame : MonoBehaviour
 
     public void WarningReloadBtn(bool enable)
     {
+        if (gameObject.activeInHierarchy == false)
+            return;
         if (reloadWarningCo != null)
             StopCoroutine(reloadWarningCo);
         reloadWarningCo = StartCoroutine(WarningCo(enable));
@@ -98,21 +100,24 @@ public class UiInGame : MonoBehaviour
     public void SetComboTimer(float Timer)
     {
         CancelInvoke(nameof(SetTimerText));
-        comboTimerReminder = Timer;
+        currentComboTimerRemind = Timer;
+        SetComboSliderMaxValue(Timer);
 
         InvokeRepeating(nameof(SetTimerText), 0, .01f);
     }
 
     private void SetTimerText()
     {
-        ComboRemindSecText.text = comboTimerReminder.ToString("0.00");
-        comboTimerReminder -= .01f;
+        ComboRemindSecText.text = currentComboTimerRemind.ToString("0.00");
+        currentComboTimerRemind -= .01f;
 
-        if (comboTimerReminder < 0)
+        HandleComboSlider();
+
+        if (currentComboTimerRemind < 0)
         {
             CancelInvoke(nameof(SetTimerText));
-            comboTimerReminder = 0;
-            ComboRemindSecText.text = comboTimerReminder.ToString("0.00");
+            currentComboTimerRemind = 0;
+            ComboRemindSecText.text = currentComboTimerRemind.ToString("0.00");
 
         }
     }
@@ -148,8 +153,8 @@ public class UiInGame : MonoBehaviour
 
     private void HandleSliderOnPointChange(float points)
     {
-        //if (gameObject.activeInHierarchy == false)
-        //    return;
+        if (GameManager.instance.gameState != EGameState.inGame)
+            return;
 
         if (points == 0)
         {
@@ -158,9 +163,15 @@ public class UiInGame : MonoBehaviour
             oneStarIcon.localScale = Vector3.zero;
             twoStarIcon.localScale = Vector3.zero;
             threeStarIcon.localScale = Vector3.zero;
+
+            pointsSlider.value = points;
+
         }
 
-        pointsSlider.value = points;
+
+        if (pointSliderCo != null)
+            StopCoroutine(pointSliderCo);
+        pointSliderCo = StartCoroutine(slideAnimationCo(points, pointsSlider));
 
         if (points >= LevelManager.instance.currentLevelStarPoints[0] && oneStarIcon.localScale == Vector3.zero)
         {
@@ -187,4 +198,40 @@ public class UiInGame : MonoBehaviour
             .SetEase(Ease.OutQuad);
     }
 
+    private IEnumerator slideAnimationCo(float point, Slider slider, float smooth = 50)
+    {
+        float currentPoint = slider.value;
+        float currentState = 0;
+        float currentValue = 0;
+
+        while (currentState < smooth)
+        {
+            currentValue = Mathf.Lerp(currentPoint, point, currentState / smooth);
+            slider.value = currentValue;
+            currentState++;
+            yield return null;
+
+        }
+    }
+
+    private void SetComboSliderMaxValue(float maxTime)
+    {
+        if (comboSlider.maxValue != maxTime)
+            comboSlider.maxValue = maxTime;
+
+        comboSlider.value = maxTime;
+
+    }
+
+    private void HandleComboSlider()
+    {
+        comboSlider.value = currentComboTimerRemind;
+
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        DOTween.Kill(gameObject);
+    }
 }

@@ -12,8 +12,8 @@ public class Hostage : Target
     protected override void Start()
     {
         base.Start();
-        if (myRespawnBox != null)
-            myStandPoint = myRespawnBox.GetHostagePoint();
+        if (myBox != null)
+            myStandPoint = myBox.GetHostagePoint();
         if (myStandPoint != null)
             standPointPos = myStandPoint.position;
         else
@@ -28,6 +28,15 @@ public class Hostage : Target
 
         AtEndOfDurationAction();
         Destroy(gameObject, 1f);
+    }
+
+    protected override void AtEndOfDurationAction()
+    {
+        if (myTaker == null)
+            if (myBox != null)
+                myBox.MakeEmpty();
+
+        transform.DOKill();
     }
 
     protected override void OnEnteringViewTracker(Vector3 centerPoint)
@@ -51,11 +60,16 @@ public class Hostage : Target
     }
     protected override void AtDieAction()
     {
-        myRespawnManager = null;
-        base.AtDieAction();
 
         if (myTaker != null)
+        {
             myTaker.AtHostageDeath();
+            myBox = null;
+        }
+
+        base.AtDieAction();
+
+ 
     }
     public void Setup(EnemyWithHostage taker)
     {

@@ -81,7 +81,7 @@ public class WaweManager : MonoBehaviour
     public void StopWaves()
     {
         ClearScene();
-        respawnManager.DeActiveAllBoxes();
+        respawnManager.BreakRespawn();
     }
     private void ResetWaweManager()
     {
@@ -174,10 +174,7 @@ public class WaweManager : MonoBehaviour
 
         isWaweEnded = false;
         isTimeForNextWawe = false;
-        currentWaveIndex++;
-        
-   
-
+        currentWaveIndex++;      
 
         respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, 
             data.minMaxRandomIntervalSummon, data.minMaxNumSummon, 
@@ -284,6 +281,5 @@ public class WaweManager : MonoBehaviour
     {
         this.respawnManager = respawnManager;
         this.respawnManager.jobDone += RespawnManagerTaskOver;
-
     }
 }

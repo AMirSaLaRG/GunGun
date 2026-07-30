@@ -78,16 +78,16 @@ public class PlayerController : MonoBehaviour, IDamagable
 
 
 
-    private void UpdateUi()
+    private void UpdateUi(bool comboChanged = true)
     {
         inGameUi.AmoChange(currentAmo);
         inGameUi.ComboChange(currentCombo);
         inGameUi.KillChange(currentKills);
         inGameUi.PointChange(points);
         inGameUi.UiOnHostageKill(currentHostageKilled);
-        if (currentCombo == 0)
+        if (currentCombo == 0 && comboChanged)
             inGameUi.SetComboTimer(0);
-        else
+        else if (comboChanged)
             inGameUi.SetComboTimer(comboIntervalCooldown);
 
         if (currentAmo <= 1)
@@ -115,7 +115,6 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (shouldReturn == false)
         {
             currentAmo--;
-            UpdateUi();
         }
 
 
@@ -135,6 +134,7 @@ public class PlayerController : MonoBehaviour, IDamagable
             if (shouldReturn)
             {
                 shouldReturn = false;
+                UpdateUi();
                 return;
             }
 
@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         magazineManager.OnReloadBullets();
         currentAmo = gunAmoCap;
         myCanvas.OnReload();
-        UpdateUi();
+        UpdateUi(false);
     }
 
     private void ShootWithEmptyMagazine()

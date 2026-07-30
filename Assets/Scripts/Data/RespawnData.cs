@@ -5,6 +5,7 @@ public class RespawnData
 {
     public RespawnType respawnType;
     public GameObject prefab;
+    public Sprite icon;
     [Range(0, 1)] public float respawnProb;
 
 

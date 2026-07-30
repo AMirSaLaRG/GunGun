@@ -28,10 +28,9 @@ public class Target : MonoBehaviour, IDamagable
 
     [SerializeField] protected Vector3 targetPos;
 
-    protected RespawnBox myRespawnBox;
+    protected RespawnBox myBox;
     protected RespawnManager myRespawnManager;
 
-    public Action<RespawnBox, Target> atEndAction;
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
     public bool isMoving = true;
@@ -228,8 +227,8 @@ public class Target : MonoBehaviour, IDamagable
 
     protected virtual void AtEndOfDurationAction()
     {
-        if (myRespawnManager != null)
-            atEndAction?.Invoke(myRespawnBox, this);
+        if (myBox != null)
+            myBox.MakeEmpty();
 
         transform.DOKill();
 
@@ -247,9 +246,10 @@ public class Target : MonoBehaviour, IDamagable
     }
 
     protected virtual void AtDieAction()
-    {       
-        if (myRespawnManager != null)
-            atEndAction?.Invoke(myRespawnBox, this);
+    {
+        if (myBox != null)
+            myBox.MakeEmpty();
+
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);
 
@@ -272,7 +272,12 @@ public class Target : MonoBehaviour, IDamagable
     public int GetComboValue() => comboValue;
 
     public void SetMyRespawnManager(RespawnManager respawnManager) => myRespawnManager = respawnManager;
-    public void SetMyBox(RespawnBox box) => myRespawnBox = box;
+    public void SetMyBox(RespawnBox box) => myBox = box;
 
     public void SetMyDuration(float duration) => this.duration = duration;
+
+    private void OnDestroy()
+    {
+        DOTween.Kill(gameObject);
+    }
 }

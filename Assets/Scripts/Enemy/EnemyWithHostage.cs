@@ -9,14 +9,8 @@ public class EnemyWithHostage : Enemy
 
     protected override void Start()
     {
-        base.Start();
-       facingPosition = myRespawnBox.GetHostagePoint().position;
-    }
-
-    protected override void Update()
-    {
-
-        base.Update();
+       base.Start();
+       facingPosition = myBox.GetHostagePoint().position;
     }
 
     public void Setup(Hostage hostage)
@@ -43,7 +37,6 @@ public class EnemyWithHostage : Enemy
     protected override void OnEnteringViewTracker(Vector3 centerOfTracker)
     {
         base.OnEnteringViewTracker(centerOfTracker);
-
     }
 
     public void AtHostageDeath()

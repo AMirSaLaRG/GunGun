@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    public RespawnManager respawnManager;
 
     public GameObject levelItemPrefab;
     public Transform contentParent; // Assign the Content object
@@ -27,6 +28,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         PopulateLevels();
+        respawnManager = FindFirstObjectByType<RespawnManager>();
     }
 
     public void PopulateLevels()
@@ -82,6 +84,8 @@ public class LevelManager : MonoBehaviour
     {
         LevelItemData levelToLoad = levels[index];
 
+        respawnManager.SetupBoxes(levelToLoad.respawnBoxHolder);
+
         threeStarPoint = levelToLoad.pointsForthreeStar;
 
         foreach (var level in levels)
@@ -89,10 +93,10 @@ public class LevelManager : MonoBehaviour
             foreach (var item in level.items)
                 item.gameObject.SetActive(false);
 
-            level.respawnManager.gameObject.SetActive(false);
+            level.respawnBoxHolder.gameObject.SetActive(false);
         }
 
-        levels[index].respawnManager.gameObject.SetActive(true);
+        levels[index].respawnBoxHolder.gameObject.SetActive(true);
 
         foreach (var item in levelToLoad.items)
             item.gameObject.SetActive(true);
@@ -116,7 +120,7 @@ public class LevelManager : MonoBehaviour
     private void SetUpLevelData(LevelItemData levelToLoad)
     {
         currentWaves = levelToLoad.waveManager;
-        currentWaves.SetRespawnManager(levelToLoad.respawnManager);
+        currentWaves.SetRespawnManager(respawnManager);
 
         if (levelToLoad.pointsForOneStar == 0 || levelToLoad.pointsFortwoStar == 0 || levelToLoad.pointsForthreeStar == 0)
             Debug.LogWarning("Set The Star Points of Level");

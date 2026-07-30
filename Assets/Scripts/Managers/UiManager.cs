@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -21,6 +22,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject LeaderBoard;
 
+    [SerializeField] private GameObject fadePanel;
+
     private EPanel currentPanel;
 
 
@@ -37,6 +40,17 @@ public class UiManager : MonoBehaviour
         gameOver?.SetActive(panel == EPanel.GameOver);
         LeaderBoard?.SetActive(panel == EPanel.LeaderBoard);
 
+
         currentPanel = panel;
+    }
+
+    public void FadePanel(float time)
+    {
+        SetPanel(EPanel.None);
+        fadePanel.SetActive(true);
+        fadePanel.GetComponent<Image>().DOFade(0, time).OnComplete(() => {
+            fadePanel.SetActive(false);
+
+        });
     }
 }

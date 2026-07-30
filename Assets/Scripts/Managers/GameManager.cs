@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController {private set; get;}
     public PlayerData playerData {private set; get;}
 
+    public EGameState gameState {private set; get;} = EGameState.inMenu;
 
     private int currenLevelIndex = 0;
 
@@ -37,7 +38,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    { 
+    {
+        gameState = EGameState.inMenu;
         uiManager.SetPanel(EPanel.MainMenu);
         playerController.SetGameStarted(false);
 
@@ -53,13 +55,14 @@ public class GameManager : MonoBehaviour
 
     public void LevelSelection()
     {
-        uiManager.SetPanel(EPanel.None);
+        uiManager.FadePanel(elevator.actionTime * .9f);
         levelManager.PopulateLevels();
 
         StartCoroutine(levelSelectionCo());
     }
     private IEnumerator levelSelectionCo()
     {
+        
         elevator.ChangeSideViewAnimation();
         yield return new WaitForSeconds(elevator.actionTime);
         uiManager.SetPanel(EPanel.LevelSelection);
@@ -84,6 +87,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+
     public void MainMenuFromLevelScene()
     {
         uiManager.SetPanel(EPanel.MainMenu);
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        
+        gameState = EGameState.inGame;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(StartGameCo());
 
@@ -145,6 +149,7 @@ public class GameManager : MonoBehaviour
     public void LevelCompleted()
     {
         uiManager.SetPanel(EPanel.None);
+        gameState = EGameState.inMenu;
         StartCoroutine(LevelCompletedCo());
     }
 
@@ -162,6 +167,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        gameState = EGameState.inMenu;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(GameOverCo());
     }
@@ -180,8 +186,10 @@ public class GameManager : MonoBehaviour
 
     public void OnSettingClick()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(OnSettingClickCo());
+        uiManager.SetPanel(EPanel.Settings);
+
+        //uiManager.SetPanel(EPanel.None);
+        //StartCoroutine(OnSettingClickCo());
     }
 
     private IEnumerator OnSettingClickCo()
@@ -192,8 +200,10 @@ public class GameManager : MonoBehaviour
     }
     public void OnLeaderBoardClick()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(OnLeaderBoardClickCo());
+        uiManager.SetPanel(EPanel.LeaderBoard);
+
+        //uiManager.SetPanel(EPanel.None);
+        //StartCoroutine(OnLeaderBoardClickCo());
     }
 
     private IEnumerator OnLeaderBoardClickCo()
@@ -205,8 +215,11 @@ public class GameManager : MonoBehaviour
 
     public void CreaditWindow()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(CreaditWindowCo());
+        uiManager.SetPanel(EPanel.Credits);
+
+
+        //uiManager.SetPanel(EPanel.None);
+        //StartCoroutine(CreaditWindowCo());
 
     }
 
