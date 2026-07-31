@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     [Header("GunSetup")]
     [SerializeField] private float gunForce = 100f;
     [SerializeField] private int gunDamage = 1;
+    [SerializeField] private GameObject bulletHoldePrefab;
+    [SerializeField] private int holeLifetime = 60;
     private int gunAmoCap = 6;
 
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
@@ -164,6 +166,19 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
+    private void MakeHoleOnHit(RaycastHit hit)
+    {
+        Debug.Log("Created");
+
+        Vector3 placePos = hit.point + (hit.normal * 0.002f);
+        Quaternion rotation = Quaternion.LookRotation(hit.normal);
+
+        GameObject hole = Instantiate(bulletHoldePrefab, placePos, rotation);
+        hole.transform.parent = hit.transform; // Stick to the surface
+
+        Destroy(hole, holeLifetime); // Clean up after some time
+    }
+
     private void OnHit(RaycastHit hit, Vector3 shotPos)
     {
         Vector3 point = mainCamera.WorldToScreenPoint(hit.point);
@@ -172,6 +187,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (hit.collider.TryGetComponent(out Target target) == false)
         {
             myCanvas.Onhit(point, distance, EHit.Missed);
+
+            MakeHoleOnHit(hit);
 
             ResetCombo();
             return;

@@ -29,6 +29,10 @@ public class WaweManager : MonoBehaviour
     private bool taskIsSq;
     private int currentSqsIndex = 0;
 
+    private void Awake()
+    {
+        respawnManager = FindFirstObjectByType<RespawnManager>();
+    }
 
     private void Start()
     {
@@ -70,6 +74,7 @@ public class WaweManager : MonoBehaviour
 
     public void StartWaves()
     {
+
         isStarted = true;
 
         isWaweEnded = true;
@@ -85,6 +90,7 @@ public class WaweManager : MonoBehaviour
     }
     private void ResetWaweManager()
     {
+        respawnManager.ClearScene();
         currentWaveIndex = 0;
         currentSqsIndex = 0;
         isStarted = false;
@@ -119,16 +125,12 @@ public class WaweManager : MonoBehaviour
 
     private IEnumerator BreathTimeBeforeEvent(LevelEventSequenceSo sq)
     {
-
         yield return new WaitForSeconds(2);
 
         respawnManager.ExecuteEvent(sq);
-
-        respawnManager.onEventEnded += OnEventEnded;
-
     }
 
-    private void OnEventEnded()
+    public void OnEventEnded()
     {
         isWaweEnded = true;
         isTimeForNextWawe = true;
@@ -185,7 +187,6 @@ public class WaweManager : MonoBehaviour
 
             SetTimerForWawe(data.durationIfTimeBase);
         }
-
     }
 
     private void SetTimerForWawe(float durationIfTimeBase)
@@ -259,9 +260,7 @@ public class WaweManager : MonoBehaviour
     }
 
     public void ClearScene()
-    {
-        respawnManager.BreakRespawn();
-
+    {        
         ResetWaweManager();
 
         foreach (var target in FindObjectsByType<Target>(FindObjectsSortMode.InstanceID))
@@ -277,9 +276,5 @@ public class WaweManager : MonoBehaviour
 
         StopAllCoroutines();
     }
-    public void SetRespawnManager(RespawnManager respawnManager)
-    {
-        this.respawnManager = respawnManager;
-        this.respawnManager.jobDone += RespawnManagerTaskOver;
-    }
+
 }

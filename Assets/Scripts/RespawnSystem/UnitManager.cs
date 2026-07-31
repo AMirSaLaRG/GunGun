@@ -1,16 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public List<RespawnData> basicRespawnUnitInfo = new List<RespawnData>();
+
+    private List<Target> targetTracker = new List<Target>();
+
+    public void TrackTarget(Target target) => targetTracker.Add(target);
+
+    public bool RemoveTrack(Target unit)
     {
-        
+        targetTracker.Remove(unit);
+        return (targetTracker.Count == 0);
     }
 
-    // Update is called once per frame
-    void Update()
+    public RespawnData GetBasicUnitData(RespawnType type)
     {
-        
+        return basicRespawnUnitInfo.Find(x => x.respawnType == type);
+
     }
+
 }

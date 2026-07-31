@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class BoxManager : MonoBehaviour
 {
-    private List<RespawnBox> myRespawnBoxes;
+    private RespawnManager respawnManager;
+
+    private List<RespawnBox> myRespawnBoxes = new List<RespawnBox>();
+
     private List<RespawnBox> activeEmptyBoxes = new List<RespawnBox>();
+
     private List<RespawnBox> activeEmptyBoxesDoubleRespawn = new List<RespawnBox>();
+
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
+
+    private void Awake()
+    {
+        respawnManager = GetComponent<RespawnManager>();
+    }
 
     public void Setup(Transform boxHolder, PlayerController player)
     {
-        myRespawnBoxes = boxHolder.GetComponentsInChildren<RespawnBox>().ToList();
+        ResetBoxes();
+
+        myRespawnBoxes.AddRange(boxHolder.GetComponentsInChildren<RespawnBox>());
 
         if (myRespawnBoxes == null || myRespawnBoxes.Count == 0)
         {
@@ -22,8 +34,10 @@ public class BoxManager : MonoBehaviour
 
         foreach (var box in myRespawnBoxes)
         {
-            box.SetManager(this);
+            box.SetManager(respawnManager);
+            
             box.SetPlayer(player);
+
         }
 
         deActiveBoxes = myRespawnBoxes.ToList();
@@ -31,37 +45,52 @@ public class BoxManager : MonoBehaviour
 
     public void ReturnBox(RespawnBox box)
     {
-        if (activeEmptyBoxes.Contains(box) == false)
-            activeEmptyBoxes.Add(box);
+        PutBoxOnReadyList(box);
     }
 
-    public void ResetBoxes()
+    public void ActivateRandomBoxes(int totalActiveBoxRequierd)
     {
-        activeEmptyBoxes.Clear();
-        activeEmptyBoxesDoubleRespawn.Clear();
-        deActiveBoxes.Clear();
+        int currentActiveBoxNum = myRespawnBoxes.Count - deActiveBoxes.Count;
+        int boxesToGetActiveToBeAtDesireNum = totalActiveBoxRequierd - currentActiveBoxNum;
+        if (boxesToGetActiveToBeAtDesireNum <= 0)
+            return;
+
+        if (boxesToGetActiveToBeAtDesireNum > deActiveBoxes.Count)
+        {
+            Debug.Log("There is No More Available Boxes");
+            boxesToGetActiveToBeAtDesireNum = deActiveBoxes.Count;
+        }
+
+        List<RespawnBox> newActiveBoxes = new List<RespawnBox>();
+        newActiveBoxes = GetRandomBoxs(boxesToGetActiveToBeAtDesireNum, deActiveBoxes);
+
+        foreach (var box in newActiveBoxes)
+        {
+            box.ActiveThisBox();
+
+            PutBoxOnReadyList(box);
+
+            if (newActiveBoxes.Contains(box))
+                deActiveBoxes.Remove(box);
+        }
     }
 
     public RespawnBox GetBox(bool isRandomDouble = false)
     {
-        RespawnBox box = null;
-
-        box = ChoseRandomEmptyBox(isRandomDouble);
+        RespawnBox box = ChoseRandomEmptyBox(isRandomDouble);
 
         if (box != null)
-            activeEmptyBoxes.Remove(box);
+            TakeBoxFromReadyList(box);
 
         return box;
 
     }
     public RespawnBox GetBox(string name)
     {
-        RespawnBox box = null;
-
-        box = GetBoxByName(name);
+        RespawnBox box = GetBoxByName(name);
 
         if (box != null)
-            activeEmptyBoxes.Remove(box);
+            TakeBoxFromReadyList(box);
 
         return box;
 
@@ -69,35 +98,39 @@ public class BoxManager : MonoBehaviour
 
     private RespawnBox ChoseRandomEmptyBox(bool isDouble)
     {
-
-        if (activeEmptyBoxes.Count == 0)
+        if (CheckIfTherIsEmptyBox() == false)
             return null;
 
-        if (isDouble == false)
-        {
-            int randomIndex = Random.Range(0, activeEmptyBoxes.Count);
-            return activeEmptyBoxes[randomIndex];
-        }
+        if (isDouble == false) 
+            return GetRandomBox(activeEmptyBoxes);
+
+
         else if (isDouble == true)
         {
-            if (activeEmptyBoxesDoubleRespawn.Count == 0)
-            {
-                List<RespawnBox> deActiveDoubleBoxes = deActiveBoxes.FindAll(a => a.isSingleSummon != false);
-                if (deActiveDoubleBoxes.Count == 0)
-                    return null;
-                else
-                {
-                    RespawnBox newBox = deActiveDoubleBoxes[Random.Range(0, deActiveDoubleBoxes.Count)];
-                    ActiveBox(newBox);
-                    return newBox;
-                }
-            }
+            if (CheckIfThereIsDoubleRespawnEmptyBox() == false)
+                return GetRandomBox(activeEmptyBoxesDoubleRespawn);
+            else
+                return OpenNewDoubleBox();
 
-            int randomIndex = Random.Range(0, activeEmptyBoxesDoubleRespawn.Count);
-            return activeEmptyBoxesDoubleRespawn[randomIndex];
         }
 
         return null;
+    }
+
+    private RespawnBox OpenNewDoubleBox()
+    {
+        List<RespawnBox> deActiveDoubleBoxes = deActiveBoxes.FindAll(a => a.isSingleSummon == false);
+        if (deActiveDoubleBoxes.Count == 0)
+        {
+            Debug.Log("Tried open new double box but there was none !");
+            return null;
+        }
+        else
+        {         
+            RespawnBox newBox = GetRandomBox(deActiveDoubleBoxes);
+            ActiveBox(newBox);
+            return newBox;
+        }
     }
 
     private RespawnBox GetBoxByName(string name)
@@ -111,7 +144,7 @@ public class BoxManager : MonoBehaviour
         return myBox;
     }
 
-    private List<RespawnBox> GetRandomBox(int num, List<RespawnBox> availableBoxes)
+    private List<RespawnBox> GetRandomBoxs(int num, List<RespawnBox> availableBoxes)
     {
         List<RespawnBox> returnBoxes = new List<RespawnBox>();
 
@@ -123,6 +156,15 @@ public class BoxManager : MonoBehaviour
         }
         return returnBoxes;
     }
+    private RespawnBox GetRandomBox(List<RespawnBox> availableBoxes)
+    {
+        if (availableBoxes.Count == 0)
+            return null;
+
+        int randomIndex = Random.Range(0, availableBoxes.Count);
+        return availableBoxes[randomIndex];
+    }
+
     private List<int> HashRandomSelection(int Range, int returnNum)
     {
         HashSet<int> resaults = new HashSet<int>();
@@ -135,45 +177,12 @@ public class BoxManager : MonoBehaviour
 
         return resaults.ToList();
     }
-    public void ActivateRandomBoxes(int newNum)
-    {
-        int currentNum = myRespawnBoxes.Count - deActiveBoxes.Count;
-        int num = newNum - currentNum;
-        if (num <= 0)
-            return;
-
-        if (num > deActiveBoxes.Count)
-        {
-            Debug.Log("There is No More Available Boxes");
-            return;
-        }
-
-        List<RespawnBox> newActiveBoxes = new List<RespawnBox>();
-        newActiveBoxes = GetRandomBox(num, deActiveBoxes);
-
-        foreach (var box in newActiveBoxes)
-        {
-            box.ActiveThisBox();
-            activeEmptyBoxes.Add(box);
-
-            if (box.isSingleSummon == false)
-                activeEmptyBoxesDoubleRespawn.Add(box);
-
-            if (newActiveBoxes.Contains(box))
-                deActiveBoxes.Remove(box);
-        }
-    }
 
     private void ActiveBox(RespawnBox box)
     {
-        if (activeEmptyBoxes.Contains(box))
-            return;
         box.ActiveThisBox();
 
-        activeEmptyBoxes.Add(box);
-
-        if (box.isSingleSummon == false)
-            activeEmptyBoxesDoubleRespawn.Add(box);
+        PutBoxOnReadyList(box);
 
         deActiveBoxes.Remove(box);
     }
@@ -190,5 +199,35 @@ public class BoxManager : MonoBehaviour
         deActiveBoxes.AddRange(myRespawnBoxes);
 
     }
+
+    public void ResetBoxes()
+    {
+        myRespawnBoxes.Clear();
+        activeEmptyBoxes.Clear();
+        activeEmptyBoxesDoubleRespawn.Clear();
+        deActiveBoxes.Clear();
+    }
+
+    private void PutBoxOnReadyList(RespawnBox box)
+    {
+        if (activeEmptyBoxes.Contains(box) == false)
+            activeEmptyBoxes.Add(box);
+        if (box.isSingleSummon != false)
+            if (activeEmptyBoxesDoubleRespawn.Contains(box) == false)
+                activeEmptyBoxesDoubleRespawn.Add(box);
+    }
+
+    private void TakeBoxFromReadyList(RespawnBox box)
+    {
+        if (activeEmptyBoxes.Contains(box) == true)
+            activeEmptyBoxes.Remove(box);
+        if (box.isSingleSummon != false)
+            if (activeEmptyBoxesDoubleRespawn.Contains(box) == true)
+                activeEmptyBoxesDoubleRespawn.Remove(box);
+    }
+
+    private bool CheckIfTherIsEmptyBox() => activeEmptyBoxes.Count > 0;
+    private bool CheckIfThereIsDoubleRespawnEmptyBox() => activeEmptyBoxesDoubleRespawn.Count > 0;
+
 
 }

@@ -228,7 +228,7 @@ public class Target : MonoBehaviour, IDamagable
     protected virtual void AtEndOfDurationAction()
     {
         if (myBox != null)
-            myBox.MakeEmpty();
+            myBox.LeavingTheBox(this);
 
         transform.DOKill();
 
@@ -248,7 +248,7 @@ public class Target : MonoBehaviour, IDamagable
     protected virtual void AtDieAction()
     {
         if (myBox != null)
-            myBox.MakeEmpty();
+            myBox.LeavingTheBox(this);
 
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);

@@ -120,7 +120,6 @@ public class LevelManager : MonoBehaviour
     private void SetUpLevelData(LevelItemData levelToLoad)
     {
         currentWaves = levelToLoad.waveManager;
-        currentWaves.SetRespawnManager(respawnManager);
 
         if (levelToLoad.pointsForOneStar == 0 || levelToLoad.pointsFortwoStar == 0 || levelToLoad.pointsForthreeStar == 0)
             Debug.LogWarning("Set The Star Points of Level");
@@ -131,21 +130,18 @@ public class LevelManager : MonoBehaviour
         currentLevelStarPoints[2] = levelToLoad.pointsForthreeStar;
     }
 
-    public void SetGameStart(bool gameStart)
+    public void SetGameStart()
     {
-        if (gameStart)
-        {
+        respawnManager.SetupBoxes(levels[currentLevelIndex].respawnBoxHolder);
 
-            currentWaves.StartWaves();
-        }
-
-        else
-        {
-            currentWaves.StopWaves();
-            currentWaves.ClearScene();
-        }
+        currentWaves.StartWaves();
     }
-
+    
+    public void SetGameEnd()
+    {
+        currentWaves.StopWaves();
+        currentWaves.ClearScene();
+    }
     public string GetLevelName(int index) => levels[index].levelName;
 
 

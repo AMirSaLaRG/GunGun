@@ -7,21 +7,19 @@ public class RespawnManager : MonoBehaviour
 {
     private PlayerController player;
     private BoxManager boxManager;
+    private UnitManager unitManager;
 
     [Header("Setup")]
-    public List<RespawnData> respawnInfo = new List<RespawnData>();
+    //public List<RespawnData> respawnInfo = new List<RespawnData>();
     public List<RespawnData> currentRespawnInfo = new List<RespawnData>();
     private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
 
     [Header("RandomRespawnSetup")]
     private Vector2 respawnTime = new Vector2(1, 3);
 
-
-
-
     public System.Action jobDone;
 
-    private List<Target> targetTracker = new List<Target>();
+    //private List<Target> targetTracker = new List<Target>();
 
     private bool isOnRandomRespawn = false;
 
@@ -35,7 +33,6 @@ public class RespawnManager : MonoBehaviour
     private bool onEventMode;
     public bool isSceenClear { private set; get; }
     private bool isEventEnded;
-    public System.Action onEventEnded;
     
     private void Awake()
     {
@@ -45,9 +42,10 @@ public class RespawnManager : MonoBehaviour
         boxManager = GetComponent<BoxManager>();
         if (boxManager == null )
             gameObject.AddComponent<BoxManager>();
+
+        unitManager = GetComponent<UnitManager>();
+
     }
-
-
 
     private void Update()
     {
@@ -60,6 +58,14 @@ public class RespawnManager : MonoBehaviour
         RespawnRandomInterval();
 
     }
+    public void OnLeavingTheBox(RespawnBox respawnBox, Target boxUser)
+    {
+        boxManager.ReturnBox(respawnBox);
+
+        isSceenClear = unitManager.RemoveTrack(boxUser); 
+
+    }
+
 
     public void SetupBoxes(Transform BoxHolder)
     {
@@ -104,19 +110,17 @@ public class RespawnManager : MonoBehaviour
             if (shouldCountDown && isSummonAll)
                 break;
 
-            bool isRespawned = REspawnRandomly();
+            bool isRespawned = RespawnRandomly();
             if (isRespawned == false)
                 return false;
         }
         return true;
     }
 
-    private bool REspawnRandomly()
+    private bool RespawnRandomly()
     {
-
         RespawnData respawnToSummon = GetRandomRespawn();
-        //Tracking null respawnToSummon
-
+        
         if (respawnToSummon == null)
             return false;
 
@@ -190,16 +194,20 @@ public class RespawnManager : MonoBehaviour
     {
         isOnRandomRespawn = false;
     }
+    
+    public void ClearScene()
+    {
+        BreakRespawn();
+        boxManager.DeActiveAllBoxes();
+        boxManager.ResetBoxes();
+    }
 
     private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0)
     {
         GameObject myPrefab = targetData.prefab;
 
         if (myPrefab == null)
-        {
-            myPrefab = respawnInfo.Find(x => x.respawnType == targetData.respawnType).prefab;
-        }
-
+            myPrefab = unitManager.GetBasicUnitData(targetData.respawnType).prefab;
 
         Target myTarget = respawnBox.RespawnRandomSide(myPrefab);
 
@@ -209,7 +217,7 @@ public class RespawnManager : MonoBehaviour
         if (duration != 0)
             myTarget.SetMyDuration(duration);
 
-        targetTracker.Add(myTarget);
+        unitManager.TrackTarget(myTarget);
 
         isSceenClear = false;
 
@@ -221,10 +229,8 @@ public class RespawnManager : MonoBehaviour
     {
         GameObject prefab = respawnData.prefab;
 
-  
-        
         if (prefab == null)
-            prefab = respawnInfo.Find(x => x.respawnType == respawnData.respawnType).prefab;
+            prefab = unitManager.GetBasicUnitData(respawnData.respawnType).prefab;
 
         if (shouldCountDown)
             CheckForCountDown(respawnData.respawnType);
@@ -232,12 +238,13 @@ public class RespawnManager : MonoBehaviour
         bool isTakerWithHostage = respawnData.respawnType == RespawnType.TakerWithHostage;
 
         RespawnBox box = boxManager.GetBox(isTakerWithHostage);
+        Debug.Log(box == null);
         if (box == null)
             return;
         Target newTarget = RespawnTargetOn(prefab, box);
 
         if (respawnData.respawnType == RespawnType.Hostage)
-            RespawnTargetRandomly(respawnInfo[0]);
+            RespawnTargetRandomly(unitManager.GetBasicUnitData(RespawnType.BaseEnemy));
 
         if (isTakerWithHostage)
             SetUpHostageTaker(box, newTarget);
@@ -249,22 +256,20 @@ public class RespawnManager : MonoBehaviour
         EnemyWithHostage taker = newTarget.GetComponent<EnemyWithHostage>();
         GameObject hostagePrefab = currentRespawnInfo.Find(x => x.respawnType == RespawnType.Hostage).prefab;
         if (hostagePrefab == null)
-            hostagePrefab = respawnInfo.Find(x => x.respawnType == RespawnType.Hostage).prefab;
+            hostagePrefab = unitManager.GetBasicUnitData(RespawnType.Hostage).prefab;
 
         Hostage newHostage = RespawnTargetOn(hostagePrefab, box).GetComponent<Hostage>();
 
-        targetTracker.Remove(newHostage);
+        unitManager.RemoveTrack(newHostage);
         taker.Setup(newHostage);
         newHostage.Setup(taker);
     }
 
     private Target RespawnTargetOn(GameObject prefab, RespawnBox box, bool usingLastSide = false)
     {
-
-
         Target newTarget = box.RespawnRandomSide(prefab, usingLastSide);
 
-        targetTracker.Add(newTarget);
+        unitManager.TrackTarget(newTarget);
         isSceenClear = false;
 
         newTarget.SetMyBox(box);
@@ -341,6 +346,8 @@ public class RespawnManager : MonoBehaviour
             shouldCountDown = true;
         }
     }
+
+  
     #endregion
 }
 

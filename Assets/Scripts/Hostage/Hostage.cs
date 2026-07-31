@@ -34,7 +34,7 @@ public class Hostage : Target
     {
         if (myTaker == null)
             if (myBox != null)
-                myBox.MakeEmpty();
+                myBox.LeavingTheBox(this);
 
         transform.DOKill();
     }

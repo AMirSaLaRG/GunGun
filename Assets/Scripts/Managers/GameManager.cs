@@ -117,14 +117,12 @@ public class GameManager : MonoBehaviour
     {
         elevator.EnterTheLevel();
         yield return new WaitForSeconds(elevator.actionTime * 2);
-        playerController.SetGameStarted(false);
-        levelManager.SetGameStart(false);
 
         uiManager.SetPanel(EPanel.InGame);
         playerController.ResetPlayer();
 
         playerController.SetGameStarted(true);
-        levelManager.SetGameStart(true);
+        levelManager.SetGameStart();
     }
 
     public void SetToNextLevel()
@@ -148,8 +146,8 @@ public class GameManager : MonoBehaviour
 
     public void LevelCompleted()
     {
-        uiManager.SetPanel(EPanel.None);
         gameState = EGameState.inMenu;
+        uiManager.SetPanel(EPanel.None);
         StartCoroutine(LevelCompletedCo());
     }
 
@@ -158,7 +156,7 @@ public class GameManager : MonoBehaviour
         elevator.LeaveScene();
         yield return new WaitForSeconds(elevator.actionTime * 2);
         playerController.SetGameStarted(false);
-        levelManager.SetGameStart(false);
+        levelManager.SetGameEnd();
 
         uiManager.SetPanel(EPanel.Victory);
 
@@ -178,7 +176,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(elevator.actionTime * 2);
         uiManager.SetPanel(EPanel.GameOver);
         playerController.SetGameStarted(false);
-        levelManager.SetGameStart(false);
+        levelManager.SetGameEnd();
 
 
         SaveGameOver();
