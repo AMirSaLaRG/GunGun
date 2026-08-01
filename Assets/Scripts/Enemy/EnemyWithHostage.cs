@@ -21,6 +21,10 @@ public class EnemyWithHostage : Enemy
 
     protected override void Shoot()
     {
+
+        AudioManager.instance.PlaySfx(shotSfx, true, true);
+
+
         anim.SetTrigger(triggerAnimAttackKeyWord);
 
         player.OnHostageHit(myHostage);

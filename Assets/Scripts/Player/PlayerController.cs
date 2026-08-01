@@ -9,7 +9,6 @@ using UnityEngine.InputSystem.Processors;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private TouchControls controls;
-    public GameObject TestBullet;
     private MagazineManager magazineManager;
 
     [Header("Uis")]
@@ -17,7 +16,6 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private UiInGame inGameUi;
 
     [Header("Setup")]
-
     [SerializeField] private int healthPointCap = 1;
     [SerializeField] private int hostageKillAlowed = 3;
     [SerializeField] private float comboIntervalCooldown = 2;
@@ -27,6 +25,9 @@ public class PlayerController : MonoBehaviour, IDamagable
 
 
     [Header("GunSetup")]
+    [SerializeField] private GameObject impactVfx;
+    [SerializeField] private GameObject impactFleshVfx;
+
     [SerializeField] private float gunForce = 100f;
     [SerializeField] private int gunDamage = 1;
     [SerializeField] private GameObject bulletHoldePrefab;
@@ -35,6 +36,13 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     [SerializeField] private float ComboToPointMultiPlyer = .25f;
     [SerializeField] private LayerMask whatIsUntargetable;
+
+    [Header("Sfx Setup")]
+    [SerializeField] private AudioSource shootSfx;
+    [SerializeField] private AudioSource emptyShootSfx;
+    [SerializeField] private AudioSource reloadSfx;
+    [SerializeField] private AudioSource bulletImapct;
+    [SerializeField] private AudioSource bulletFleshImpact;
 
     public Camera mainCamera {  get; private set; }
 
@@ -116,7 +124,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (shouldReturn == false)
         {
-            currentAmo--;
         }
 
 
@@ -125,6 +132,8 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
         {
             Debug.Log($"Hit:{hit.collider.name}");
+
+
             Vector3 shotPos = hit.point;
 
             if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
@@ -139,20 +148,23 @@ public class PlayerController : MonoBehaviour, IDamagable
                 UpdateUi();
                 return;
             }
+            currentAmo--;
 
-            GameObject bullet = Instantiate(TestBullet, shotPos, Quaternion.Euler(0, 180, 0));
+            AudioManager.instance.PlaySfx(shootSfx, true);
+
             magazineManager.OnShotBullet();
-
-
 
             OnHit(hit, shotPos);
         }
-
-
     }
 
     public void Reload()
     {
+        Debug.Log(currentAmo);
+        Debug.Log(gunAmoCap);
+        if(currentAmo >= gunAmoCap || magazineManager.isReloading)
+            return;
+        AudioManager.instance.PlaySfx(reloadSfx, true);
         magazineManager.OnReloadBullets();
         currentAmo = gunAmoCap;
         myCanvas.OnReload();
@@ -162,6 +174,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private void ShootWithEmptyMagazine()
     {
         Debug.Log("Out Of Amo!!!!");
+        AudioManager.instance.PlaySfx(emptyShootSfx, true);
         magazineManager.OnShotBullet();
 
     }
@@ -179,6 +192,23 @@ public class PlayerController : MonoBehaviour, IDamagable
         Destroy(hole, holeLifetime); // Clean up after some time
     }
 
+    private void MakeHumanHitVfx(RaycastHit hit)
+    {
+        Vector3 placePos = hit.point + (hit.normal * 0.002f);
+        Quaternion rotation = Quaternion.LookRotation(hit.normal);
+
+        GameObject bloodVfx = Instantiate(impactFleshVfx, placePos, rotation);
+        bloodVfx.transform.parent = hit.transform;
+    }
+    private void MakeHitVfx(RaycastHit hit)
+    {
+        Vector3 placePos = hit.point + (hit.normal * 0.002f);
+        Quaternion rotation = Quaternion.LookRotation(hit.normal);
+
+        GameObject hitVfx = Instantiate(impactVfx, placePos, rotation);
+        hitVfx.transform.parent = hit.transform;
+    }
+
     private void OnHit(RaycastHit hit, Vector3 shotPos)
     {
         Vector3 point = mainCamera.WorldToScreenPoint(hit.point);
@@ -187,6 +217,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (hit.collider.TryGetComponent(out Target target) == false)
         {
             myCanvas.Onhit(point, distance, EHit.Missed);
+            AudioManager.instance.PlaySfx(bulletImapct, true);
+            MakeHitVfx(hit);
+
+
 
             MakeHoleOnHit(hit);
 
@@ -197,15 +231,29 @@ public class PlayerController : MonoBehaviour, IDamagable
         ShotForce(hit, shotPos, target);
 
         if (target.TryGetComponent(out Enemy enemy))
+        {
+            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
+            MakeHumanHitVfx(hit);
+
+
             OnEnemyHit(enemy);
+        }
 
 
         else if (target.TryGetComponent(out Hostage hostage))
         {
+            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
+            MakeHumanHitVfx(hit);
+
+
             OnHostageHit(hostage);
         }
         else
         {
+            AudioManager.instance.PlaySfx(bulletImapct, true);
+            MakeHitVfx(hit);
+
+
             myCanvas.Onhit(point, distance, EHit.Missed);
             ResetCombo();
         }

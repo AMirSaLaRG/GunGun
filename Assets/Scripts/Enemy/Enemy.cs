@@ -19,6 +19,8 @@ public class Enemy : Target
     [SerializeField] private float danceRotationRange = 15f;
     private float danceCycleDelay = .4f;
 
+    [Header("Sfx Setup")]
+    [SerializeField] protected AudioSource shotSfx;
     
 
     private Vector3 startingRotation;
@@ -104,6 +106,7 @@ public class Enemy : Target
     {
         anim.SetTrigger(triggerAnimAttackKeyWord);
         GameObject newBullet = Instantiate(projectal, transform.position, GetDirectionTowardLookPosition(facingPosition));
+        AudioManager.instance.PlaySfx(shotSfx, true);
         newBullet.GetComponent<EnemyProjectal>().SetUP(projectalSpeed, damage, player);
     }
     
