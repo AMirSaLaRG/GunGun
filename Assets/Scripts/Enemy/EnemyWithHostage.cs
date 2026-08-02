@@ -11,6 +11,7 @@ public class EnemyWithHostage : Enemy
     {
        base.Start();
        facingPosition = myBox.GetHostagePoint().position;
+
     }
 
     public void Setup(Hostage hostage)

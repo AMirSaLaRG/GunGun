@@ -29,6 +29,8 @@ public class WaweManager : MonoBehaviour
     private bool taskIsSq;
     private int currentSqsIndex = 0;
 
+    private bool isSaftyAtEndTriggered = false;
+
     private void Awake()
     {
         respawnManager = FindFirstObjectByType<RespawnManager>();
@@ -157,17 +159,32 @@ public class WaweManager : MonoBehaviour
 
         if (currentWaveIndex == waweData.Count)
         {
-            if (respawnManager.isSceenClear)
+            startSaftyTriggerIn(5);
+
+            if (respawnManager.isSceenClear || isSaftyAtEndTriggered)
             {
                 GameManager.instance.LevelCompleted();
                 isWaweEnded = true;
                 isTimeForNextWawe = false;
+                isSaftyAtEndTriggered = false;
+
             }
 
             return;
         }
 
         ExecuteWawe(waweData[currentWaveIndex]);
+    }
+
+    private void startSaftyTriggerIn(float time)
+    {
+        Invoke(nameof(saftyCheck), time);
+    }
+
+    private void saftyCheck()
+    {
+        if (isSaftyAtEndTriggered == false)
+            isSaftyAtEndTriggered = true;
     }
 
     private void ExecuteWawe(WaveData data)

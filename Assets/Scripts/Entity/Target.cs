@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -27,6 +28,15 @@ public class Target : MonoBehaviour, IDamagable
     [SerializeField] protected int comboValue = 1;
 
     [SerializeField] protected Vector3 targetPos;
+
+    [Header("Leaving Warning Sign Setup")]
+    [SerializeField] private ParticleSystem leavingWarningSign;
+    [SerializeField] private float timeToGiveLeavingWarningSignBefore;
+    private bool isLeavingWarningSignGiven = false;
+
+    [Header("At Position Warning Sign Setup")]
+    [SerializeField] private ParticleSystem atPositionWarningSign;
+    private bool isatPositionWarningSignGiven = false;
 
     protected RespawnBox myBox;
     protected RespawnManager myRespawnManager;
@@ -210,7 +220,10 @@ public class Target : MonoBehaviour, IDamagable
     {
         if (isDead)
             return;
-     
+
+        GiveAtPosWarningSign();
+
+        CheckAndGiveLeavingSign(DurationEndTime);
 
         if (Time.time > DurationEndTime)
         {
@@ -227,12 +240,15 @@ public class Target : MonoBehaviour, IDamagable
 
     protected virtual void AtEndOfDurationAction()
     {
+
         if (myBox != null)
             myBox.LeavingTheBox(this);
 
         transform.DOKill();
 
     }
+
+
 
     private void Die()
     {
@@ -266,6 +282,33 @@ public class Target : MonoBehaviour, IDamagable
     public float GetTargetPoints()
     {
             return points;
+    }
+
+    protected void GiveAtPosWarningSign()
+    {
+        if (atPositionWarningSign == null)
+            return;
+
+        if (isatPositionWarningSignGiven == true)
+            return;
+
+        atPositionWarningSign.Play();
+        isatPositionWarningSignGiven = true;
+    }
+    protected void CheckAndGiveLeavingSign(float timeToLeave)
+    {
+        if (leavingWarningSign == null)
+            return;
+
+        if (isLeavingWarningSignGiven)
+            return;
+
+        if (Time.time > timeToLeave - timeToGiveLeavingWarningSignBefore)
+        {
+            leavingWarningSign.Play();
+            isLeavingWarningSignGiven = true;
+        }
+
     }
 
     public float GetMoveSpeed() => moveSpeed;

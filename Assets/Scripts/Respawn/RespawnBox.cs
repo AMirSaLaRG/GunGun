@@ -36,16 +36,17 @@ public class RespawnBox : MonoBehaviour
 
     private PlayerController player;
 
-    public bool isActive {  get; private set; } = false;
+
+
     public bool isSingleSummon;
 
     private void Awake()
     { 
-        ClearDummy();
         SignUpRespawnPoints();
 
         if (hostageStandPoint == null)
             isSingleSummon = true;
+
     }
 
     public void LeavingTheBox(Target boxUser)
@@ -198,45 +199,17 @@ public class RespawnBox : MonoBehaviour
         isSingleSummon = respawnPoints.Count <= 1;
     }
 
-    private void SetActive (bool isActive) => this.isActive = isActive;
-
-    //TODO SomeTImes Activing some box take seconds i should implant time to make them active if needed
     [ContextMenu("testActive")]
     public void ActiveThisBox()
     {
-        SetActive(true);
         myActivateItem.SetActive();
     }
     [ContextMenu("testDeActive")]
 
     public void DeActivateThisBox()
     {
-        SetActive(false);
         myActivateItem.SetDeActive();
 
-    }
-
-    [ContextMenu ("DummyCheck")]
-    public void ShowDummy()
-    {
-        dummyRight  = Instantiate(enemyDummy, rightRespawnPoint.position, Quaternion.identity);
-        dummyLeft = Instantiate(enemyDummy, leftRespawnPoint.position, Quaternion.identity);
-
-        dummyLeft.GetComponent<MeshRenderer>().material = DummyMaterial;
-        dummyRight.GetComponent<MeshRenderer>().material = DummyMaterial;
-
-        dummyLeft.transform.parent = leftRespawnPoint;
-        dummyRight.transform.parent = rightRespawnPoint;
-    }
-    [ContextMenu("DummyClear")]
-
-
-    public void ClearDummy()
-    {
-        if (dummyRight != null) 
-            DestroyImmediate(dummyLeft);
-        if (dummyLeft != null) 
-            DestroyImmediate(dummyRight);
     }
 
     public void SetPlayer(PlayerController player) => this.player = player;

@@ -52,8 +52,7 @@ public class MagazineManager : MonoBehaviour
 
         if (currentBullet.localPosition != Vector3.zero)
         {
-            Debug.Log("Emoyt magazine");
-            //this should handle gun amo but i have track in player and here
+            Debug.Log("Emoyt magazine this should handle gun amo but i have track in player and here");
             return;
         }
 

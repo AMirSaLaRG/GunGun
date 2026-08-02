@@ -21,7 +21,12 @@ public class Enemy : Target
 
     [Header("Sfx Setup")]
     [SerializeField] protected AudioSource shotSfx;
-    
+
+    [Header("Shooting Warning Sign Setup")]
+    [SerializeField] private ParticleSystem ShootingWarningSign;
+    [SerializeField] private float warningSecondsBeforShoot;
+    private Coroutine shootingWarningSignCo;
+
 
     private Vector3 startingRotation;
     private Vector3 startingPos;
@@ -62,6 +67,8 @@ public class Enemy : Target
 
         if (shootCo != null)
             StopCoroutine(shootCo);
+        if (shootingWarningSignCo != null)
+            StopCoroutine(shootingWarningSignCo);
     }
 
     protected override void AtEndOfDurationAction()
@@ -91,6 +98,7 @@ public class Enemy : Target
 
     private void AimAtPlayerAndShoot()
     {
+        
         shootCo = StartCoroutine(AimAtPlayerAndShootCo());
 
     }
@@ -112,8 +120,7 @@ public class Enemy : Target
     
     protected virtual void Aiming()
     {
-        
-
+        GiveShootingWarningSign(attackTime);
     }
 
     public void SetDanceMode(bool enable) => ShouldDance = enable;
@@ -122,6 +129,25 @@ public class Enemy : Target
     {
         SetDanceMode(false);
         DanceSequence(false);
+    }
+
+    protected void GiveShootingWarningSign(float NextShotTimeFromNow)
+    {
+        if (ShootingWarningSign == null)
+            return;
+
+        float timeToGiveSign = NextShotTimeFromNow - warningSecondsBeforShoot;
+
+        if (timeToGiveSign <= 0)
+            ShootingWarningSign.Play();
+        else
+            shootingWarningSignCo = StartCoroutine(GiveShootingWarningSignCo(timeToGiveSign));
+    }
+
+    private IEnumerator GiveShootingWarningSignCo(float timeToGiveSign)
+    {
+        yield return new WaitForSeconds(timeToGiveSign);
+        ShootingWarningSign.Play();
     }
 
     private void DanceSequence(bool enable,bool imediate = false, Action callback = null)

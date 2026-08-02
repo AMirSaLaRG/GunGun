@@ -107,7 +107,7 @@ public class BoxManager : MonoBehaviour
 
         else if (isDouble == true)
         {
-            if (CheckIfThereIsDoubleRespawnEmptyBox() == false)
+            if (CheckIfThereIsDoubleRespawnEmptyBox())
                 return GetRandomBox(activeEmptyBoxesDoubleRespawn);
             else
                 return OpenNewDoubleBox();
@@ -212,7 +212,7 @@ public class BoxManager : MonoBehaviour
     {
         if (activeEmptyBoxes.Contains(box) == false)
             activeEmptyBoxes.Add(box);
-        if (box.isSingleSummon != false)
+        if (box.isSingleSummon == false)
             if (activeEmptyBoxesDoubleRespawn.Contains(box) == false)
                 activeEmptyBoxesDoubleRespawn.Add(box);
     }
@@ -221,7 +221,7 @@ public class BoxManager : MonoBehaviour
     {
         if (activeEmptyBoxes.Contains(box) == true)
             activeEmptyBoxes.Remove(box);
-        if (box.isSingleSummon != false)
+        if (box.isSingleSummon == false)
             if (activeEmptyBoxesDoubleRespawn.Contains(box) == true)
                 activeEmptyBoxesDoubleRespawn.Remove(box);
     }

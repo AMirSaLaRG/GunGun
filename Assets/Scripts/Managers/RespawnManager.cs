@@ -238,7 +238,6 @@ public class RespawnManager : MonoBehaviour
         bool isTakerWithHostage = respawnData.respawnType == RespawnType.TakerWithHostage;
 
         RespawnBox box = boxManager.GetBox(isTakerWithHostage);
-        Debug.Log(box == null);
         if (box == null)
             return;
         Target newTarget = RespawnTargetOn(prefab, box);
@@ -254,6 +253,7 @@ public class RespawnManager : MonoBehaviour
     private void SetUpHostageTaker(RespawnBox box, Target newTarget)
     {
         EnemyWithHostage taker = newTarget.GetComponent<EnemyWithHostage>();
+
         GameObject hostagePrefab = currentRespawnInfo.Find(x => x.respawnType == RespawnType.Hostage).prefab;
         if (hostagePrefab == null)
             hostagePrefab = unitManager.GetBasicUnitData(RespawnType.Hostage).prefab;
@@ -317,6 +317,13 @@ public class RespawnManager : MonoBehaviour
     {
         currentRespawnInfo.Clear();
         currentRespawnInfo.AddRange(newRespawns);
+
+        foreach (var basicData in unitManager.basicRespawnUnitInfo)
+        {
+            RespawnData check = currentRespawnInfo.Find(x => x.respawnType == basicData.respawnType);
+            if ( check == null)
+                currentRespawnInfo.Add(basicData);
+        }
     }
 
     private void SetNewRespawnTime(Vector2 newMinMaxIntervalSummon)

@@ -1,0 +1,238 @@
+{
+  "main": {
+    "id": "7c3ffc10f585b411",
+    "type": "split",
+    "children": [
+      {
+        "id": "dcddaf177c567662",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "93763eac79b391e0",
+            "type": "leaf",
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "03 - Kanban Task Board/Master Kanban Board.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                }
+              },
+              "icon": "lucide-trello",
+              "title": "Master Kanban Board"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7e74c3ea18fb6170",
+    "type": "split",
+    "children": [
+      {
+        "id": "ddccb5f0706c6fa1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d5aa1547a22222ed",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "248f9dc4bf495c77",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "dbd6182d19e4fb8b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "ed3bfef46cfbd190",
+    "type": "split",
+    "children": [
+      {
+        "id": "9e2d426567c36279",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d0136d4194e5df64",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "1f4bafaf6db6412d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Gun Manager.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "010982d66d15789a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "1b109f46da444236",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "32cbf373d9f616c8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Gun Manager.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian-kanban:Create new board": false
+    }
+  },
+  "active": "93763eac79b391e0",
+  "lastOpenFiles": [
+    "03 - Kanban Task Board/Master Kanban Board.md",
+    "01 - GDD/WaveManager.md",
+    "01 - GDD/PlayerController.md",
+    "02 - Asset/Level1.md",
+    "01 - GDD/TargetEntity.md",
+    "01 - GDD/01 - Index.md",
+    "TargetEntity.md",
+    "01 - GDD/Hostage.md",
+    "02 - Asset /Enemy/WarningSign.md",
+    "02 - Asset /Enemy",
+    "02 - Asset ",
+    "Gun Gun Project/01 - GDD/01 - index/PlayerController.md",
+    "Gun Gun Project/01 - GDD/01 - index",
+    "Gun Gun Project/01 - index/PlayerController.md",
+    "Gun Gun Project/01 - index",
+    "Gun Gun Project/PlayerController.md",
+    "[[Gun Gun Project/PlayerController.md",
+    "[[Gun Gun Project",
+    "01 - Index/GunManager.md",
+    "01 - Index",
+    "Gun Gun Project/03 - Kanban Task Board/Untitled.md",
+    "03 - Kanban Task Board",
+    "02 - Asset",
+    "01 - GDD",
+    "player Health manager.md",
+    "Gun Manager.md",
+    "Gun Gun Project.md",
+    "Player Controller.md",
+    "Gun Gun Project",
+    "Untitled.md",
+    "2026-08-01.md",
+    "Untitled.canvas",
+    "Point And Combo manager.md",
+    "Welcome.md"
+  ]
+}

@@ -95,10 +95,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         inGameUi.KillChange(currentKills);
         inGameUi.PointChange(points);
         inGameUi.UiOnHostageKill(currentHostageKilled);
-        if (currentCombo == 0 && comboChanged)
-            inGameUi.SetComboTimer(0);
-        else if (comboChanged)
-            inGameUi.SetComboTimer(comboIntervalCooldown);
+
+        if (comboChanged)
+        {
+            if (currentCombo == 0)
+                inGameUi.SetComboTimer(0);
+            else
+                inGameUi.SetComboTimer(comboIntervalCooldown);
+        }
+     
+
 
         if (currentAmo <= 1)
         {
@@ -110,28 +116,16 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void Shoot(Vector2 aimPosition)
     {
-
-        bool shouldReturn = false;
-
-        if (currentAmo <= 0)
-        {
-            ShootWithEmptyMagazine();
-            shouldReturn = true ;
-        }
-
         if (magazineManager.isReloading)
             return;
 
-        if (shouldReturn == false)
-        {
-        }
 
 
         Ray ray = mainCamera.ScreenPointToRay(aimPosition);
         
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
         {
-            Debug.Log($"Hit:{hit.collider.name}");
+            //Debug.Log($"Hit:{hit.collider.name}");
 
 
             Vector3 shotPos = hit.point;
@@ -142,12 +136,12 @@ public class PlayerController : MonoBehaviour, IDamagable
                 return;
             }
 
-            if (shouldReturn)
+            if (currentAmo <= 0)
             {
-                shouldReturn = false;
-                UpdateUi();
+                ShootWithEmptyMagazine();
                 return;
             }
+
             currentAmo--;
 
             AudioManager.instance.PlaySfx(shootSfx, true);
@@ -160,8 +154,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public void Reload()
     {
-        Debug.Log(currentAmo);
-        Debug.Log(gunAmoCap);
         if(currentAmo >= gunAmoCap || magazineManager.isReloading)
             return;
         AudioManager.instance.PlaySfx(reloadSfx, true);
@@ -173,7 +165,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void ShootWithEmptyMagazine()
     {
-        Debug.Log("Out Of Amo!!!!");
         AudioManager.instance.PlaySfx(emptyShootSfx, true);
         magazineManager.OnShotBullet();
 
@@ -181,8 +172,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void MakeHoleOnHit(RaycastHit hit)
     {
-        Debug.Log("Created");
-
         Vector3 placePos = hit.point + (hit.normal * 0.002f);
         Quaternion rotation = Quaternion.LookRotation(hit.normal);
 
