@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8568226586651912950}
+  - component: {fileID: 1850764350633412977}
   - component: {fileID: 3747146533316168943}
   - component: {fileID: 206545151903971151}
-  - component: {fileID: 1850764350633412977}
   - component: {fileID: 7933797234642827983}
   m_Layer: 0
   m_Name: BulletTest
@@ -36,6 +36,20 @@ Transform:
   - {fileID: 3047368769495605380}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1850764350633412977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842304394038328753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 190250290ff7ec545a530d4901dfb346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectal
+  onHitVfx: {fileID: 2196159827754299204, guid: aa909c7b201156744a20746bb9595281, type: 3}
+  disFromCameraToHit: 3
 --- !u!33 &3747146533316168943
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -93,19 +107,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1850764350633412977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842304394038328753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 190250290ff7ec545a530d4901dfb346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectal
-  onHitVfx: {fileID: 2196159827754299204, guid: aa909c7b201156744a20746bb9595281, type: 3}
 --- !u!65 &7933797234642827983
 BoxCollider:
   m_ObjectHideFlags: 0

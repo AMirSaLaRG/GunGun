@@ -38,6 +38,12 @@ kanban-plugin: board
 		- [ ] In Game user Interface shows
 - [ ] - [ ] ObjectPool #code
 - [ ] - [ ] Lightning managment #art #render
+- [ ] - [ ] Add more [[01 - GDD/ Enemy|enemy]]
+		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
+		- [x] [[EnemyHostageTaker|Hostage Taker]]
+		- [ ] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
+		- [ ] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
+		- [ ]
 - [ ] - [ ] Add dynamic [[01 - GDD/ RespawnBox| Respawn Box]]  #art #code 
 		- [ ] Handle the target by sequences
 		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
@@ -50,6 +56,11 @@ kanban-plugin: board
 
 ## Done
 
+- [ ] Relocate the damage taking effects from [[01 - Gdd/UI/InGame|In Game]] to [[01 - GDD/UI/PlayerCanvas|player canvas]] and fix the not showing the sprite #code #art
+	- [x] move elements
+	- [x] fix the sprite
+- [ ] Change [[EnemyHostageTaker| enemy hostage taker]] look from [[01 - GDD/ Enemy/EnemyBasic|enemy basic]]
+- [ ] Big places should have more than one [[01 - GDD/ RespawnBox|respawn point]]
 - [ ] - [ ] Create warning when a target want to shoot #code #art
 		- [x] Get and design [[WarningSign|warning signs]]  for
 			- [x] Target At Position
@@ -71,6 +82,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,true,false,true,true,true],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,true,true,true],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

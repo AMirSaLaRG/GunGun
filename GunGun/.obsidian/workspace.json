@@ -11,14 +11,24 @@
             "id": "93763eac79b391e0",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "kanban",
               "state": {
-                "file": "01 - GDD/01 - Index.md",
-                "mode": "source",
-                "source": false
+                "file": "03 - Kanban Task Board/Master Kanban Board.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                    true,
+                    true
+                  ]
+                }
               },
-              "icon": "lucide-file",
-              "title": "01 - Index"
+              "icon": "lucide-trello",
+              "title": "Master Kanban Board"
             }
           }
         ]
@@ -190,13 +200,23 @@
   },
   "active": "93763eac79b391e0",
   "lastOpenFiles": [
-    "01 - GDD/TargetEntity.md",
-    "Screenshot 2026-05-21 170529.png",
+    "01 - GDD/UI/PlayerCanvas.md",
+    "03 - Kanban Task Board/Master Kanban Board.md",
+    "01 - Gdd/UI/InGame.md",
+    "01 - GDD/UI/InGame.md",
+    "01 - GDD/UI",
+    "01 - Gdd/UI",
+    "01 - GDD/ Enemy/LuncherEnemy.md",
+    "01 - GDD/ Enemy/ShieldedEnemy.md",
+    "01 - GDD/ Enemy/EnemyBasic.md",
+    "01 - GDD/ Enemy/EnemyHostageTaker.md",
+    "01 - GDD/ Enemy",
     "01 - GDD/01 - Index.md",
+    "Screenshot 2026-05-21 170529.png",
+    "01 - GDD/TargetEntity.md",
     "project_capture_17.png",
     "02 - Asset/Level1.md",
     "Untitled.base",
-    "03 - Kanban Task Board/Master Kanban Board.md",
     "Untitled.canvas",
     "01 - GDD/Hostage.md",
     "01 - GDD/WaveManager.md",
@@ -215,16 +235,9 @@
     "01 - Index/GunManager.md",
     "01 - Index",
     "Gun Gun Project/03 - Kanban Task Board/Untitled.md",
-    "03 - Kanban Task Board",
-    "02 - Asset",
-    "01 - GDD",
     "player Health manager.md",
     "Gun Manager.md",
     "Gun Gun Project.md",
-    "Player Controller.md",
-    "Untitled.md",
-    "2026-08-01.md",
-    "Point And Combo manager.md",
-    "Welcome.md"
+    "Player Controller.md"
   ]
 }

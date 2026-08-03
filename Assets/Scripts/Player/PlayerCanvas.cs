@@ -59,9 +59,9 @@ public class PlayerCanvas : MonoBehaviour
 
     [Header("TakingDamageUi")]
     [SerializeField] private Transform takingDamageElements;
+    [SerializeField] private Image DieVisualImage;
     [SerializeField] private float takingDamageUiTime;
 
-    private Image[] takingDamageImages;
     private OnHitUi[] onHitUis;
     private int prepareOnhitUis = 20;
     private int currentOnHitIndex = 0;
@@ -69,7 +69,6 @@ public class PlayerCanvas : MonoBehaviour
 
     private void Start()
     {
-        takingDamageImages = takingDamageElements.GetComponentsInChildren<Image>();
 
         onHitUis = new OnHitUi[prepareOnhitUis];
 
@@ -80,19 +79,20 @@ public class PlayerCanvas : MonoBehaviour
         }
     }
 
-    public void OnTakingDamage(Vector3 screenPoint)
+    public void OnTakingDamage(Vector3 screenPoint, bool isDead = true)
     {
         takingDamageElements.position = new Vector3(screenPoint.x, screenPoint.y, takingDamageElements.position.z);
 
         screenPanel.color = Color.red;
         PulsFadeEffectAndFade(screenPanel, takingDamageUiTime);
 
-        foreach (var image in takingDamageImages)
+        if (isDead)
         {
-            image.transform.localScale = Vector3.zero;
-            image.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
-            PulsFadeEffectAndFade(image, takingDamageUiTime);
+            DieVisualImage.transform.localScale = Vector3.zero;
+            DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
+            PulsFadeEffectAndFade(DieVisualImage, takingDamageUiTime);
         }
+
     }
     public void Onhit(Vector3 screenPoint, float distance, EHit hitInfo)
     {
