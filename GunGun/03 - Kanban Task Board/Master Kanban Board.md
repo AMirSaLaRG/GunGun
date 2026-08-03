@@ -71,6 +71,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,true,false,true,true,true],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

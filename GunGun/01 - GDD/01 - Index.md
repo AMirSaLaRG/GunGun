@@ -1,5 +1,6 @@
 # Fast phase shooting Mobile game 
 
+
 ## Controls and Interaction
 1. Touch will shoot instantly [[PlayerController| PlayerController]]
 2. Reload button or magazine hit will Reload [[]]

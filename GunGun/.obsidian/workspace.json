@@ -11,24 +11,14 @@
             "id": "93763eac79b391e0",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "markdown",
               "state": {
-                "file": "03 - Kanban Task Board/Master Kanban Board.md",
-                "kanbanViewState": {
-                  "kanban-plugin": "board",
-                  "list-collapse": [
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                  ]
-                }
+                "file": "01 - GDD/01 - Index.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-trello",
-              "title": "Master Kanban Board"
+              "icon": "lucide-file",
+              "title": "01 - Index"
             }
           }
         ]
@@ -200,14 +190,18 @@
   },
   "active": "93763eac79b391e0",
   "lastOpenFiles": [
+    "01 - GDD/TargetEntity.md",
+    "Screenshot 2026-05-21 170529.png",
+    "01 - GDD/01 - Index.md",
+    "project_capture_17.png",
+    "02 - Asset/Level1.md",
+    "Untitled.base",
     "03 - Kanban Task Board/Master Kanban Board.md",
+    "Untitled.canvas",
+    "01 - GDD/Hostage.md",
     "01 - GDD/WaveManager.md",
     "01 - GDD/PlayerController.md",
-    "02 - Asset/Level1.md",
-    "01 - GDD/TargetEntity.md",
-    "01 - GDD/01 - Index.md",
     "TargetEntity.md",
-    "01 - GDD/Hostage.md",
     "02 - Asset /Enemy/WarningSign.md",
     "02 - Asset /Enemy",
     "02 - Asset ",
@@ -228,10 +222,8 @@
     "Gun Manager.md",
     "Gun Gun Project.md",
     "Player Controller.md",
-    "Gun Gun Project",
     "Untitled.md",
     "2026-08-01.md",
-    "Untitled.canvas",
     "Point And Combo manager.md",
     "Welcome.md"
   ]
