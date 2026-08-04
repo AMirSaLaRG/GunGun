@@ -12,11 +12,21 @@ kanban-plugin: board
 		- [ ] Move ammo, reload, and fire-rate variables to new script
 		- [ ] Set up reference: PlayerController calls GunController.Shoot() on input
 		- [ ] Test shooting, reloading, and weapon switching in-engine
+- [ ] [[WarningSign]] change enemies sign
+- [ ] SFX of gun shot is feel off check how can fix it on rapid fire
 
 
 ## Mehrdad feedback
 
 - [ ] [[02 - Asset/Hostage|Hostage]] change the prefab #art
+- [ ] Remove bullet point on game ends ( resets)
+- [ ] enemy and hostage should not snap on each other
+- [ ] death effect is too messy make it simpler
+- [ ] on wave change close and open activators more phase change feel
+- [ ] add combo bonus something like call of
+- [ ] add [[ShieldedEnemy]]
+- [ ] Leader board can insert name and be smaller
+- [ ] after fight don't remove death effect
 
 
 ## Bugs
@@ -82,6 +92,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,true,true,true],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,true,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

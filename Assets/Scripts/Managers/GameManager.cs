@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     private int currenLevelIndex = 0;
 
+    public bool isVibrateOn = true;
+
     public int currentLeaderBoardRank { private set; get; } = 0;
 
     private void Awake()

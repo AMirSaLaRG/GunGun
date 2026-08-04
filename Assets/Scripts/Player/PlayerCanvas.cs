@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,17 +60,21 @@ public class PlayerCanvas : MonoBehaviour
 
     [Header("TakingDamageUi")]
     [SerializeField] private Transform takingDamageElements;
-    [SerializeField] private Image DieVisualImage;
     [SerializeField] private float takingDamageUiTime;
+    [Header ("TakeDamageAndDie")]
+    [SerializeField] private Image DieVisualImage;
+    [SerializeField] private float screenShakeIntansityDie = 0.3f;
+    [SerializeField] private float screenShakeDurationDie = .3f;
 
     private OnHitUi[] onHitUis;
     private int prepareOnhitUis = 20;
     private int currentOnHitIndex = 0;
     private int currentKhalasIndex;
 
+    private Camera mainCamera;
     private void Start()
     {
-
+        mainCamera = Camera.main;
         onHitUis = new OnHitUi[prepareOnhitUis];
 
         for (int i = 0; i < onHitUis.Length; i++)
@@ -78,6 +83,8 @@ public class PlayerCanvas : MonoBehaviour
             onHitUis[i].transform.localScale = Vector3.zero;
         }
     }
+
+
 
     public void OnTakingDamage(Vector3 screenPoint, bool isDead = true)
     {
@@ -88,6 +95,15 @@ public class PlayerCanvas : MonoBehaviour
 
         if (isDead)
         {
+            if (GameManager.instance.isVibrateOn)
+            {
+                Debug.Log("Vibrate");
+                Handheld.Vibrate();
+            }
+
+            ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
+
+            DieVisualImage.transform.localEulerAngles = Vector3.forward * UnityEngine.Random.Range(0, 360);
             DieVisualImage.transform.localScale = Vector3.zero;
             DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
             PulsFadeEffectAndFade(DieVisualImage, takingDamageUiTime);
@@ -221,5 +237,26 @@ public class PlayerCanvas : MonoBehaviour
                 break;
         }
     }
+    private void ShakeScreen(float duration, float intensity, Transform mainCamera)
+    {
+        StartCoroutine(ShakeScreenCo(duration, intensity, mainCamera));
+    }
 
+    private IEnumerator ShakeScreenCo(float duration, float intensity, Transform mainCamera)
+    {
+        Vector3 originalPos = Camera.main.transform.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float x = UnityEngine.Random.Range(-1f, 1f) * intensity;
+            float y = UnityEngine.Random.Range(-1f, 1f) * intensity;
+            mainCamera.localPosition = originalPos + new Vector3(x, y, 0);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        mainCamera.localPosition = originalPos;
+    }
 }

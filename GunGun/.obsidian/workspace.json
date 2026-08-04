@@ -22,8 +22,8 @@
                     false,
                     false,
                     true,
-                    true,
-                    true
+                    false,
+                    false
                   ]
                 }
               },
@@ -200,8 +200,10 @@
   },
   "active": "93763eac79b391e0",
   "lastOpenFiles": [
-    "01 - GDD/UI/PlayerCanvas.md",
+    "01 - GDD/01 - Index.md",
+    "01 - GDD/WarningSign.md",
     "03 - Kanban Task Board/Master Kanban Board.md",
+    "01 - GDD/UI/PlayerCanvas.md",
     "01 - Gdd/UI/InGame.md",
     "01 - GDD/UI/InGame.md",
     "01 - GDD/UI",
@@ -211,7 +213,6 @@
     "01 - GDD/ Enemy/EnemyBasic.md",
     "01 - GDD/ Enemy/EnemyHostageTaker.md",
     "01 - GDD/ Enemy",
-    "01 - GDD/01 - Index.md",
     "Screenshot 2026-05-21 170529.png",
     "01 - GDD/TargetEntity.md",
     "project_capture_17.png",
@@ -222,7 +223,6 @@
     "01 - GDD/WaveManager.md",
     "01 - GDD/PlayerController.md",
     "TargetEntity.md",
-    "02 - Asset /Enemy/WarningSign.md",
     "02 - Asset /Enemy",
     "02 - Asset ",
     "Gun Gun Project/01 - GDD/01 - index/PlayerController.md",

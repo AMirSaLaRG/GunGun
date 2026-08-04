@@ -954,7 +954,7 @@ GameObject:
   - component: {fileID: 53796560}
   - component: {fileID: 53796562}
   - component: {fileID: 53796561}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Checkmark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11259,7 +11259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 750403298}
   - component: {fileID: 750403299}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: TestMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15199,7 +15199,7 @@ GameObject:
   - component: {fileID: 1014786872}
   - component: {fileID: 1014786874}
   - component: {fileID: 1014786873}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18756,8 +18756,10 @@ MonoBehaviour:
   lowAmoScale: 2
   lowAmoDuration: 1
   takingDamageElements: {fileID: 1376606260}
-  DieVisualImage: {fileID: 1876494487}
   takingDamageUiTime: 0.75
+  DieVisualImage: {fileID: 1876494487}
+  screenShakeIntansityDie: 0.3
+  screenShakeDurationDie: 0.25
 --- !u!4 &1254392427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
@@ -19624,7 +19626,7 @@ GameObject:
   - component: {fileID: 1345926617}
   - component: {fileID: 1345926619}
   - component: {fileID: 1345926618}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26604,15 +26606,15 @@ RectTransform:
   m_GameObject: {fileID: 1876494485}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1376606260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1876494487
 MonoBehaviour:
@@ -29013,6 +29015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   isTesting: 0
+  isVibrateOn: 1
 --- !u!4 &2062707314
 Transform:
   m_ObjectHideFlags: 0

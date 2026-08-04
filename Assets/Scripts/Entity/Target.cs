@@ -43,8 +43,8 @@ public class Target : MonoBehaviour, IDamagable
 
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
-    public bool isMoving = true;
-    public bool isRotating = false;
+    public bool isMoving { protected set; get; } = true;
+    public bool isRotating {protected set; get;} = false;
     protected Vector3 facingPosition;
 
     private float DurationEndTime = 0;
@@ -291,6 +291,8 @@ public class Target : MonoBehaviour, IDamagable
 
         if (isatPositionWarningSignGiven == true)
             return;
+
+        Debug.Log("play");
 
         atPositionWarningSign.Play();
         isatPositionWarningSignGiven = true;
