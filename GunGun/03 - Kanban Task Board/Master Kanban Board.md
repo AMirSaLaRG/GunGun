@@ -58,8 +58,6 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] add [[EnemyBasic|Shielded enemy]]
-- [ ] Change the sfx when someone take damage will get sound of sfx on hit not from hit only miss can be there
 
 
 ## Done
@@ -67,8 +65,10 @@ kanban-plugin: board
 - [ ] Relocate the damage taking effects from [[01 - Gdd/UI/InGame|In Game]] to [[01 - GDD/UI/PlayerCanvas|player canvas]] and fix the not showing the sprite #code #art
 	- [x] move elements
 	- [x] fix the sprite
+- [ ] add [[EnemyBasic|Shielded enemy]]
 - [ ] Change [[EnemyHostageTaker| enemy hostage taker]] look from [[01 - GDD/ Enemy/EnemyBasic|enemy basic]]
 - [ ] Big places should have more than one [[01 - GDD/ RespawnBox|respawn point]]
+- [ ] Change the sfx when someone take damage will get sound of sfx on hit not from hit only miss can be there
 - [ ] - [ ] Create warning when a target want to shoot #code #art
 		- [x] Get and design [[WarningSign|warning signs]]  for
 			- [x] Target At Position

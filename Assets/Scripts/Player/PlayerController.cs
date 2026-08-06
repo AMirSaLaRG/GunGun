@@ -243,6 +243,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
         else
         {
+            //this is kinda default it better to get moved to target class and make a virtual method for it
             AudioManager.instance.PlaySfx(bulletImapct, true);
             MakeHitVfx(hit);
 
