@@ -11705,7 +11705,7 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.885
-    - respawnType: 1
+    - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.157
@@ -11728,7 +11728,7 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.885
-    - respawnType: 1
+    - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.102
@@ -11751,7 +11751,7 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.885
-    - respawnType: 1
+    - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 0.243
@@ -25402,7 +25402,7 @@ GameObject:
   - component: {fileID: 1742153113}
   - component: {fileID: 1742153114}
   m_Layer: 0
-  m_Name: impact
+  m_Name: BulletImpactMiss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25434,7 +25434,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 930328602069814448, guid: b8cb5933740450f47938d7a188eaf0a1, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: afac41c3b66e2d94da3650ba1a7be5d4, type: 3}
+  m_Resource: {fileID: 8300000, guid: 33b4b6fd3a5eeab449f9f4dfc87a6091, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.474
   m_Pitch: 1
@@ -33282,6 +33282,10 @@ PrefabInstance:
     - target: {fileID: 5117032311296125721, guid: dd68061adb50f75488b2d184882d5729, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5117032311296125721, guid: dd68061adb50f75488b2d184882d5729, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

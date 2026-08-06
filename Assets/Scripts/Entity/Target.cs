@@ -13,6 +13,11 @@ public class Target : MonoBehaviour, IDamagable
     public Animator anim { get; protected set; }
     public CapsuleCollider mycollider { protected set; get; }
 
+    [Header("Target Sfx")]
+    [SerializeField] protected AudioSource onTakeDamageSfx;
+    [SerializeField] protected AudioSource onDeathSfx;
+    [SerializeField] protected AudioSource onDeadBodyGetShotSfx;
+
     [Header("Target Type")]
     [SerializeField] private bool isStatic = false;
 
@@ -147,16 +152,24 @@ public class Target : MonoBehaviour, IDamagable
             return;
 
         if (isDead)
+        {
+            if (onDeadBodyGetShotSfx != null)
+                AudioManager.instance.PlaySfx(onDeadBodyGetShotSfx, true);
             return;
+        }
 
 
 
         healthPoint -= (int)damage;
 
+        if (onTakeDamageSfx != null)
+            AudioManager.instance.PlaySfx(onTakeDamageSfx, true);
 
 
         if (healthPoint <= 0)
         {
+            if (onDeathSfx != null)
+                AudioManager.instance.PlaySfx(onDeathSfx, true);
             Die();
         }
     }

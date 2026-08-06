@@ -59,6 +59,7 @@ kanban-plugin: board
 ## Done Before Comit
 
 - [ ] add [[EnemyBasic|Shielded enemy]]
+- [ ] Change the sfx when someone take damage will get sound of sfx on hit not from hit only miss can be there
 
 
 ## Done
@@ -108,6 +109,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,true,true,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,true,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

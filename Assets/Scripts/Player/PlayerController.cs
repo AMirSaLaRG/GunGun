@@ -222,7 +222,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (target.TryGetComponent(out Enemy enemy))
         {
-            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
             MakeHumanHitVfx(hit);
 
 
@@ -230,9 +229,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
         else if (target.TryGetComponent(out EnemyShield enemyShiedl))
         {
-            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
             MakeHumanHitVfx(hit);
-
 
             OnEnemyShieldHit(enemyShiedl);
         }
@@ -240,9 +237,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         else if (target.TryGetComponent(out Hostage hostage))
         {
-            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
             MakeHumanHitVfx(hit);
-
 
             OnHostageHit(hostage);
         }
