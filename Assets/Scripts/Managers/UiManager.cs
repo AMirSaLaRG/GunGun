@@ -24,7 +24,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] private GameObject fadePanel;
 
-    private EPanel currentPanel;
+    public EPanel currentPanel { private set; get; } = EPanel.MainMenu;
 
 
     public void SetPanel(EPanel panel)

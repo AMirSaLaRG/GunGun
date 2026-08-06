@@ -1,4 +1,6 @@
 using DG.Tweening;
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,7 +13,10 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
     [SerializeField] protected float activateTransitionTIme = 1.5f;
     [SerializeField] protected Ease ActivateEase;
     protected Vector3 closeScale;
-    public bool isActive { private set; get; } = false;
+
+    private List<RespawnBox> myRespawnBoxes = new List<RespawnBox>();
+    public bool isActive { protected set; get; } = false;
+    private int NumberOfCloseRequests;
 
     protected virtual void Awake()
     {
@@ -23,11 +28,12 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
         closeScale = myActivateItem.localScale;
 
         myActivateItemCollider = myActivateItem.GetComponent<Collider>();
-
-
     }
-    public virtual void SetActive()
+    public virtual void SetActive(out float activateTime)
     {
+
+        activateTime = 0;
+
         if (isActive)
             return;
         myActivateItemCollider.enabled = false;
@@ -41,16 +47,33 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
         });
 
         isActive = true;
-
+        activateTime = activateTransitionTIme;
     }
 
     public virtual void SetDeActive()
     {
         if (isActive == false) return;
- 
+
         myActivateItem.DOScale(closeScale, activateTransitionTIme);
 
         isActive = false;
-        
+    }
+
+    public void CheckCloseRequsts()
+    {
+        foreach (var box in myRespawnBoxes)
+        {
+            if (box.isActive == true)
+            {
+                SetActive(out float t);
+                return;
+            }
+        }
+        SetDeActive();
+    }
+
+    public void AddBox(RespawnBox myBox)
+    {
+        myRespawnBoxes.Add(myBox);
     }
 }

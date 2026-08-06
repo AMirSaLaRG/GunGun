@@ -25,6 +25,7 @@ public enum RespawnType
     BaseEnemy = 0,
     Hostage = 1,
     TakerWithHostage = 2,
+    ShieldedEnemy = 3,
 }
 
 

@@ -33,7 +33,10 @@ public class RespawnManager : MonoBehaviour
     private bool onEventMode;
     public bool isSceenClear { private set; get; }
     private bool isEventEnded;
-    
+
+    private int waveActiveBoxes;
+    private bool startingNextWawe;
+
     private void Awake()
     {
         player = FindFirstObjectByType<PlayerController>();
@@ -49,6 +52,19 @@ public class RespawnManager : MonoBehaviour
 
     private void Update()
     {
+        if (boxManager.ManagingBoxes)
+            return;
+
+        if (unitManager.onWaitingRoomForSceneClear)
+            return;
+
+        if (startingNextWawe)
+        {
+            boxManager.ActivateRandomBoxes(waveActiveBoxes);
+            startingNextWawe = false;
+            return;
+        }
+
         bool flowControl = CheckRandomConditionals();
         if (!flowControl)
         {
@@ -200,38 +216,11 @@ public class RespawnManager : MonoBehaviour
         BreakRespawn();
         boxManager.DeActiveAllBoxes();
         boxManager.ResetBoxes();
-    }
-
-    private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0)
-    {
-        GameObject myPrefab = targetData.prefab;
-
-        if (myPrefab == null)
-            myPrefab = unitManager.GetBasicUnitData(targetData.respawnType).prefab;
-
-        Target myTarget = respawnBox.RespawnRandomSide(myPrefab);
-
-        myTarget.SetMyBox(respawnBox);
-        myTarget.SetMyRespawnManager(this);
-
-        if (duration != 0)
-            myTarget.SetMyDuration(duration);
-
-        unitManager.TrackTarget(myTarget);
-
-        isSceenClear = false;
-
-
-        return myTarget;
+        unitManager.ClearTheScene();
     }
 
     private void RespawnTargetRandomly(RespawnData respawnData)
     {
-        GameObject prefab = respawnData.prefab;
-
-        if (prefab == null)
-            prefab = unitManager.GetBasicUnitData(respawnData.respawnType).prefab;
-
         if (shouldCountDown)
             CheckForCountDown(respawnData.respawnType);
 
@@ -240,7 +229,7 @@ public class RespawnManager : MonoBehaviour
         RespawnBox box = boxManager.GetBox(isTakerWithHostage);
         if (box == null)
             return;
-        Target newTarget = RespawnTargetOn(prefab, box);
+        Target newTarget = RespawnTargetOn(respawnData, box);
 
         if (respawnData.respawnType == RespawnType.Hostage)
             RespawnTargetRandomly(unitManager.GetBasicUnitData(RespawnType.BaseEnemy));
@@ -253,32 +242,38 @@ public class RespawnManager : MonoBehaviour
     private void SetUpHostageTaker(RespawnBox box, Target newTarget)
     {
         EnemyWithHostage taker = newTarget.GetComponent<EnemyWithHostage>();
+        
 
-        GameObject hostagePrefab = currentRespawnInfo.Find(x => x.respawnType == RespawnType.Hostage).prefab;
-        if (hostagePrefab == null)
-            hostagePrefab = unitManager.GetBasicUnitData(RespawnType.Hostage).prefab;
+        RespawnData hostageData = currentRespawnInfo.Find(x => x.respawnType == RespawnType.Hostage);
 
-        Hostage newHostage = RespawnTargetOn(hostagePrefab, box).GetComponent<Hostage>();
+
+        Hostage newHostage = RespawnTargetOn(hostageData, box).GetComponent<Hostage>();
 
         unitManager.RemoveTrack(newHostage);
         taker.Setup(newHostage);
         newHostage.Setup(taker);
     }
-
-    private Target RespawnTargetOn(GameObject prefab, RespawnBox box, bool usingLastSide = false)
+    private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0, bool usingLastSide = false)
     {
-        Target newTarget = box.RespawnRandomSide(prefab, usingLastSide);
+        GameObject myPrefab = targetData.prefab;
+
+        if (myPrefab == null)
+            myPrefab = unitManager.GetBasicUnitData(targetData.respawnType).prefab;
+
+        Target newTarget = respawnBox.RespawnRandomSide(myPrefab, usingLastSide);
+
+        newTarget.SetUpTarget(player, this, respawnBox, targetData.respawnType);
+
+        if (duration != 0)
+            newTarget.SetMyDuration(duration);
 
         unitManager.TrackTarget(newTarget);
+
         isSceenClear = false;
 
-        newTarget.SetMyBox(box);
-        newTarget.SetMyRespawnManager(this);
 
         return newTarget;
-    }
-    
-
+    }   
 
     private void CheckForCountDown(RespawnType type)
     {
@@ -299,12 +294,15 @@ public class RespawnManager : MonoBehaviour
         Vector2Int newMinMaxParallarRespawns,
         int newCountDown = 0, RespawnType newCountDownType = RespawnType.BaseEnemy)
     {
+        waveActiveBoxes = newActiveBoxes;
+        startingNextWawe = true;
+
+        unitManager.SetOnWaitingForSceneClear();
+
 
         ReplcaeRespawnInfo(newRespawns);
 
         SetNewRespawnTime(newMinMaxIntervalSummon);
-
-        boxManager.ActivateRandomBoxes(newActiveBoxes);
 
         SetNewRespawnNumber(newMinMaxParallarRespawns);
 
@@ -312,6 +310,8 @@ public class RespawnManager : MonoBehaviour
 
         isOnRandomRespawn = true;
     }
+
+    
 
     private void ReplcaeRespawnInfo(List<RespawnData> newRespawns)
     {

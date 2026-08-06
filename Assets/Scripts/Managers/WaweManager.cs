@@ -291,6 +291,10 @@ public class WaweManager : MonoBehaviour
             Destroy(target.gameObject);
         }
 
+        foreach (var bulletHolde in FindObjectsByType<BulletHoldeVfx>(FindObjectsSortMode.InstanceID))
+            Destroy(bulletHolde.gameObject, .2f);
+               
+
         StopAllCoroutines();
     }
 

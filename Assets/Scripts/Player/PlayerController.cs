@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour, IDamagable
 {
@@ -227,6 +228,14 @@ public class PlayerController : MonoBehaviour, IDamagable
 
             OnEnemyHit(enemy);
         }
+        else if (target.TryGetComponent(out EnemyShield enemyShiedl))
+        {
+            AudioManager.instance.PlaySfx(bulletFleshImpact, true);
+            MakeHumanHitVfx(hit);
+
+
+            OnEnemyShieldHit(enemyShiedl);
+        }
 
 
         else if (target.TryGetComponent(out Hostage hostage))
@@ -327,6 +336,20 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
+    private void OnEnemyShieldHit(EnemyShield enemyShield)
+    {
+        Vector3 point = mainCamera.WorldToScreenPoint(enemyShield.transform.position);
+        float distance = enemyShield.transform.position.z - transform.position.z;
+        myCanvas.Onhit(point, distance, EHit.Shield);
+
+        float targetBasePoints = enemyShield.GetTargetPoints();
+
+        AddPoints(targetBasePoints);
+        currentKills++;
+        AddToCombo(enemyShield.GetComboValue(), enemyShield.transform.position);
+
+    }
+
     private void AddToCombo(int combo, Vector3 targetPos)
     {
         currentCombo += combo;
@@ -376,10 +399,14 @@ public class PlayerController : MonoBehaviour, IDamagable
             ResetCombo();
     }
 
-    private void ShotForce(RaycastHit hit, Vector3 shotPos, Target enemy)
+    private void ShotForce(RaycastHit hit, Vector3 shotPos, Target target)
     {
+        if (target.rb == null) return;
+
+        target.rb.isKinematic = false;
+
         Vector3 hitDirectionNorm = (transform.position - hit.transform.position).normalized;
-        enemy.rb.AddForceAtPosition(-gunForce * hitDirectionNorm, shotPos, ForceMode.Impulse);
+        target.rb.AddForceAtPosition(-gunForce * hitDirectionNorm, shotPos, ForceMode.Impulse);
     }
 
     private void OnTap(InputAction.CallbackContext context)

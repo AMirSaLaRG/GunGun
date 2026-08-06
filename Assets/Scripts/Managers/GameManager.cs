@@ -109,7 +109,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        gameState = EGameState.inGame;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(StartGameCo());
 
@@ -121,6 +120,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(elevator.actionTime * 2);
 
         uiManager.SetPanel(EPanel.InGame);
+        gameState = EGameState.inGame;
+
         playerController.ResetPlayer();
 
         playerController.SetGameStarted(true);
@@ -148,7 +149,6 @@ public class GameManager : MonoBehaviour
 
     public void LevelCompleted()
     {
-        gameState = EGameState.inMenu;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(LevelCompletedCo());
     }
@@ -161,13 +161,14 @@ public class GameManager : MonoBehaviour
         levelManager.SetGameEnd();
 
         uiManager.SetPanel(EPanel.Victory);
+        gameState = EGameState.inMenu;
+
 
 
         SaveLevelCompleted();
     }
     public void GameOver()
     {
-        gameState = EGameState.inMenu;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(GameOverCo());
     }
@@ -179,6 +180,8 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.GameOver);
         playerController.SetGameStarted(false);
         levelManager.SetGameEnd();
+        gameState = EGameState.inMenu;
+
 
 
         SaveGameOver();

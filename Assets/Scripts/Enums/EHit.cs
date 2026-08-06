@@ -7,4 +7,5 @@ public enum EHit
     Hostage = 2,
     Khalas = 3,
     MovingEnemy = 4,
+    Shield = 5,
 }

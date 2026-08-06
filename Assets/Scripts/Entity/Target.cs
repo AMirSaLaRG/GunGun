@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -12,13 +13,20 @@ public class Target : MonoBehaviour, IDamagable
     public Animator anim { get; protected set; }
     public CapsuleCollider mycollider { protected set; get; }
 
+    [Header("Target Type")]
+    [SerializeField] private bool isStatic = false;
+
+
     [Header("Visuals")]
     [SerializeField] private GameObject visuals;
+    [SerializeField] protected List<GameObject> visualShields = new List<GameObject>();
+
 
     [Header("TargetSetup")]
     [SerializeField] protected float moveSpeed = 5;
     [SerializeField] protected float rotationSpeed = 5;
     [SerializeField] protected float duration = 5f;
+    protected float BaseMoveSpeed;
 
     [SerializeField] protected int healthPoint = 1;
     [SerializeField] protected float bodyDispearAfterDeath = 4f;
@@ -37,6 +45,8 @@ public class Target : MonoBehaviour, IDamagable
     [Header("At Position Warning Sign Setup")]
     [SerializeField] private ParticleSystem atPositionWarningSign;
     private bool isatPositionWarningSignGiven = false;
+
+    protected RespawnType myType;
 
     protected RespawnBox myBox;
     protected RespawnManager myRespawnManager;
@@ -65,10 +75,16 @@ public class Target : MonoBehaviour, IDamagable
 
         mycollider = GetComponent<CapsuleCollider>();
         DurationEndTime = Mathf.Infinity;
+
     }
 
     protected virtual void Start()
     {
+        if (isStatic)
+            return;
+
+        BaseMoveSpeed = moveSpeed;
+
         StartingScale = transform.localScale;
 
         if (isScaling)
@@ -78,6 +94,8 @@ public class Target : MonoBehaviour, IDamagable
 
     protected virtual void Update()
     {
+        if (isStatic)
+            return;
 
         if (isMoving)
             MoveForward();
@@ -94,11 +112,23 @@ public class Target : MonoBehaviour, IDamagable
 
     }
 
-    public void SetUpTarget(PlayerController player, bool isScaling)
+    protected virtual void CheckAndSetMyType()
+    {
+
+    }
+
+
+    public void SetUpTarget(PlayerController player, RespawnManager respawnManager, RespawnBox myNewBox, RespawnType myNewType)
     {
         this.player = player;
-        this.isScaling = isScaling;
+        this.myRespawnManager = respawnManager;
+        this.myBox = myNewBox;
+
+        myType = myNewType;
+        CheckAndSetMyType();
     }
+
+    public void SetScalingAtRespawn(bool enable) => isScaling = enable;
 
     private void ScaleToOrginal()
     {
@@ -119,7 +149,11 @@ public class Target : MonoBehaviour, IDamagable
         if (isDead)
             return;
 
+
+
         healthPoint -= (int)damage;
+
+
 
         if (healthPoint <= 0)
         {
@@ -127,7 +161,9 @@ public class Target : MonoBehaviour, IDamagable
         }
     }
 
-    public virtual void RespawnTheTarget(Vector3 newtargetPos)
+
+
+    public virtual void SetTargetsFace(Vector3 newtargetPos)
     {
         targetPos = newtargetPos;
 
@@ -152,6 +188,11 @@ public class Target : MonoBehaviour, IDamagable
         moveSpeed = newMoveSpeed;
         isMoving = newIsMoving;
         transform.LookAt(toward);
+    }
+
+    public void SlowTarget(float percentage)
+    {
+        moveSpeed = BaseMoveSpeed * percentage;
     }
 
     protected virtual void LookAt(Vector3 lookPosition)
@@ -324,5 +365,22 @@ public class Target : MonoBehaviour, IDamagable
     private void OnDestroy()
     {
         DOTween.Kill(gameObject);
+    }
+
+    protected virtual void SpeedUpTarget(float startSpeed, float endSpeed, float duration)
+    {
+        StartCoroutine(SpeedUpTargetCo(startSpeed,endSpeed, duration));
+    }
+
+    private IEnumerator SpeedUpTargetCo(float startSpeed, float endSpeed, float duration)
+    {
+        float elapse = 0;
+        while (elapse < duration)
+        {
+            moveSpeed = Mathf.Lerp(startSpeed, endSpeed, elapse / duration);
+            yield return null;
+            elapse += Time.deltaTime;
+        }
+        moveSpeed = endSpeed;
     }
 }

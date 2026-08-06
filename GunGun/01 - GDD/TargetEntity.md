@@ -1,5 +1,5 @@
 Each Targetable object on scene that has effect on player.
-1. [[01 - GDD/ Enemy|Enemy]]
+1. [[01 - GDD/ Enemy|Enemy]] : basic , hostage taker, shielded
 2. [[Hostage|Hostage]]
 3. 
 

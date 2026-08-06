@@ -7,6 +7,8 @@ public class RespawnBox : MonoBehaviour
 {
     private RespawnManager respawnManager;
 
+    public bool showGizmos = true;
+
     [Header("Respawn Setup")]
     [SerializeField] private bool isScaling;
 
@@ -29,16 +31,13 @@ public class RespawnBox : MonoBehaviour
    
     private List<Transform> respawnPoints = new List<Transform>();
 
-    private GameObject dummyLeft;
-    private GameObject dummyRight;
-    private GameObject dummyTop;
-    private GameObject dummyBottom;
 
     private PlayerController player;
 
 
 
     public bool isSingleSummon;
+    public bool isActive { private set; get; } = false;
 
     private void Awake()
     { 
@@ -47,6 +46,8 @@ public class RespawnBox : MonoBehaviour
         if (hostageStandPoint == null)
             isSingleSummon = true;
 
+        if (myActivateItem != null)
+            myActivateItem.AddBox(this);
     }
 
     public void LeavingTheBox(Target boxUser)
@@ -65,9 +66,9 @@ public class RespawnBox : MonoBehaviour
         GameObject newTarget = Instantiate(respawnObject, onPos, Quaternion.identity);
 
         Target targetData = newTarget.GetComponent<Target>();
-        targetData.SetUpTarget(player, isScaling);
 
-        targetData.RespawnTheTarget(ViewTracker.position);
+        targetData.SetTargetsFace(ViewTracker.position);
+        targetData.SetScalingAtRespawn(isScaling);
 
         return targetData;
     }
@@ -170,50 +171,80 @@ public class RespawnBox : MonoBehaviour
     }
 
 
-    private void SignUpRespawnPoints()
+    private void SignUpRespawnPoints(bool showPoints = false)
     {
         if (rightRespawnPoint != null)
         {
-            rightRespawnPoint.GetComponent<MeshRenderer>().enabled = false;
+            rightRespawnPoint.GetComponent<MeshRenderer>().enabled = showPoints;
             respawnPoints.Add(rightRespawnPoint);
         }
         if (leftRespawnPoint != null)
         {
-            leftRespawnPoint.GetComponent<MeshRenderer>().enabled = false;
+            leftRespawnPoint.GetComponent<MeshRenderer>().enabled = showPoints;
             respawnPoints.Add(leftRespawnPoint);
         }
         if (centerFrontRespawnPoint != null)
         {
-            centerFrontRespawnPoint.GetComponent<MeshRenderer>().enabled = false;
+            centerFrontRespawnPoint.GetComponent<MeshRenderer>().enabled = showPoints;
             respawnPoints.Add(centerFrontRespawnPoint);
         }
         if (centerBackRespawnPoint != null)
         {
-            centerBackRespawnPoint.GetComponent<MeshRenderer>().enabled = false;
+            centerBackRespawnPoint.GetComponent<MeshRenderer>().enabled = showPoints;
             respawnPoints.Add(centerBackRespawnPoint);
         }
 
         if (hostageStandPoint != null)
-            hostageStandPoint.GetComponent<MeshRenderer>().enabled = false;
+            hostageStandPoint.GetComponent<MeshRenderer>().enabled = showPoints;
 
         isSingleSummon = respawnPoints.Count <= 1;
     }
 
     [ContextMenu("testActive")]
-    public void ActiveThisBox()
+    public void ActiveThisBox(out float activateTime)
     {
-        myActivateItem.SetActive();
+        isActive = true;
+        myActivateItem.SetActive(out activateTime);
     }
     [ContextMenu("testDeActive")]
 
     public void DeActivateThisBox()
     {
-        myActivateItem.SetDeActive();
-
+        isActive = false;
+        myActivateItem.CheckCloseRequsts();
     }
 
     public void SetPlayer(PlayerController player) => this.player = player;
 
     public void SetManager(RespawnManager manager) => respawnManager = manager;
     public Transform GetHostagePoint() => hostageStandPoint;
+
+    public GameObject GetActivator() => myActivateItem.gameObject;
+
+    private void OnValidate()
+    {
+        SignUpRespawnPoints(true);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (showGizmos == false)
+            return;
+
+        Gizmos.color = Color.red;
+        foreach (var respawnPoint in respawnPoints)
+        {
+            if (respawnPoint != null)
+                Gizmos.DrawLine(respawnPoint.transform.position, ViewTracker.transform.position);
+        }
+
+        if (hostageStandPoint != null)
+        {
+            Gizmos.color = Color.green;
+            foreach (var respawnPoint in respawnPoints)
+                Gizmos.DrawLine(respawnPoint.transform.position, hostageStandPoint.position);
+        }
+
+
+    }
 }

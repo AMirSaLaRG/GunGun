@@ -9,8 +9,11 @@ public class EnemyWithHostage : Enemy
 
     protected override void Start()
     {
-       base.Start();
-       facingPosition = myBox.GetHostagePoint().position;
+        base.Start();
+
+        facingPosition = myBox.GetHostagePoint().position;
+
+        SpeedUpTarget(0, BaseMoveSpeed, .5f);
 
     }
 

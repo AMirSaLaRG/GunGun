@@ -5,13 +5,15 @@ using DG.Tweening;
 
 public class Enemy : Target
 {
- 
+    
 
     [Header("EnemySetup")]
     [SerializeField] protected float attackTime = 3f;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected GameObject projectal;
     [SerializeField] protected float projectalSpeed = 100;
+
+
 
     [Header("DanceSetup")]
     [SerializeField] private float danceTime = 2f;
@@ -58,7 +60,32 @@ public class Enemy : Target
 
     }
 
+    protected override void CheckAndSetMyType()
+    {
+        base.CheckAndSetMyType();
 
+        switch (myType)
+        {
+            case RespawnType.BaseEnemy:
+                ActivateShields(0);
+                break;
+            case RespawnType.ShieldedEnemy:
+                ActivateShields(1);
+                break;
+        }
+    }
+
+    private void ActivateShields(int num)
+    {
+        foreach (var visualShield in visualShields)
+            visualShield.SetActive(false);
+
+        for (int i = 0; i < num; i++)
+        {
+            if (visualShields[i] != null)
+                visualShields[i].SetActive(true);
+        }
+    }
 
     protected override void AtDieAction()
     {
@@ -109,6 +136,7 @@ public class Enemy : Target
         yield return new WaitForSeconds(attackTime);
         Shoot();
     }
+
 
     protected virtual void Shoot()
     {

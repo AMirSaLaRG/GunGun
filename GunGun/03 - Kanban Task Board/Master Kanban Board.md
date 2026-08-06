@@ -14,23 +14,19 @@ kanban-plugin: board
 		- [ ] Test shooting, reloading, and weapon switching in-engine
 - [ ] [[WarningSign]] change enemies sign
 - [ ] SFX of gun shot is feel off check how can fix it on rapid fire
+- [ ] add combo bonus something like call of
 
 
 ## Mehrdad feedback
 
 - [ ] [[02 - Asset/Hostage|Hostage]] change the prefab #art
-- [ ] Remove bullet point on game ends ( resets)
-- [ ] enemy and hostage should not snap on each other
-- [ ] death effect is too messy make it simpler
-- [ ] on wave change close and open activators more phase change feel
-- [ ] add combo bonus something like call of
-- [ ] add [[ShieldedEnemy]]
 - [ ] Leader board can insert name and be smaller
-- [ ] after fight don't remove death effect
+- [ ] add reward on combo
 
 
 ## Bugs
 
+- [ ] [[01 - GDD/ RespawnBox| View box]] miss for target as edge cases should get handled
 
 
 ## To Do
@@ -60,8 +56,9 @@ kanban-plugin: board
 - [ ] - [ ] Create [[02 - Asset/Level1|level one asset]] #art #blender
 
 
-## In Progress
+## Done Before Comit
 
+- [ ] add [[EnemyBasic|Shielded enemy]]
 
 
 ## Done
@@ -79,6 +76,25 @@ kanban-plugin: board
 		- [x] Code [[TargetEntity| Target Script]] to Trigger signs
 - [ ] [[01 - GDD/ BoxManager|Box Manager]]s [[01 - GDD/ RespawnBox|respawn box]]s [[01 - GDD/ activator|activator]] should not colider with targets while getting active
 - [ ] On  empty gun shot combo get reset
+- [ ] Remove bullet point on game ends ( resets)
+- [ ] death effect is too messy make it simpler #art
+- [ ] activator of box the logic is wrong
+- [ ] after fight don't remove death effect
+- [ ] on wave change close and open activators more phase change feel #code 
+	- [x] when wave executed should wait until the scene is clear
+	- [x] when scene is clear call for new waweRespawn
+	- [x] chose new set of respawn boxes from all available boxes
+	- [x] active ones get active or stay active and de active ones get de active or stay de active
+	- [x] at end of activation respawns should get start
+- [ ] Add path line to [[01 - GDD/ RespawnBox| Respawn Points]] 
+	- [x] Gizmos Draw from the point to target point
+	- [x] on editor can see
+- [ ] enemy and hostage should not snap on each other 
+	enemy and hostage now get stuck together while moving and never reach the distance
+
+
+## In Progress
+
 
 
 ## fixed but not sure
@@ -92,6 +108,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,true,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,true,true,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

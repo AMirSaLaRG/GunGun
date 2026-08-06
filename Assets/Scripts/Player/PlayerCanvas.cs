@@ -21,8 +21,11 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private float onHitOffsetY;
     [SerializeField] private float onHitOffsetRandom;
     [Space]
-    [SerializeField] private string onEnemyext;
+    [SerializeField] private string onEnemyText;
     [SerializeField] private Color onEnemyColor;
+    [Space]
+    [SerializeField] private string onShieldText;
+    [SerializeField] private Color onShieldColor;
     [Space]
     [SerializeField] private string onMovingEnemyext;
     [SerializeField] private Color onMovingEnemyColor;
@@ -90,8 +93,8 @@ public class PlayerCanvas : MonoBehaviour
     {
         takingDamageElements.position = new Vector3(screenPoint.x, screenPoint.y, takingDamageElements.position.z);
 
-        screenPanel.color = Color.red;
-        PulsFadeEffectAndFade(screenPanel, takingDamageUiTime);
+        
+
 
         if (isDead)
         {
@@ -101,15 +104,46 @@ public class PlayerCanvas : MonoBehaviour
                 Handheld.Vibrate();
             }
 
-            ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
+            StartCoroutine(DeadSpriteAnimation());
+        }
+    }
 
-            DieVisualImage.transform.localEulerAngles = Vector3.forward * UnityEngine.Random.Range(0, 360);
-            DieVisualImage.transform.localScale = Vector3.zero;
-            DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
-            PulsFadeEffectAndFade(DieVisualImage, takingDamageUiTime);
+    private IEnumerator DeadSpriteAnimation()
+    {
+
+        screenPanel.color = Color.red;
+        screenPanel.DOFade(.4f, takingDamageUiTime / 2);
+
+
+        ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
+
+        DieVisualImage.transform.localEulerAngles = Vector3.forward * UnityEngine.Random.Range(0, 360);
+        DieVisualImage.transform.localScale = Vector3.zero;
+        DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
+        DieVisualImage.DOFade(.4f, takingDamageUiTime / 2);
+
+        int saftyCheck = 0;
+        while (true)
+        {
+
+            yield return new WaitForSeconds(1);
+            if (GameManager.instance.gameState == EGameState.inMenu)
+                break;
+            saftyCheck++;
+            if (saftyCheck > 6)
+            {
+                Debug.Log("Safty Check got triggered");
+                break;
+            }
         }
 
+        DieVisualImage.DOFade(0f, takingDamageUiTime);
+        screenPanel.DOFade(0f, takingDamageUiTime);
+
+
+
     }
+
     public void Onhit(Vector3 screenPoint, float distance, EHit hitInfo)
     {
         float scale = Mathf.Lerp(maxScale, minScale, distance / maxDistance);
@@ -212,7 +246,11 @@ public class PlayerCanvas : MonoBehaviour
         {
             case EHit.Enemy:
                 color = onEnemyColor;
-                text = onEnemyext;
+                text = onEnemyText;
+                break;
+            case EHit.Shield:
+                color = onShieldColor;
+                text = onShieldText;
                 break;
             case EHit.MovingEnemy:
                 color = onMovingEnemyColor;

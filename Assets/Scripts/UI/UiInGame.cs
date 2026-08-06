@@ -33,6 +33,8 @@ public class UiInGame : MonoBehaviour
     private float currentComboTimerRemind;
     public Action onReloadBtn;
     private Coroutine reloadWarningCo;
+    [Header ("UiManager")]
+    [SerializeField] private UiManager uiManager;
 
     private void Awake()
     {
@@ -153,7 +155,7 @@ public class UiInGame : MonoBehaviour
 
     private void HandleSliderOnPointChange(float points)
     {
-        if (GameManager.instance.gameState != EGameState.inGame)
+        if (uiManager.currentPanel != EPanel.InGame)
             return;
 
         if (points == 0)
