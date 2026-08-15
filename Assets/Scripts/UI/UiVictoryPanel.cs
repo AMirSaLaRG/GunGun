@@ -24,7 +24,7 @@ public class UiVictoryPanel : MonoBehaviour
 
     private bool isConfigStartPos;
 
-    PlayerController playerController;
+    private ScoreManager scoreManager;
     private UiCountTo pointCount;
 
 
@@ -46,10 +46,10 @@ public class UiVictoryPanel : MonoBehaviour
         if (pointCount == null)
             pointCount = pointText.AddComponent<UiCountTo>();
 
-        if (playerController == null)
-            playerController = GameManager.instance.playerController;
+        if (scoreManager == null)
+            scoreManager = GameManager.instance.scoreManager;
 
-        pointCount.StartSettingTheNumber(playerController?.points ?? 0, 1);
+        pointCount.StartSettingTheNumber(scoreManager?.points ?? 0, 1);
 
         if (hasStar == false)
             return;

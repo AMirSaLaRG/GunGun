@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public void TakeDamage(int damage, Vector3 worldSpaceOfDamageTaken);
+    public void TakeDamage(int damage, HitData hitData);
 }

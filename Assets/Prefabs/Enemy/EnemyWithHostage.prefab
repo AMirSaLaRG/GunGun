@@ -16582,16 +16582,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWithHostage
   onTakeDamageSfx: {fileID: 8221492606670340351}
   onDeathSfx: {fileID: 0}
-  onDeadBodyGetShotSfx: {fileID: 3204815625066482715}
+  onDeadTargetGetShotSfx: {fileID: 3204815625066482715}
   isStatic: 0
   visuals: {fileID: 2184719389273361409}
   visualShields: []
+  takeShotVfx: {fileID: 4413521124262731454, guid: 2378e5a7d8338144a8d534d8acee49da, type: 3}
   moveSpeed: 5
   rotationSpeed: 5
   duration: 5
   healthPoint: 1
   bodyDispearAfterDeath: 1.5
-  points: 175
+  points: 15
   bounusMovingPoint: 0.1
   comboValue: 1
   targetPos: {x: 0, y: 0, z: 0}

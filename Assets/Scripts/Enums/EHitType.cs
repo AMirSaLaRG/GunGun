@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum EHit 
+public enum EHitType 
 {
     Missed = 0,
     Enemy = 1,
@@ -8,4 +8,7 @@ public enum EHit
     Khalas = 3,
     MovingEnemy = 4,
     Shield = 5,
+    Magazine = 6,
+    None = 7,
+    Player = 8,
 }

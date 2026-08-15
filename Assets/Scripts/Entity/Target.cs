@@ -3,7 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Target : MonoBehaviour, IDamagable
 {
@@ -16,15 +18,17 @@ public class Target : MonoBehaviour, IDamagable
     [Header("Target Sfx")]
     [SerializeField] protected AudioSource onTakeDamageSfx;
     [SerializeField] protected AudioSource onDeathSfx;
-    [SerializeField] protected AudioSource onDeadBodyGetShotSfx;
+    [SerializeField] protected AudioSource onDeadTargetGetShotSfx;
 
     [Header("Target Type")]
     [SerializeField] private bool isStatic = false;
 
 
     [Header("Visuals")]
-    [SerializeField] private GameObject visuals;
+    [SerializeField] protected GameObject visuals;
     [SerializeField] protected List<GameObject> visualShields = new List<GameObject>();
+    [SerializeField] protected GameObject takeShotVfx;
+
 
 
     [Header("TargetSetup")]
@@ -71,8 +75,10 @@ public class Target : MonoBehaviour, IDamagable
     private float scaleTime = 1f;
 
 
+
     protected string boolAnimRunKeyWord = "IsRunning";
     protected string boolAnimDieKeyWord = "IsDead";
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -143,7 +149,7 @@ public class Target : MonoBehaviour, IDamagable
 
 
 
-    public virtual void TakeDamage(int damage, Vector3 worldSpaceOfDamageTaken)
+    public virtual void TakeDamage(int damage, HitData hitData)
     {
         if (isDurationEnded)
             return;
@@ -151,10 +157,13 @@ public class Target : MonoBehaviour, IDamagable
         if (canTakeDamage == false)
             return;
 
+        TakeShotForce(hitData);
+        TakeShotVfx(hitData);
+
         if (isDead)
         {
-            if (onDeadBodyGetShotSfx != null)
-                AudioManager.instance.PlaySfx(onDeadBodyGetShotSfx, true);
+            if (onDeadTargetGetShotSfx != null)
+                AudioManager.instance.PlaySfx(onDeadTargetGetShotSfx, true);
             return;
         }
 
@@ -170,11 +179,29 @@ public class Target : MonoBehaviour, IDamagable
         {
             if (onDeathSfx != null)
                 AudioManager.instance.PlaySfx(onDeathSfx, true);
+
             Die();
         }
     }
 
+    private void TakeShotForce(HitData hitData)
+    {
+        if (rb == null) return;
 
+        rb.isKinematic = false;
+
+        rb.AddForceAtPosition(-hitData.hitForce * hitData.hitNorm, hitData.hitPos, ForceMode.Impulse);
+    }
+
+    private void TakeShotVfx(HitData hitData)
+    {
+        Vector3 placePos = hitData.hitPos + (hitData.hitNorm * 0.002f);
+        Quaternion rotation = Quaternion.LookRotation(hitData.hitNorm);
+
+        GameObject bloodVfx = Instantiate(takeShotVfx, placePos, rotation, transform);
+
+
+    }
 
     public virtual void SetTargetsFace(Vector3 newtargetPos)
     {
@@ -289,11 +316,13 @@ public class Target : MonoBehaviour, IDamagable
     {
 
         AtEndOfDurationAction();
+        
         Destroy(gameObject);
     }
 
     protected virtual void AtEndOfDurationAction()
     {
+
 
         if (myBox != null)
             myBox.LeavingTheBox(this);
@@ -323,6 +352,8 @@ public class Target : MonoBehaviour, IDamagable
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);
 
+   
+
         rb.constraints = RigidbodyConstraints.None;
 
         isMoving = false;
@@ -345,8 +376,6 @@ public class Target : MonoBehaviour, IDamagable
 
         if (isatPositionWarningSignGiven == true)
             return;
-
-        Debug.Log("play");
 
         atPositionWarningSign.Play();
         isatPositionWarningSignGiven = true;
@@ -396,4 +425,6 @@ public class Target : MonoBehaviour, IDamagable
         }
         moveSpeed = endSpeed;
     }
+
+    
 }

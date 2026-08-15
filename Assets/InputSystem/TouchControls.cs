@@ -109,6 +109,15 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Test"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a0304f4-6974-454e-aa65-b7089841cffa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -155,6 +164,17 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""733fad8c-2881-4150-8219-be6e1efde633"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -165,6 +185,7 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
         m_TouchScreen = asset.FindActionMap("TouchScreen", throwIfNotFound: true);
         m_TouchScreen_Shoot = m_TouchScreen.FindAction("Shoot", throwIfNotFound: true);
         m_TouchScreen_Aim = m_TouchScreen.FindAction("Aim", throwIfNotFound: true);
+        m_TouchScreen_Test = m_TouchScreen.FindAction("Test", throwIfNotFound: true);
     }
 
     ~@TouchControls()
@@ -247,6 +268,7 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
     private List<ITouchScreenActions> m_TouchScreenActionsCallbackInterfaces = new List<ITouchScreenActions>();
     private readonly InputAction m_TouchScreen_Shoot;
     private readonly InputAction m_TouchScreen_Aim;
+    private readonly InputAction m_TouchScreen_Test;
     /// <summary>
     /// Provides access to input actions defined in input action map "TouchScreen".
     /// </summary>
@@ -266,6 +288,10 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "TouchScreen/Aim".
         /// </summary>
         public InputAction @Aim => m_Wrapper.m_TouchScreen_Aim;
+        /// <summary>
+        /// Provides access to the underlying input action "TouchScreen/Test".
+        /// </summary>
+        public InputAction @Test => m_Wrapper.m_TouchScreen_Test;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -298,6 +324,9 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @Test.started += instance.OnTest;
+            @Test.performed += instance.OnTest;
+            @Test.canceled += instance.OnTest;
         }
 
         /// <summary>
@@ -315,6 +344,9 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @Test.started -= instance.OnTest;
+            @Test.performed -= instance.OnTest;
+            @Test.canceled -= instance.OnTest;
         }
 
         /// <summary>
@@ -369,5 +401,12 @@ public partial class @TouchControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAim(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Test" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTest(InputAction.CallbackContext context);
     }
 }

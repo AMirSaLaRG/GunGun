@@ -12,8 +12,7 @@ public class UiCountTo : MonoBehaviour
     private void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
-        if (text == null)
-            Debug.Log("This script only uses on component with text mesh pro " + gameObject.name);
+
     }
 
 
@@ -27,7 +26,6 @@ public class UiCountTo : MonoBehaviour
 
         numberToReach = number;
 
-        Debug.Log($"passed number {number} this made numbertoreach to {numberToReach}");
 
         if (numberToReach < 0)
             return;

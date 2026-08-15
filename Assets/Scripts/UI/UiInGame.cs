@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UiInGame : MonoBehaviour
@@ -15,6 +16,19 @@ public class UiInGame : MonoBehaviour
     [SerializeField] private GameObject hostageImageHolder;
     [SerializeField] private TextMeshProUGUI comboText;
     [SerializeField] private Slider comboSlider;
+    [Header("OnCashPointEarned")]
+    [SerializeField] private OnCashPointUi onCashPointUi;
+    [SerializeField] private float onPointDuration;
+    [SerializeField] private float cashPointScale;
+
+    [Header("LowAmoWarnning")]
+    [SerializeField] private Transform lowAmoWarnningElements;
+    [SerializeField] private Image lowAmoIcon;
+    [SerializeField] private TextMeshProUGUI lowAmoText;
+    [SerializeField] private float lowAmoScale = 2;
+    [SerializeField] private float lowAmoDuration = 1;
+    private bool isWarned = false;
+    [Space]
 
     [SerializeField] private TextMeshProUGUI killText;
     [SerializeField] private TextMeshProUGUI ComboRemindSecText;
@@ -31,20 +45,22 @@ public class UiInGame : MonoBehaviour
     private List<HostageImage> HostageImages = new List<HostageImage>();
 
     private float currentComboTimerRemind;
-    public Action onReloadBtn;
     private Coroutine reloadWarningCo;
     [Header ("UiManager")]
     [SerializeField] private UiManager uiManager;
 
     private void Awake()
     {
-        AssignButtons();
+        
     }
 
     private void Start()
     {
         HostageImages = hostageImageHolder.GetComponentsInChildren<HostageImage>().ToList();
+
     }
+
+
 
     public void UiOnHostageKill(int hostageKilled)
     {
@@ -145,13 +161,13 @@ public class UiInGame : MonoBehaviour
         HandleSliderOnPointChange(points);
     }
 
-    private void AssignButtons()
-    {
-        reloadBtn.onClick.AddListener(() =>
-        {
-            onReloadBtn?.Invoke();
-        });
-    }
+    //private void AssignButtons()
+    //{
+    //    reloadBtn.onClick.AddListener(() =>
+    //    {
+    //        onReloadBtn?.Invoke();
+    //    });
+    //}
 
     private void HandleSliderOnPointChange(float points)
     {
@@ -233,7 +249,56 @@ public class UiInGame : MonoBehaviour
 
     private void OnDisable()
     {
+
         StopAllCoroutines();
         DOTween.Kill(gameObject);
+    }
+
+    internal void CashPoints(float currentCashPoints)
+    {
+        int showPoints = Mathf.FloorToInt(currentCashPoints);
+
+        onCashPointUi.SetUp(showPoints, cashPointScale, onPointDuration);
+    }
+
+    internal void GiveLowAmoWarning()
+    {
+        if (isWarned)
+            return;
+
+        isWarned = true;
+
+        DOTween.Kill(lowAmoWarnningElements.gameObject);
+
+        lowAmoText.DOFade(1, 0);
+        lowAmoIcon.DOFade(1, 0);
+
+        PulsScaleEffect(lowAmoWarnningElements, lowAmoScale, lowAmoDuration, lowAmoText, lowAmoIcon);
+    }
+
+    public void OnReload(int currentAmo)
+    {
+        isWarned = false;
+        DOTween.Kill(lowAmoWarnningElements.gameObject);
+
+        lowAmoWarnningElements.DOScale(0, 0);
+
+        AmoChange(currentAmo);
+
+    }
+
+    private void PulsScaleEffect(Transform transform, float scale, float duration, TextMeshProUGUI text, Image icon)
+    {
+        transform.localScale = Vector3.zero;
+
+        if (text)
+            text.DOFade(0, duration);
+        if (icon)
+            icon.DOFade(0, duration);
+
+        transform.DOScale(scale, duration * .7f).OnComplete(() =>
+        {
+            transform.DOScale(0, duration * .3f);
+        });
     }
 }

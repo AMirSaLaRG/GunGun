@@ -9,7 +9,14 @@ public class MagazineManager : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] private float switchTIme = .3f;
     [SerializeField] private float reloadTime = .5f;
+    [SerializeField] private float chnageGunTime = 1.1f;
+    [SerializeField] private AudioSource reloadSfx;
 
+
+    private UiInGame inGameUi;
+    
+
+    public int currentAmo {  get; private set; }
     public bool isReloading { get; private set; }
 
     private Transform[] mybullets;
@@ -21,6 +28,10 @@ public class MagazineManager : MonoBehaviour
 
     private void Awake()
     {
+        inGameUi = FindFirstObjectByType<UiInGame>();
+        if (inGameUi == null )
+            inGameUi = GameManager.instance.GetUiPanel(EPanel.InGame).GetComponent<UiInGame>();
+
         mybullets = new Transform[bulletHolders.Length];
         mybulletsRb = new Rigidbody[bulletHolders.Length];
 
@@ -31,11 +42,19 @@ public class MagazineManager : MonoBehaviour
             GameObject newBullet = Instantiate(bulletPrefab, bulletHolders[i]);
             newBullet.transform.localPosition = Vector3.zero;
             newBullet.transform.localRotation = Quaternion.identity;
+            
+            Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+            if (rb == null)
+                rb = newBullet.AddComponent<Rigidbody>();
+
+            rb.isKinematic = true;
 
             mybullets[i] = newBullet.transform;
-            mybulletsRb[i] = newBullet.GetComponent<Rigidbody>();
+            mybulletsRb[i] = rb;
+           
         }
 
+        isReloading = true;
 
     }
 
@@ -43,6 +62,7 @@ public class MagazineManager : MonoBehaviour
     {
         if (isReloading)
             return;
+
 
         Transform currentBullet = mybullets[currentBulletIndex];
         Rigidbody currentBulletRb = mybulletsRb[currentBulletIndex];
@@ -73,6 +93,7 @@ public class MagazineManager : MonoBehaviour
         currentBulletIndex++;
         currentBulletIndex %= bulletHolders.Length;
 
+        inGameUi.AmoChange(currentAmo);
 
     }
 
@@ -80,7 +101,13 @@ public class MagazineManager : MonoBehaviour
 
     public void OnReloadBullets()
     {
+        if (currentAmo == GetAmoCap())
+            return;
+
         isReloading = true;
+        currentAmo = GetAmoCap();
+        AudioManager.instance.PlaySfx(reloadSfx, true);
+
 
         transform.DORotate(startRotation.eulerAngles, reloadTime).OnComplete(() => isReloading = false);
         currentBulletIndex = 0;
@@ -102,7 +129,53 @@ public class MagazineManager : MonoBehaviour
 
         }
 
+        inGameUi.OnReload(currentAmo);
+
     }
 
-    public int GetAmoCap() => bulletHolders.Length; 
+    public int GetAmoCap() => bulletHolders.Length;
+
+    public bool ConsumeAmmo(int v)
+    {
+        if (IsEmpty()) return false;
+
+        int newAmo;
+        newAmo = currentAmo - v;
+        if (newAmo < 0)
+            newAmo = 0;
+
+        currentAmo = newAmo;
+        if (currentAmo <= 1)
+            inGameUi.GiveLowAmoWarning();
+
+        OnShotBullet();
+        return true;
+    }
+
+    public bool IsEmpty() => currentAmo <= 0;
+
+    internal void PutMagazineInSocket()
+    {
+        Vector3 StartPos = transform.position;
+        Vector3 startRot = transform.rotation.eulerAngles;
+
+        isReloading = true;
+
+        transform.position = StartPos - transform.right *  4;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+
+        float switchTime = chnageGunTime;
+
+        if (GameManager.instance != null)
+            if (GameManager.instance.gameState != EGameState.inGame)
+                switchTime = 0;
+
+        transform.DORotate(startRot, switchTime);
+        transform.DOMove(StartPos, switchTime).SetEase(Ease.OutElastic).OnComplete(() =>
+        {
+            isReloading = false;
+            OnReloadBullets();
+
+        });
+    }
 }

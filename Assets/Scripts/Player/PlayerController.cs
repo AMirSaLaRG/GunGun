@@ -1,16 +1,19 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Processors;
+using static UnityEngine.Analytics.IAnalytic;
 using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private TouchControls controls;
-    private MagazineManager magazineManager;
+    private GunManager gunManager;
+    public ScoreManager scoreManager {  get; private set; }
 
     [Header("Uis")]
     [SerializeField] private PlayerCanvas myCanvas;
@@ -18,407 +21,43 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     [Header("Setup")]
     [SerializeField] private int healthPointCap = 1;
-    [SerializeField] private int hostageKillAlowed = 3;
     [SerializeField] private float comboIntervalCooldown = 2;
     [SerializeField] private float onMoveHitPointBonuse = 1.2f;
     [SerializeField] private float khalasHitPointBonuse = 1.1f;
-    
 
 
-    [Header("GunSetup")]
-    [SerializeField] private GameObject impactVfx;
-    [SerializeField] private GameObject impactFleshVfx;
 
-    [SerializeField] private float gunForce = 100f;
-    [SerializeField] private int gunDamage = 1;
-    [SerializeField] private GameObject bulletHoldePrefab;
-    [SerializeField] private int holeLifetime = 60;
-    private int gunAmoCap = 6;
-
-    [SerializeField] private float ComboToPointMultiPlyer = .25f;
-    [SerializeField] private LayerMask whatIsUntargetable;
-
-    [Header("Sfx Setup")]
-    [SerializeField] private AudioSource shootSfx;
-    [SerializeField] private AudioSource emptyShootSfx;
-    [SerializeField] private AudioSource reloadSfx;
-    [SerializeField] private AudioSource bulletImapct;
-    [SerializeField] private AudioSource bulletFleshImpact;
-
+    public WeaponData currentGun { private set; get; }
     public Camera mainCamera {  get; private set; }
 
     private bool gameStarted = false;
 
-
-    public float points { private set; get; } = 0;
-    private int currentKills = 0;
-    private int currentCombo = 0;
-    private bool isOnCombo = false;
-    private int currentAmo;
-    private int currentHostageKilled = 0;
     private int healthPoint;
 
-    private float lastComboTime = 0;
-
-    private Enemy lastKill;
     private bool isDead;
-    private int khalasShotCount;
-    private float currentCahsPoint;
+
     private void Awake()
     {
         mainCamera = Camera.main;
         controls = new TouchControls();
-        magazineManager = GetComponentInChildren<MagazineManager>();
-
+        gunManager = GetComponent<GunManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
 
         controls.TouchScreen.Shoot.performed += ctx => OnTap(ctx);
 
-        inGameUi.onReloadBtn += Reload;
-    }
-
-    private void Start()
-    {
-        ResetPlayer();
-        UpdateUi();
-    }
-
-    private void Update()
-    {
-        CheckComboTime();
-    }
-
-
-
-    private void UpdateUi(bool comboChanged = true)
-    {
-        inGameUi.AmoChange(currentAmo);
-        inGameUi.ComboChange(currentCombo);
-        inGameUi.KillChange(currentKills);
-        inGameUi.PointChange(points);
-        inGameUi.UiOnHostageKill(currentHostageKilled);
-
-        if (comboChanged)
-        {
-            if (currentCombo == 0)
-                inGameUi.SetComboTimer(0);
-            else
-                inGameUi.SetComboTimer(comboIntervalCooldown);
-        }
-     
-
-
-        if (currentAmo <= 1)
-        {
-            myCanvas.OnLowAmo();
-        }
-        inGameUi.WarningReloadBtn(currentAmo <= 1);
-
-    }
-
-    private void Shoot(Vector2 aimPosition)
-    {
-        if (magazineManager.isReloading)
-            return;
-
-
-
-        Ray ray = mainCamera.ScreenPointToRay(aimPosition);
-        
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
-        {
-            //Debug.Log($"Hit:{hit.collider.name}");
-
-
-            Vector3 shotPos = hit.point;
-
-            if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
-            {
-                Reload();
-                return;
-            }
-
-            if (currentAmo <= 0)
-            {
-                ShootWithEmptyMagazine();
-                return;
-            }
-
-            currentAmo--;
-
-            AudioManager.instance.PlaySfx(shootSfx, true);
-
-            magazineManager.OnShotBullet();
-
-            OnHit(hit, shotPos);
-        }
-    }
-
-    public void Reload()
-    {
-        if(currentAmo >= gunAmoCap || magazineManager.isReloading)
-            return;
-        AudioManager.instance.PlaySfx(reloadSfx, true);
-        magazineManager.OnReloadBullets();
-        currentAmo = gunAmoCap;
-        myCanvas.OnReload();
-        UpdateUi(false);
-    }
-
-    private void ShootWithEmptyMagazine()
-    {
-        AudioManager.instance.PlaySfx(emptyShootSfx, true);
-        magazineManager.OnShotBullet();
-
-    }
-
-    private void MakeHoleOnHit(RaycastHit hit)
-    {
-        Vector3 placePos = hit.point + (hit.normal * 0.002f);
-        Quaternion rotation = Quaternion.LookRotation(hit.normal);
-
-        GameObject hole = Instantiate(bulletHoldePrefab, placePos, rotation);
-        hole.transform.parent = hit.transform; // Stick to the surface
-
-        Destroy(hole, holeLifetime); // Clean up after some time
-    }
-
-    private void MakeHumanHitVfx(RaycastHit hit)
-    {
-        Vector3 placePos = hit.point + (hit.normal * 0.002f);
-        Quaternion rotation = Quaternion.LookRotation(hit.normal);
-
-        GameObject bloodVfx = Instantiate(impactFleshVfx, placePos, rotation);
-        bloodVfx.transform.parent = hit.transform;
-    }
-    private void MakeHitVfx(RaycastHit hit)
-    {
-        Vector3 placePos = hit.point + (hit.normal * 0.002f);
-        Quaternion rotation = Quaternion.LookRotation(hit.normal);
-
-        GameObject hitVfx = Instantiate(impactVfx, placePos, rotation);
-        hitVfx.transform.parent = hit.transform;
-    }
-
-    private void OnHit(RaycastHit hit, Vector3 shotPos)
-    {
-        Vector3 point = mainCamera.WorldToScreenPoint(hit.point);
-        float distance = hit.point.z - transform.position.z;
-
-        if (hit.collider.TryGetComponent(out Target target) == false)
-        {
-            myCanvas.Onhit(point, distance, EHit.Missed);
-            AudioManager.instance.PlaySfx(bulletImapct, true);
-            MakeHitVfx(hit);
-
-
-
-            MakeHoleOnHit(hit);
-
-            ResetCombo();
-            return;
-        }
-     
-        ShotForce(hit, shotPos, target);
-
-        if (target.TryGetComponent(out Enemy enemy))
-        {
-            MakeHumanHitVfx(hit);
-
-
-            OnEnemyHit(enemy);
-        }
-        else if (target.TryGetComponent(out EnemyShield enemyShiedl))
-        {
-            MakeHumanHitVfx(hit);
-
-            OnEnemyShieldHit(enemyShiedl);
-        }
-
-
-        else if (target.TryGetComponent(out Hostage hostage))
-        {
-            MakeHumanHitVfx(hit);
-
-            OnHostageHit(hostage);
-        }
-        else
-        {
-            //this is kinda default it better to get moved to target class and make a virtual method for it
-            AudioManager.instance.PlaySfx(bulletImapct, true);
-            MakeHitVfx(hit);
-
-
-            myCanvas.Onhit(point, distance, EHit.Missed);
-            ResetCombo();
-        }
-
-        target.TakeDamage(gunDamage, hit.point);
-
-        UpdateUi();
-
-    }
-
-    public void OnHostageHit(Hostage target)
-    {
-        Vector3 point = mainCamera.WorldToScreenPoint(target.transform.position);
-        float distance = target.transform.position.z - transform.position.z;
-
-        myCanvas.Onhit(point, distance, EHit.Hostage);
-
-        isOnCombo = false;
-
-        if (target.isDead)
-            return;
-
-        currentHostageKilled++;
-
-
-        ResetCombo();
-
-        if (GameManager.instance.isTesting)
-        {
-            inGameUi.UiOnHostageKill(currentHostageKilled >= hostageKillAlowed ? hostageKillAlowed : currentHostageKilled);
-            return;
-        }
-
-        inGameUi.UiOnHostageKill(currentHostageKilled);
-
-    
-
-        if (hostageKillAlowed <= currentHostageKilled)
-            GameManager.instance.GameOver();
-    }
-
-    private void OnEnemyHit(Enemy target)
-    {
-        Vector3 point = mainCamera.WorldToScreenPoint(target.transform.position);
-        float distance = target.transform.position.z - transform.position.z;
-
-        float targetBasePoints = target.GetTargetPoints();
-
-        if (target.isDead)
-        {
-            khalasShotCount++;
-
-
-
-            KhalasComboHandler(targetBasePoints);
-
-            myCanvas.OnHitKhalas(point, distance, khalasShotCount, UnityEngine.Color.orange);
-            return;
-        }
-
-        lastKill = target;
-
-        khalasShotCount = 0;
-
-
-        if (target.isMoving)
-        {
-            myCanvas.Onhit(point, distance, EHit.MovingEnemy);
-            targetBasePoints *= onMoveHitPointBonuse;
-
-
-        } else
-        {
-            myCanvas.Onhit(point, distance, EHit.Enemy);
-
-        }
-
-        AddPoints(targetBasePoints);
-        currentKills++;
-
-        AddToCombo(target.GetComboValue(), target.transform.position);
-
-    }
-
-    private void OnEnemyShieldHit(EnemyShield enemyShield)
-    {
-        Vector3 point = mainCamera.WorldToScreenPoint(enemyShield.transform.position);
-        float distance = enemyShield.transform.position.z - transform.position.z;
-        myCanvas.Onhit(point, distance, EHit.Shield);
-
-        float targetBasePoints = enemyShield.GetTargetPoints();
-
-        AddPoints(targetBasePoints);
-        currentKills++;
-        AddToCombo(enemyShield.GetComboValue(), enemyShield.transform.position);
-
-    }
-
-    private void AddToCombo(int combo, Vector3 targetPos)
-    {
-        currentCombo += combo;
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(targetPos);
-
-        myCanvas.OnCombo(screenPos, screenPos.z - transform.position.z, currentCombo);
-
-        isOnCombo = true;
-        lastComboTime = Time.time;
-    }
-
-    private void KhalasComboHandler(float targetPoints)
-    {
-        targetPoints *= khalasHitPointBonuse;
-        AddPoints(targetPoints);
-
-        if (khalasShotCount < 3)
-            return;
-        if (khalasShotCount < 5)
-            AddToCombo(1, lastKill.transform.position);
-        if (khalasShotCount >= 5)
-            AddToCombo(2, lastKill.transform.position);
-
-    }
-
-    private void AddPoints(float targetPoints)
-    {
-        points += targetPoints + (targetPoints * currentCombo * ComboToPointMultiPlyer);
-        currentCahsPoint += targetPoints + (targetPoints * currentCombo * ComboToPointMultiPlyer);
-    }
-
-    private void ResetCombo()
-    {
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(transform.position);
-        myCanvas.OnCashPoint(screenPos, 1, currentCahsPoint);
-        currentCahsPoint = 0;
-        isOnCombo = false;
-        currentCombo = 0;
-        UpdateUi();
-
-    }
-
-    private void CheckComboTime()
-    {
-        if (currentCombo == 0) return;
-        if (Time.time > lastComboTime + comboIntervalCooldown)
-            ResetCombo();
-    }
-
-    private void ShotForce(RaycastHit hit, Vector3 shotPos, Target target)
-    {
-        if (target.rb == null) return;
-
-        target.rb.isKinematic = false;
-
-        Vector3 hitDirectionNorm = (transform.position - hit.transform.position).normalized;
-        target.rb.AddForceAtPosition(-gunForce * hitDirectionNorm, shotPos, ForceMode.Impulse);
     }
 
     private void OnTap(InputAction.CallbackContext context)
     {
-        if (gameStarted == false) return;
+        if (GameManager.instance.gameState != EGameState.inGame) return;
 
-        StartCoroutine(CheckUITap());
+        StartCoroutine(CheckScreenTouch());
     }
 
-    private IEnumerator CheckUITap()
+    private IEnumerator CheckScreenTouch()
     {
-        // Wait for end of frame so UI state is updated
         yield return new WaitForEndOfFrame();
-        // Or yield return null; // Wait one frame
 
-        // Now this will work correctly
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
             Debug.Log("Tapped on UI - ignoring");
@@ -426,30 +65,27 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
 
         Vector2 aimPos = controls.TouchScreen.Aim.ReadValue<Vector2>();
-        Shoot(aimPos);
+        List<HitData> hitDatas = gunManager.GunShot(aimPos);
+
+        if (hitDatas != null)
+        {
+            foreach (var hitData in hitDatas)
+                scoreManager.ProcessHit(hitData);
+
+            myCanvas.Onhit(mainCamera, hitDatas);
+
+        }
     }
 
-
-
-    private void OnEnable()
-    {
-        controls?.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
-
-    public void TakeDamage(int damage, Vector3 worldSpaceTakingDamage)
+    public void TakeDamage(int damage, HitData hitedData)
     {
         if (isDead)
             return;
 
-        ResetCombo();
+        //ResetCombo();
 
         healthPoint -= damage;
-        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(worldSpaceTakingDamage));
+        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
         if (healthPoint <= 0)
         {
             if (GameManager.instance.isTesting)
@@ -461,20 +97,24 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
-    public void ResetPlayer()
-    {
-        isDead = false;
-        currentHostageKilled = 0;
-        currentAmo = gunAmoCap;
-        points = 0;
-        currentKills = 0;
-        currentCombo = 0;
-        currentCahsPoint = 0;
-        healthPoint = healthPointCap;
-        UpdateUi();
-        magazineManager.OnReloadBullets();
-    }
-    public void SetGameStarted(bool gameStarted) => this.gameStarted = gameStarted;
 
-    public int GetKills() => currentKills;
+    public void SetGameStarted(bool gameStarted)
+    {
+        this.gameStarted = gameStarted;
+        isDead = !gameStarted;
+        if (gameStarted)
+            gunManager.ReadyTheGun();
+
+    }
+
+    private void OnEnable()
+    {
+        controls?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
 }

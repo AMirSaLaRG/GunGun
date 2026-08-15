@@ -1,13 +1,17 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Analytics.IAnalytic;
 using static UnityEngine.GraphicsBuffer;
 
 public class PlayerCanvas : MonoBehaviour
 {
+    private ScoreManager scoreManager;
+
     [SerializeField] private Image screenPanel;
     [Header("ScaleSetup")]
     [SerializeField] private float maxDistance;
@@ -47,19 +51,6 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private float onComboAndPointOffsetY;
     [SerializeField] private float onComboAndPointOffsetRandom;
 
-    [Header("OnCashPointEarned")]
-    [SerializeField] private OnCashPointUi onCashPointUi;
-    [SerializeField] private float onPointDuration;
-    [SerializeField] private float cashPointScale;
-
-    [Header("LowAmoWarnning")]
-    [SerializeField] private Transform lowAmoWarnningElements;
-    [SerializeField] private Image lowAmoIcon;
-    [SerializeField] private TextMeshProUGUI lowAmoText;
-    [SerializeField] private float lowAmoScale = 2;
-    [SerializeField] private float lowAmoDuration = 1;
-    private bool isWarned = false;
-
 
     [Header("TakingDamageUi")]
     [SerializeField] private Transform takingDamageElements;
@@ -77,6 +68,7 @@ public class PlayerCanvas : MonoBehaviour
     private Camera mainCamera;
     private void Start()
     {
+        scoreManager = FindFirstObjectByType<ScoreManager>();
         mainCamera = Camera.main;
         onHitUis = new OnHitUi[prepareOnhitUis];
 
@@ -85,8 +77,9 @@ public class PlayerCanvas : MonoBehaviour
             onHitUis[i] = Instantiate(onHitUiPrefab, onHitUiHolder).GetComponent<OnHitUi>();
             onHitUis[i].transform.localScale = Vector3.zero;
         }
-    }
 
+
+    }
 
 
     public void OnTakingDamage(Vector3 screenPoint, bool isDead = true)
@@ -144,35 +137,71 @@ public class PlayerCanvas : MonoBehaviour
 
     }
 
-    public void Onhit(Vector3 screenPoint, float distance, EHit hitInfo)
+    public void Onhit(Camera mainCaera, List<HitData> hitDatas)
     {
+        if (hitDatas == null) return;
+        foreach (var hitData in hitDatas)
+        {
+            if (hitData == null) continue;
+
+
+            EHitType hitType = hitData.hitTYpe;
+
+            if (hitType == EHitType.Magazine)
+                continue;
+
+            if (hitType == EHitType.Khalas)
+            {
+                OnHitKhalas(mainCaera, hitData);
+                continue;
+            }
+
+            HandleOnHitVisual(mainCaera, hitData, hitType);
+
+    
+        }
+
+
+    }
+
+    private void HandleOnHitVisual(Camera mainCaera, HitData hitData, EHitType hitType)
+    {
+        Vector3 screenPoint = mainCamera.WorldToScreenPoint(hitData.hitPos);
+        float distance = hitData.hitPos.z - mainCaera.transform.position.z;
+
+
         float scale = Mathf.Lerp(maxScale, minScale, distance / maxDistance);
         float randomY = UnityEngine.Random.Range(onHitOffsetY - onHitOffsetRandom, onHitOffsetY + onHitOffsetRandom);
 
-        GetColorAndText(hitInfo, out Color color, out string text);
+        GetColorAndText(hitType, out Color color, out string text);
 
         Vector2 onHitOffset = new Vector2(0, randomY);
 
         onHitUis[currentOnHitIndex].Setup(screenPoint, text, color, scale, onHitOffset, onHitDuration);
-        currentOnHitIndex = (currentOnHitIndex + 1) % onHitUis.Length; 
+        currentOnHitIndex = (currentOnHitIndex + 1) % onHitUis.Length;
+
+        if (scoreManager.currentCombo > 1)
+            OnCombo(screenPoint, distance);
+  
     }
 
- 
-
-    public void OnHitKhalas(Vector3 screenPoint, float distance, int combo, Color color)
+    public void OnHitKhalas(Camera mainCaera, HitData hitData)
     {
-        if (combo == 1)
+        int khalasCombo = scoreManager.khalasShotCount;
+
+        if (khalasCombo == 1)
         {
             currentKhalasIndex = currentOnHitIndex;
-            Onhit(screenPoint, distance, EHit.Khalas);
-        } else
+            HandleOnHitVisual(mainCaera, hitData, EHitType.Khalas);
+        }
+        else
         {
-            onHitUis[currentKhalasIndex].SetUpKhalas(combo);
+            onHitUis[currentKhalasIndex].SetUpKhalas(khalasCombo);
         }
     }
 
 
-    public void OnCombo(Vector3 screenPoint, float distance, int combo)
+    public void OnCombo(Vector3 screenPoint, float distance)
     {
         float scale = Mathf.Lerp(maxScale, minScale, distance / maxDistance);
         float randomX = UnityEngine.Random.Range(onComboAndPointOffsetX - onComboAndPointOffsetRandom, onComboAndPointOffsetX + onComboAndPointOffsetRandom);
@@ -180,6 +209,7 @@ public class PlayerCanvas : MonoBehaviour
 
         Vector2 pointAndComboOffset = new Vector2(randomX, randomY);
 
+        int combo = scoreManager.currentCombo;
 
         if (combo > 1)
         {
@@ -187,37 +217,7 @@ public class PlayerCanvas : MonoBehaviour
         }
     }
 
-    public void OnCashPoint(Vector3 screenPoint, float distance, float points)
-    {
 
-        int showPoints = Mathf.FloorToInt(points);
-
-        onCashPointUi.SetUp(showPoints, cashPointScale, onPointDuration);
-  
-    }
-
-    public void OnLowAmo()
-    {
-        if (isWarned)
-            return;
-
-        isWarned = true;
-
-        DOTween.Kill(lowAmoWarnningElements.gameObject);
-
-        lowAmoText.DOFade(1, 0);
-        lowAmoIcon.DOFade(1, 0);
-
-        PulsScaleEffect(lowAmoWarnningElements, lowAmoScale, lowAmoDuration, lowAmoText, lowAmoIcon);
-    }
-
-    public void OnReload()
-    {
-        isWarned = false;
-        DOTween.Kill(lowAmoWarnningElements.gameObject);
-
-        lowAmoWarnningElements.DOScale(0, 0);
-    }
     private void PulsFadeEffectAndFade(Image targetImage, float duration)
     {
 
@@ -226,45 +226,32 @@ public class PlayerCanvas : MonoBehaviour
             targetImage.DOFade(0, duration / 2);
         });
     }
-    private void PulsScaleEffect(Transform transform, float scale, float duration, TextMeshProUGUI text, Image icon)
-    {
-        transform.localScale = Vector3.zero;
 
-        if (text)
-            text.DOFade(0, duration);
-        if (icon)
-            icon.DOFade(0, duration);
-
-        transform.DOScale(scale, duration * .7f).OnComplete(() =>
-        {
-            transform.DOScale(0, duration * .3f);
-        });
-    }
-    private void GetColorAndText(EHit hitInfo, out Color color, out string text)
+    private void GetColorAndText(EHitType hitInfo, out Color color, out string text)
     {
         switch (hitInfo)
         {
-            case EHit.Enemy:
+            case EHitType.Enemy:
                 color = onEnemyColor;
                 text = onEnemyText;
                 break;
-            case EHit.Shield:
+            case EHitType.Shield:
                 color = onShieldColor;
                 text = onShieldText;
                 break;
-            case EHit.MovingEnemy:
+            case EHitType.MovingEnemy:
                 color = onMovingEnemyColor;
                 text = onMovingEnemyext;
                 break;
-            case EHit.Missed:
+            case EHitType.Missed:
                 color = onMissColor;
                 text = onMissText;
                 break;
-            case EHit.Hostage:
+            case EHitType.Hostage:
                 color = onHostageKillColor;
                 text = onHostageKillText;
                 break;
-            case EHit.Khalas:
+            case EHitType.Khalas:
                 color = onKhalasColor;
                 text = onKhalasText;
                 break;

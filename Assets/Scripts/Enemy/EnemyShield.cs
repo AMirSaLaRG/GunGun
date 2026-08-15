@@ -18,15 +18,15 @@ public class EnemyShield : Target
     {
         base.Start();
         points = pointMultiplyerOfHolder * myHolder.GetTargetPoints();
-        boxCollider = GetComponent<BoxCollider>();
-        myMaterial = GetComponent<Renderer>().material;
+        boxCollider = GetComponentInChildren<BoxCollider>();
+        myMaterial = GetComponentInChildren<Renderer>().material;
         ApplyShieldEffect();
 
     }
 
-    public override void TakeDamage(int damage, Vector3 worldSpaceOfDamageTaken)
+    public override void TakeDamage(int damage, HitData hitedData)
     {
-        base.TakeDamage(damage, worldSpaceOfDamageTaken);
+        base.TakeDamage(damage, hitedData);
 
         boxCollider.isTrigger = false;
         gameObject.layer = GetLayerIndexFromMask(whatIsUntargetable);

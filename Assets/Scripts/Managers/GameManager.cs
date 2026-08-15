@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,6 +16,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController {private set; get;}
     public PlayerData playerData {private set; get;}
 
+    public ScoreManager scoreManager {private set; get;}
     public EGameState gameState {private set; get;} = EGameState.inMenu;
 
     private int currenLevelIndex = 0;
@@ -33,10 +36,14 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        playerData = SaveManager.instance.data;
+
+
         levelManager = FindFirstObjectByType<LevelManager>();
         uiManager = FindFirstObjectByType<UiManager>();
         elevator = FindFirstObjectByType<ElevatorMainMenu>();
         playerController = FindFirstObjectByType<PlayerController>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
     private void Start()
@@ -45,7 +52,6 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.MainMenu);
         playerController.SetGameStarted(false);
 
-        playerData = SaveManager.instance.data;
 
         if (isTesting)
         {
@@ -53,6 +59,8 @@ public class GameManager : MonoBehaviour
             levelManager.Test(0);
         }
     }
+
+    public GameObject GetUiPanel(EPanel panel) => uiManager.GetPanel(panel);
 
 
     public void LevelSelection()
@@ -122,7 +130,7 @@ public class GameManager : MonoBehaviour
         uiManager.SetPanel(EPanel.InGame);
         gameState = EGameState.inGame;
 
-        playerController.ResetPlayer();
+        scoreManager.ResetAll();
 
         playerController.SetGameStarted(true);
         levelManager.SetGameStart();
@@ -235,7 +243,7 @@ public class GameManager : MonoBehaviour
     private void SaveLevelCompleted()
     {
         
-        float points = playerController.points;
+        float points = scoreManager.points;
         int currentLevelIndex = levelManager.currentLevelIndex;
 
         if (playerData.levelPoints[currentLevelIndex] < points)
@@ -248,14 +256,16 @@ public class GameManager : MonoBehaviour
         if (playerData.unlockedLevel < currentLevelIndex + 1)
             playerData.unlockedLevel = currentLevelIndex + 1;
 
+        playerData.totalPoints += points;
+
         SaveManager.instance.Save();
-        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, playerController.GetKills(), levelManager.GetLevelName(currentLevelIndex), out int rank);
+        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, scoreManager.currentKills, levelManager.GetLevelName(currentLevelIndex), out int rank);
         currentLeaderBoardRank = rank;
 
     }
     private void SaveGameOver()
     {
-        float points = playerController.points;
+        float points = scoreManager.points;
         int currentLevelIndex = levelManager.currentLevelIndex;
 
         if (playerData.levelPoints[currenLevelIndex] < points)
@@ -266,8 +276,11 @@ public class GameManager : MonoBehaviour
         if (playerData.levelStars[currenLevelIndex] < earnedStart)
             playerData.levelStars[currenLevelIndex] = earnedStart;
 
+        playerData.totalPoints += points;
+
+
         SaveManager.instance.Save();
-        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, playerController.GetKills(), levelManager.GetLevelName(currentLevelIndex), out int rank);
+        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, scoreManager.currentKills, levelManager.GetLevelName(currentLevelIndex), out int rank);
         currentLeaderBoardRank = rank;
 
     }
@@ -283,14 +296,38 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < requirepoints.Length; i++)
         {
        
-            if (playerController.points < requirepoints[i])
+            if (scoreManager.points < requirepoints[i])
                 return i;
         }
 
         return 3;
     }
 
+    public bool GunPurche(GunSo gun)
+    {
+        float gunPrice = gun.WeaponData.gunPrice;
+        float playerPoints = playerData.totalPoints;
 
+        if (isTesting)
+            playerPoints = Mathf.Infinity;
+
+
+        if (playerPoints < gunPrice)
+            return false;
+
+        playerData.totalPoints -= gunPrice;
+
+        int[] unlockedWeapons = new int[playerData.unlockedWeapons.Length + 1];
+        playerData.unlockedWeapons.CopyTo(unlockedWeapons, 0);
+        unlockedWeapons[unlockedWeapons.Length - 1] = gun.gunID;
+
+        playerData.unlockedWeapons = unlockedWeapons;
+
+        SaveManager.instance.Save();
+
+        return true;
+
+    }
 
 
     public void QuitGame()
@@ -301,4 +338,6 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+
 }

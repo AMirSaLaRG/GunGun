@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyWithHostage : Enemy
 {
     protected Hostage myHostage;
+    protected ScoreManager scoreManager;
     [Header("EnemyWIthHostageSetup")]
     [SerializeField] protected float distanceByHostage;
 
@@ -14,6 +15,8 @@ public class EnemyWithHostage : Enemy
         facingPosition = myBox.GetHostagePoint().position;
 
         SpeedUpTarget(0, BaseMoveSpeed, .5f);
+
+        scoreManager = player.scoreManager;
 
     }
 
@@ -31,9 +34,12 @@ public class EnemyWithHostage : Enemy
 
         anim.SetTrigger(triggerAnimAttackKeyWord);
 
-        player.OnHostageHit(myHostage);
+        scoreManager.OnHostageKilled();
 
-        myHostage.TakeDamage(damage, myHostage.transform.position);
+        HitData hitData = new HitData();
+        hitData.hitPos = myHostage.transform.position;
+
+        myHostage.TakeDamage(damage, hitData);
     }
 
     protected override void AtDieAction()

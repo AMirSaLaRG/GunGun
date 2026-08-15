@@ -42,8 +42,11 @@ public class EnemyProjectal : MonoBehaviour
 
         if (isDistanceEnough)
         {
+            HitData hitData = new HitData();
+            hitData.hitPos = transform.position;
+
             Instantiate(onHitVfx.gameObject, transform.position, Quaternion.identity, null);
-            player.TakeDamage(damage, transform.position);
+            player.TakeDamage(damage, hitData);
             Destroy(gameObject);
         }
     }

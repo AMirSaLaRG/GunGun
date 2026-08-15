@@ -4,10 +4,11 @@ using UnityEngine;
 public class PlayerData
 {
     public string name;
-    public float currentCoins;
+    public float totalPoints;
     public int[] levelStars;      // stars per level
     public float[] levelPoints;     // points per level
     public int unlockedLevel = 1;
+    public int[] unlockedWeapons;
     public float musicVolume;
     public float sfxVolume;
     

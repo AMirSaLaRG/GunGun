@@ -76,7 +76,6 @@ public class LevelManager : MonoBehaviour
 
     private void OnLevelSelected(int index)
     {
-        Debug.Log($"Selected Level: {index + 1}");
         LoadLevel(index);
     }
 

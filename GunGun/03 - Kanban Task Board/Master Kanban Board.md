@@ -7,26 +7,60 @@ kanban-plugin: board
 ## Backlog
 
 - [ ] - [ ] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
-		- [ ] Create new script (GunController.cs / GunSystem.gd)
-		- [ ] Move shooting logic (Raycast/Projectiles) out of PlayerController
-		- [ ] Move ammo, reload, and fire-rate variables to new script
-		- [ ] Set up reference: PlayerController calls GunController.Shoot() on input
+		- [x] Create new script (GunController.cs / GunSystem.gd)
+		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController
+		- [x] Move ammo, reload, and fire-rate variables to new script
+		- [x] Set up reference: PlayerController calls GunController.Shoot() on input
 		- [ ] Test shooting, reloading, and weapon switching in-engine
-- [ ] [[WarningSign]] change enemies sign
+		- [x] switching function for gun 
+		- [x] switching middle of game ( later can be use for power  up and etx
+		- [ ] switching before game starts need a user interface to use unlock weapons
+		- [ ] switching animation
+- [ ] Add Enemy projectiles to the targets
 - [ ] SFX of gun shot is feel off check how can fix it on rapid fire
 - [ ] add combo bonus something like call of
+- [ ] Create [[Enemy|enemy launcher]]
+- [ ] Add Ability System to the Player.
+	- [ ] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [ ] General watch : Get Double points
+- [ ] Gun Data and Gun manager.
+	- [ ] All controls of gun should be on one behavior on Player #code
+	- [ ] Create scriptable object or store the data of each gun on the gun manager #code
+	- [ ] Write data for Gun: #code
+		- [ ] Amo
+		- [ ] gun force
+		- [ ] shooting behavior
+		- [ ] reload time
+		- [ ] Price
+		- [ ] unlock Requierments
+	- [ ] Create or download Asset for each gun #art
+	- [ ] Create user interface for gun selection #ui
+- [ ] Add power up and bonus targets
+	- [ ] power ups the items that shooting them will activate ability
+	- [ ] bonus item 
+		- [ ] items with points
+		- [ ] secret items 
+		- [ ] achive items
+	- [ ] handle respawn and movement
+	- [ ] create visuals for it
+- [ ] make activator time by controlled by breath time in middle of game
 
 
 ## Mehrdad feedback
 
-- [ ] [[02 - Asset/Hostage|Hostage]] change the prefab #art
 - [ ] Leader board can insert name and be smaller
 - [ ] add reward on combo
 
 
 ## Bugs
 
-- [ ] [[01 - GDD/ RespawnBox| View box]] miss for target as edge cases should get handled
+- [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
+
+
+## In Progress
+
 
 
 ## To Do
@@ -44,13 +78,13 @@ kanban-plugin: board
 		- [ ] In Game user Interface shows
 - [ ] - [ ] ObjectPool #code
 - [ ] - [ ] Lightning managment #art #render
-- [ ] - [ ] Add more [[01 - GDD/ Enemy|enemy]]
+- [ ] - [ ] Add more [[Enemy|enemy]]
 		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
 		- [x] [[EnemyHostageTaker|Hostage Taker]]
-		- [ ] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
+		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
 		- [ ] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
 		- [ ]
-- [ ] - [ ] Add dynamic [[01 - GDD/ RespawnBox| Respawn Box]]  #art #code 
+- [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
 		- [ ] Handle the target by sequences
 		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
 - [ ] - [ ] Create [[02 - Asset/Level1|level one asset]] #art #blender
@@ -62,12 +96,14 @@ kanban-plugin: board
 
 ## Done
 
+- [ ] [[WarningSign]] change enemies sign
+- [ ] [[02 - Asset/Hostage|Hostage]] change the prefab #art
 - [ ] Relocate the damage taking effects from [[01 - Gdd/UI/InGame|In Game]] to [[01 - GDD/UI/PlayerCanvas|player canvas]] and fix the not showing the sprite #code #art
 	- [x] move elements
 	- [x] fix the sprite
 - [ ] add [[EnemyBasic|Shielded enemy]]
 - [ ] Change [[EnemyHostageTaker| enemy hostage taker]] look from [[01 - GDD/ Enemy/EnemyBasic|enemy basic]]
-- [ ] Big places should have more than one [[01 - GDD/ RespawnBox|respawn point]]
+- [ ] Big places should have more than one [[RespawnBox|respawn point]]
 - [ ] Change the sfx when someone take damage will get sound of sfx on hit not from hit only miss can be there
 - [ ] - [ ] Create warning when a target want to shoot #code #art
 		- [x] Get and design [[WarningSign|warning signs]]  for
@@ -75,7 +111,7 @@ kanban-plugin: board
 			- [x] Target leaving the scene
 			- [x] Target shooting player
 		- [x] Code [[TargetEntity| Target Script]] to Trigger signs
-- [ ] [[01 - GDD/ BoxManager|Box Manager]]s [[01 - GDD/ RespawnBox|respawn box]]s [[01 - GDD/ activator|activator]] should not colider with targets while getting active
+- [ ] [[01 - GDD/ BoxManager|Box Manager]]s [[RespawnBox|respawn box]]s [[01 - GDD/ activator|activator]] should not colider with targets while getting active
 - [ ] On  empty gun shot combo get reset
 - [ ] Remove bullet point on game ends ( resets)
 - [ ] death effect is too messy make it simpler #art
@@ -87,15 +123,11 @@ kanban-plugin: board
 	- [x] chose new set of respawn boxes from all available boxes
 	- [x] active ones get active or stay active and de active ones get de active or stay de active
 	- [x] at end of activation respawns should get start
-- [ ] Add path line to [[01 - GDD/ RespawnBox| Respawn Points]] 
+- [ ] Add path line to [[RespawnBox| Respawn Points]] 
 	- [x] Gizmos Draw from the point to target point
 	- [x] on editor can see
 - [ ] enemy and hostage should not snap on each other 
 	enemy and hostage now get stuck together while moving and never reach the distance
-
-
-## In Progress
-
 
 
 ## fixed but not sure
@@ -109,6 +141,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,true,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

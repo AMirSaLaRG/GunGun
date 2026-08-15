@@ -14,3 +14,9 @@ public enum EPanel
     Ready = 9,
     LeaderBoard = 10,
 }
+
+public enum EDPanel
+{
+    None = 0,
+    Armory = 1,
+}

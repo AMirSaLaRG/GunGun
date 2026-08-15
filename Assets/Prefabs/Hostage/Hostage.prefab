@@ -25824,10 +25824,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Hostage
   onTakeDamageSfx: {fileID: 6999810918071136572}
   onDeathSfx: {fileID: 0}
-  onDeadBodyGetShotSfx: {fileID: 0}
+  onDeadTargetGetShotSfx: {fileID: 0}
   isStatic: 0
   visuals: {fileID: 3835717565138771309}
   visualShields: []
+  takeShotVfx: {fileID: 4413521124262731454, guid: 2378e5a7d8338144a8d534d8acee49da, type: 3}
   moveSpeed: 7.5
   rotationSpeed: 10
   duration: 2.2
