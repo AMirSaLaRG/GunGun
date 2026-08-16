@@ -24,7 +24,7 @@ public class UiGunItem : MonoBehaviour
 
         gunImage.sprite = gunSo.gunIcon;
         gunNameText.text = data.gunName;
-        priceText.text = data.gunPierce.ToString();
+        priceText.text =$"$ {data.gunPrice}";
         gunModeText.text = data.gunShotType.ToString();
         gunBulletsText.text = data.magazineAmoCap.ToString();
 

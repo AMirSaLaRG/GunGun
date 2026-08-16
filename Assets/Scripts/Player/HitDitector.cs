@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class HitDitector : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private LayerMask whatIsUntargetable;
+    [SerializeField] private float acuracyThreshold = 100;
 
     private Camera mainCamera;
 
@@ -24,7 +28,46 @@ public class HitDitector : MonoBehaviour
         return null;
     }
 
-    
+    public List<HitData> ThripleShot(Vector2 shotAim, float acuracy)
+    {
+        float shotThreshold = Mathf.Lerp(acuracyThreshold, 0, acuracy);
+
+        List<HitData> returnList = new List<HitData>();
+
+        //Detect aim hit
+        HitData mainHit = SingleShot(shotAim);
+        if (mainHit.hitedTarget != null && mainHit.hitedTarget.TryGetComponent(out Enemy enemy))
+        {
+            float extraHit = 2;
+            returnList.Add(mainHit);
+
+            for (int i = 0; i < extraHit; i++)
+            {
+                HitData extraHitData = mainHit.Copy();
+
+                extraHitData.hitPos = mainHit.hitedTarget.GetRandomPointOnCollider();
+                extraHitData.hitForce *= 0.3f;
+
+                returnList.Add(extraHitData);
+            }
+
+            return returnList;
+        }
+
+        returnList.Add(mainHit);
+
+        for (int i = 0; i < 2; i++)
+        {
+            float x = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+            float y = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+
+            HitData newHit = SingleShot(new Vector2(shotAim.x + x, shotAim.y + y));
+
+            returnList.Add(newHit);
+        }
+
+        return returnList;
+    }
 
     private HitData OnHit(RaycastHit hit)
     {
@@ -42,29 +85,42 @@ public class HitDitector : MonoBehaviour
         else
         {
             hitData.hitedTarget = target;
-
-            if (target.TryGetComponent(out Enemy enemy))
-            {
-                if (enemy.isMoving)
-                    hitData.hitTYpe = EHitType.MovingEnemy;
-                else if (enemy.isDead)
-                    hitData.hitTYpe = EHitType.Khalas;
-                else
-                    hitData.hitTYpe = EHitType.Enemy;
-            }
-
-            else if (target.TryGetComponent(out EnemyShield enemyShiedl))
-                hitData.hitTYpe = EHitType.Shield;
-
-            else if (target.TryGetComponent(out Hostage hostage))
-                hitData.hitTYpe = EHitType.Hostage;
-
+            hitData.hitTYpe = GetTargetStatus(target);
         }
-        
 
-        
 
         return hitData;
     }
+
+    public EHitType GetTargetStatus(Target target)
+    {
+        if (target == null)
+            return EHitType.None;
+
+        if (target.TryGetComponent(out Enemy enemy))
+        {
+            if (enemy.isMoving)
+                return EHitType.MovingEnemy;
+            else if (enemy.isDead)
+                return EHitType.Khalas;
+            else
+                return EHitType.Enemy;
+        }
+
+        else if (target.TryGetComponent(out EnemyShield enemyShiedl))
+            return EHitType.Shield;
+
+        else if (target.TryGetComponent(out Hostage hostage))
+        {
+            if (hostage.isDead)
+                return EHitType.Missed;
+            else 
+                return EHitType.Hostage;
+        }
+
+        return EHitType.None;
+
+    }
+
 }
 

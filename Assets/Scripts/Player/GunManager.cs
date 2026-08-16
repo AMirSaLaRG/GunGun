@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Analytics.IAnalytic;
 
 public class GunManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class GunManager : MonoBehaviour
     private WeaponData currentGunData;
     private MagazineManager magazineManager;
     private HitDitector hitDitector;
+    private PlayerController player;
 
     [Header("All Guns")]
     public List<GunSo> allGuns = new List<GunSo>();  // All guns in the game
@@ -20,8 +23,8 @@ public class GunManager : MonoBehaviour
     public List<int> unlockedGunsId = new List<int>();
 
     [Header("Current Gun")]
-    public GunSo currentGun;
-    public int currentGunIndex = 0;
+    public GunSo currentGun { private set; get; }
+    public int currentGunId { private set; get; } = 0;
 
     [Header("Settings")]
     [SerializeField] private Transform magazineSocket;
@@ -36,6 +39,9 @@ public class GunManager : MonoBehaviour
 
     private void Start()
     {
+
+
+        player = GetComponent<PlayerController>();
         magazineManager = GetComponent<MagazineManager>();
         hitDitector = GetComponent<HitDitector>();
 
@@ -44,9 +50,9 @@ public class GunManager : MonoBehaviour
 
         GetUnlockedGunsId();
 
-        currentGunIndex = 0;
+        currentGunId = GameManager.instance.playerData.lastGunId;
 
-        SetCurrentGun();
+        SetCurrentGun(currentGunId);
     }
 
     private void RefreshUnlockGuns()
@@ -78,15 +84,14 @@ public class GunManager : MonoBehaviour
     {
         Debug.Log("Triggered Test");
 
-        currentGunIndex = (currentGunIndex + 1) % unlockedGunsId.Count;
-        SetCurrentGun(currentGunIndex);
+        currentGunId = (currentGunId + 1) % unlockedGunsId.Count;
+        SetCurrentGun(currentGunId);
     }
 
-    public void SetCurrentGun(int gunIndex = 0)
+    public void SetCurrentGun(int gunId = 0)
     {
         GunSo gun = gunDictionary[0];
 
-        int gunId = unlockedGunsId[gunIndex];
         if (gunDictionary.ContainsKey(gunId))
         {
             gun = gunDictionary[gunId];
@@ -96,6 +101,8 @@ public class GunManager : MonoBehaviour
         }
         currentGun = gun;
         currentGunData = gun.WeaponData;
+
+        currentGunId = gunId;
 
         SetupMagazine(gun);
 
@@ -138,6 +145,11 @@ public class GunManager : MonoBehaviour
                 resault.Add(hitDitector.SingleShot(shotAim));
                 break;
 
+            case GunShotType.ThripleShot:
+                resault.AddRange(hitDitector.ThripleShot(shotAim, currentGunData.accuracy));
+                break;
+
+
             default:
                 return null;
         }
@@ -159,50 +171,56 @@ public class GunManager : MonoBehaviour
             return false;
         }
 
-        Target hitedTarget;
-        Vector3 hitedPos;
-
-        bool isShootingBullet = magazineManager.ConsumeAmmo(1);
-
-        if (isShootingBullet == false)
+        if (magazineManager.IsEmpty())
         {
             PlayEmptyShotSfx();
             return false;
         }
         else
             PlayGunShotSfx();
-        
 
+        StartCoroutine(GunFireCo(hitDatas));
 
- 
+        return true;
+    }
+
+    private IEnumerator GunFireCo(List<HitData> hitDatas)
+    {
+        Target hitedTarget;
+        Vector3 hitedPos;
 
         foreach (HitData hitData in hitDatas)
         {
-            hitData.hitForce = currentGunData.gunForce;
-            hitedTarget = hitData.hitedTarget ?? null;
-            hitedPos = hitData.hitPos;
+            bool isShootingBullet = magazineManager.ConsumeAmmo(1);
+            if (isShootingBullet)
+            {
+                hitData.hitForce = currentGunData.gunForce;
+                hitedTarget = hitData.hitedTarget ?? null;
+                hitedPos = hitData.hitPos;
 
-            if (hitedTarget == null)
-                if (hitData.hitPos != null && hitData.hitTYpe != EHitType.Magazine)
+                if (hitedTarget == null)
+                    if (hitData.hitPos != null && hitData.hitTYpe != EHitType.Magazine)
+                    {
+                        if (currentGunData.defaultHitClip != null)
+                            defaultHitSfx.clip = currentGunData.defaultHitClip;
+                        if (currentGunData.defaultHitVfx != null)
+                            defaultHitVfx = currentGunData.defaultHitVfx;
+                        if (currentGunData.bulletHolePrefab != null)
+                            defaultbulletHole = currentGunData.bulletHolePrefab;
+
+                        DefaultSfxVfxHandler(hitData);
+                    }
+
+                if (hitedTarget != null)
                 {
-                    if (currentGunData.defaultHitClip != null)
-                        defaultHitSfx.clip = currentGunData.defaultHitClip;
-                    if (currentGunData.defaultHitVfx != null)
-                        defaultHitVfx = currentGunData.defaultHitVfx;
-                    if (currentGunData.bulletHolePrefab != null)
-                        defaultbulletHole = currentGunData.bulletHolePrefab;
-
-                    DefaultSfxVfxHandler(hitData);        
+                    hitData.hitTYpe = hitDitector.GetTargetStatus(hitData.hitedTarget);
+                    hitedTarget.TakeDamage(currentGunData.gunDamage, hitData);
                 }
 
-            if (hitedTarget != null)
-            {           
-                hitedTarget.TakeDamage(currentGunData.gunDamage, hitData); 
+                player.HandleShot(hitData);
             }
-          
-        }
-
-        return true;
+            yield return new WaitForSeconds(currentGunData.rapitShootingDelay);
+        }      
     }
 
     private void DefaultSfxVfxHandler(HitData hitData)
@@ -251,7 +269,7 @@ public class GunManager : MonoBehaviour
 
     public void ReadyTheGun()
     {
-        SetCurrentGun(currentGunIndex);
+        SetCurrentGun(currentGunId);
     }
     private void OnEnable()
     {

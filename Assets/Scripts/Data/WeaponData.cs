@@ -16,6 +16,8 @@ public class WeaponData
     public float gunForce = 500f;
     public float gunReloadTime = 2f;
     public int magazineAmoCap = 2;
+    public float rapitShootingDelay = 0;
+    [Range (.2f, 1)]public float accuracy = 1;
 
     [Header("Multipliers")]
     public float pointMultiplier = 1f;
@@ -36,7 +38,7 @@ public class WeaponData
 public enum GunShotType 
 {
     singleShot = 0,
-    thripleShot = 1,
+    ThripleShot = 1,
     machineGun = 2,
     shotgun = 3,
 }

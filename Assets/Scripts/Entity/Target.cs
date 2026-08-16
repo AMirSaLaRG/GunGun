@@ -164,26 +164,37 @@ public class Target : MonoBehaviour, IDamagable
         {
             if (onDeadTargetGetShotSfx != null)
                 AudioManager.instance.PlaySfx(onDeadTargetGetShotSfx, true);
-            return;
-        }
-
-
-
-        healthPoint -= (int)damage;
-
-        if (onTakeDamageSfx != null)
-            AudioManager.instance.PlaySfx(onTakeDamageSfx, true);
-
-
-        if (healthPoint <= 0)
+        } else
         {
-            if (onDeathSfx != null)
-                AudioManager.instance.PlaySfx(onDeathSfx, true);
+            healthPoint -= (int)damage;
 
-            Die();
+            if (onTakeDamageSfx != null)
+                AudioManager.instance.PlaySfx(onTakeDamageSfx, true);
+
+
+            if (healthPoint <= 0)
+            {
+                if (onDeathSfx != null)
+                    AudioManager.instance.PlaySfx(onDeathSfx, true);
+
+                Die();
+            }
         }
     }
 
+
+
+    public Vector3 GetRandomPointOnCollider()
+    {
+        if (mycollider == null) return transform.position;
+
+        Bounds bounds = mycollider.bounds;
+        return new Vector3(
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y),
+            UnityEngine.Random.Range(bounds.min.z, bounds.max.z)
+        );
+    }
     private void TakeShotForce(HitData hitData)
     {
         if (rb == null) return;

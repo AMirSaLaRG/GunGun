@@ -137,29 +137,28 @@ public class PlayerCanvas : MonoBehaviour
 
     }
 
-    public void Onhit(Camera mainCaera, List<HitData> hitDatas)
+    public void Onhit(Camera mainCaera, HitData hitData)
     {
-        if (hitDatas == null) return;
-        foreach (var hitData in hitDatas)
+        if (hitData == null) return;
+
+        if (hitData == null) return;
+
+
+        EHitType hitType = hitData.hitTYpe;
+
+        if (hitType == EHitType.Magazine)
+            return;
+
+        if (hitType == EHitType.Khalas)
         {
-            if (hitData == null) continue;
+            OnHitKhalas(mainCaera, hitData);
+            return;
+        }
 
-
-            EHitType hitType = hitData.hitTYpe;
-
-            if (hitType == EHitType.Magazine)
-                continue;
-
-            if (hitType == EHitType.Khalas)
-            {
-                OnHitKhalas(mainCaera, hitData);
-                continue;
-            }
-
-            HandleOnHitVisual(mainCaera, hitData, hitType);
+        HandleOnHitVisual(mainCaera, hitData, hitType);
 
     
-        }
+   
 
 
     }

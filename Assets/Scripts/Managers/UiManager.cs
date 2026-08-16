@@ -23,8 +23,10 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject LeaderBoard;
 
-    [Header("MenuStatics")]
+    [Header("MenuDynamicOnTop")]
     [SerializeField] private GameObject onTopInMenu;
+    [SerializeField] private TextMeshProUGUI playersPoints;
+
 
     [Header("DynamicPanels")]
     [SerializeField] private GameObject mainPageArmory;
@@ -52,6 +54,8 @@ public class UiManager : MonoBehaviour
 
 
         currentPanel = panel;
+
+        UpdateTotalPoints();
     }
 
     public void PopDynamicPanel(EDPanel panel)
@@ -90,11 +94,23 @@ public class UiManager : MonoBehaviour
 
     public void FadePanel(float time)
     {
+        if (fadePanel == null) return;
         SetPanel(EPanel.None);
         fadePanel.SetActive(true);
         fadePanel.GetComponent<Image>().DOFade(0, time).OnComplete(() => {
             fadePanel.SetActive(false);
 
         });
+    }
+
+    internal void UpdateTotalPoints()
+    {
+        if (GameManager.instance == null) return;
+        int currentPoints = 0;
+
+        if (GameManager.instance.playerData != null)
+            currentPoints = Mathf.FloorToInt(GameManager.instance.playerData.totalPoints);
+
+        playersPoints.text = $"$ {currentPoints}";
     }
 }

@@ -9,4 +9,17 @@ public class HitData
     public Vector3 hitNorm;
     public Transform hitTransform;
     public float hitForce;
+
+    public HitData Copy()
+    {
+        return new HitData
+        {
+            hitTYpe = this.hitTYpe,
+            hitPos = this.hitPos,
+            hitedTarget = this.hitedTarget,
+            hitNorm = this.hitNorm,
+            hitTransform = this.hitTransform,
+            hitForce = this.hitForce,
+        };
+    }
 }

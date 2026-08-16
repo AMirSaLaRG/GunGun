@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviour
 
     public void LevelSelection()
     {
+        if (uiManager == null) return;
+        
         uiManager.FadePanel(elevator.actionTime * .9f);
         levelManager.PopulateLevels();
 
@@ -315,7 +317,7 @@ public class GameManager : MonoBehaviour
         if (playerPoints < gunPrice)
             return false;
 
-        playerData.totalPoints -= gunPrice;
+        ChangePlayersPoints(-gunPrice);
 
         int[] unlockedWeapons = new int[playerData.unlockedWeapons.Length + 1];
         playerData.unlockedWeapons.CopyTo(unlockedWeapons, 0);
@@ -329,6 +331,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void ChangePlayersPoints(float gunPrice)
+    {
+        playerData.totalPoints += gunPrice;
+        uiManager.UpdateTotalPoints();
+    }
 
     public void QuitGame()
     {
@@ -337,6 +344,13 @@ public class GameManager : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private void OnApplicationQuit()
+    {
+        playerData.lastGunId = playerController.gunManager.currentGun.gunID;
+
+        SaveManager.instance.Save();
     }
 
 

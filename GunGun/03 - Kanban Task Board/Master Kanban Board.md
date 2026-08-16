@@ -6,37 +6,9 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] - [ ] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
-		- [x] Create new script (GunController.cs / GunSystem.gd)
-		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController
-		- [x] Move ammo, reload, and fire-rate variables to new script
-		- [x] Set up reference: PlayerController calls GunController.Shoot() on input
-		- [ ] Test shooting, reloading, and weapon switching in-engine
-		- [x] switching function for gun 
-		- [x] switching middle of game ( later can be use for power  up and etx
-		- [ ] switching before game starts need a user interface to use unlock weapons
-		- [ ] switching animation
 - [ ] Add Enemy projectiles to the targets
-- [ ] SFX of gun shot is feel off check how can fix it on rapid fire
-- [ ] add combo bonus something like call of
 - [ ] Create [[Enemy|enemy launcher]]
-- [ ] Add Ability System to the Player.
-	- [ ] Adrenaline rush : time get slow 
-	- [ ] Supper gun : Get a supper gun
-	- [ ] Sniper Squad : helps to kill enemies.
-	- [ ] General watch : Get Double points
-- [ ] Gun Data and Gun manager.
-	- [ ] All controls of gun should be on one behavior on Player #code
-	- [ ] Create scriptable object or store the data of each gun on the gun manager #code
-	- [ ] Write data for Gun: #code
-		- [ ] Amo
-		- [ ] gun force
-		- [ ] shooting behavior
-		- [ ] reload time
-		- [ ] Price
-		- [ ] unlock Requierments
-	- [ ] Create or download Asset for each gun #art
-	- [ ] Create user interface for gun selection #ui
+- [ ] make activator time by controlled by breath time in middle of game
 - [ ] Add power up and bonus targets
 	- [ ] power ups the items that shooting them will activate ability
 	- [ ] bonus item 
@@ -45,7 +17,14 @@ kanban-plugin: board
 		- [ ] achive items
 	- [ ] handle respawn and movement
 	- [ ] create visuals for it
-- [ ] make activator time by controlled by breath time in middle of game
+- [ ] Add Ability System to the Player.
+	- [ ] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [ ] General watch : Get Double points
+- [ ] add combo bonus something like call of
+- [ ] move damage to hitData
+- [ ] when buy a weapon should get equiped
 
 
 ## Mehrdad feedback
@@ -92,6 +71,33 @@ kanban-plugin: board
 
 ## Done Before Comit
 
+- [ ] Add three shot gun to the game 
+	- [x] create prefab #art
+	- [x] write code for 3 shot
+	- [x] handle the detection
+	- [x] create guns
+- [ ] Gun Data and Gun manager.
+	- [x] All controls of gun should be on one behavior on Player #code
+	- [x] Create scriptable object or store the data of each gun on the gun manager #code
+	- [x] Write data for Gun: #code
+		- [x] Amo
+		- [x] gun force
+		- [x] shooting behavior
+		- [x] reload time
+		- [x] Price
+		- [ ] unlock Requierments
+	- [x] Create or download Asset for each gun #art
+	- [x] Create user interface for gun selection #ui
+- [ ] - [ ] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
+		- [x] Create new script (GunController.cs / GunSystem.gd)
+		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController
+		- [x] Move ammo, reload, and fire-rate variables to new script
+		- [x] Set up reference: PlayerController calls GunController.Shoot() on input
+		- [x] Test shooting, reloading, and weapon switching in-engine
+		- [x] switching function for gun 
+		- [x] switching middle of game ( later can be use for power  up and etx
+		- [x] switching before game starts need a user interface to use unlock weapons
+		- [x] switching animation
 
 
 ## Done
@@ -135,6 +141,7 @@ kanban-plugin: board
 - [ ] respawn manager don't get scene clear i think the problem should be on target feed back it do not trigger to check
 	not happening again just adding a check for it at end of wawe
 	added in [[WaveManager|wave Manager]] at end of last wave it get a(( trigger after two seconds ( magical number) that trigger end of level))
+- [ ] SFX of gun shot is feel off check how can fix it on rapid fire
 
 
 

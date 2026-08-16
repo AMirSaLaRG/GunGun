@@ -11,6 +11,9 @@ public class MagazineManager : MonoBehaviour
     [SerializeField] private float reloadTime = .5f;
     [SerializeField] private float chnageGunTime = 1.1f;
     [SerializeField] private AudioSource reloadSfx;
+    [SerializeField] private int warningMax = 1;
+    [SerializeField] private EMagazinesType type;
+    [SerializeField] private Transform bulletHolderSet;
 
 
     private UiInGame inGameUi;
@@ -25,6 +28,10 @@ public class MagazineManager : MonoBehaviour
     private int currentBulletIndex = 0;
 
     private Quaternion startRotation;
+    private Vector3 startPosition;
+    private Vector3 bulletHolderSetStartPos;
+
+    private float zdifTwoBulletInStang;
 
     private void Awake()
     {
@@ -36,6 +43,13 @@ public class MagazineManager : MonoBehaviour
         mybulletsRb = new Rigidbody[bulletHolders.Length];
 
         startRotation = transform.rotation;
+        startPosition = transform.position;
+        if (type == EMagazinesType.STANAG)
+        {
+            bulletHolderSetStartPos = bulletHolderSet.position;
+            zdifTwoBulletInStang = bulletHolders[1].localPosition.z - bulletHolders[0].localPosition.z;
+            zdifTwoBulletInStang = Mathf.Abs(zdifTwoBulletInStang);
+        }
 
         for ( int i = 0; i < bulletHolders.Length; i++ )
         {
@@ -54,6 +68,8 @@ public class MagazineManager : MonoBehaviour
            
         }
 
+
+
         isReloading = true;
 
     }
@@ -64,33 +80,51 @@ public class MagazineManager : MonoBehaviour
             return;
 
 
+
         Transform currentBullet = mybullets[currentBulletIndex];
         Rigidbody currentBulletRb = mybulletsRb[currentBulletIndex];
 
-        Quaternion currentRotation = transform.localRotation;
-        transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic);
-
-        if (currentBullet.localPosition != Vector3.zero)
+        if (type == EMagazinesType.RevolverCylinder)
         {
-            Debug.Log("Emoyt magazine this should handle gun amo but i have track in player and here");
-            return;
+            Quaternion currentRotation = transform.localRotation;
+            transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic);
+
+            if (currentBullet.localPosition != Vector3.zero)
+                return;
+
+            float torgueforce = UnityEngine.Random.Range(-4f, 5f);
+            float jumpForce = UnityEngine.Random.Range(100, 200);
+
+            currentBullet.DOLocalMoveY(-2, switchTIme / 2).OnComplete(() =>
+            {
+                currentBulletRb.AddForce(Vector2.up * jumpForce);
+                currentBulletRb.isKinematic = false;
+                currentBulletRb.AddTorque(Vector3.forward * torgueforce, ForceMode.Impulse);
+                currentBullet.parent = null;
+            });
+        } else if (type == EMagazinesType.STANAG)
+        {
+            if (currentBullet.localPosition != Vector3.zero)
+                return;
+
+            float torgueforce = UnityEngine.Random.Range(-4f, 5f);
+            float jumpForce = UnityEngine.Random.Range(100, 200);
+
+
+            currentBullet.DOLocalMoveZ(2, switchTIme / 2).OnComplete(() =>
+            {
+                
+                currentBulletRb.AddForce(Vector2.up * jumpForce);
+                currentBulletRb.isKinematic = false;
+                currentBulletRb.AddTorque(Vector3.forward * torgueforce, ForceMode.Impulse);
+                currentBullet.parent = null;
+            });
+
+            bulletHolderSet.DOLocalMoveZ(bulletHolderSet.localPosition.z + zdifTwoBulletInStang, switchTIme / 3);
         }
 
-        float torgueforce = UnityEngine.Random.Range(-4f, 5f);
-        float jumpForce = UnityEngine.Random.Range(100, 200);
-
-
-        currentBullet.DOLocalMoveY(-2, switchTIme /2).OnComplete(() =>
-        {
-            currentBulletRb.AddForce(Vector2.up * jumpForce);
-            currentBulletRb.isKinematic = false;
-            currentBulletRb.AddTorque(Vector3.forward * torgueforce, ForceMode.Impulse);
-            currentBullet.parent = null;
-
-    
-        });
-
         currentBulletIndex++;
+
         currentBulletIndex %= bulletHolders.Length;
 
         inGameUi.AmoChange(currentAmo);
@@ -108,26 +142,63 @@ public class MagazineManager : MonoBehaviour
         currentAmo = GetAmoCap();
         AudioManager.instance.PlaySfx(reloadSfx, true);
 
-
-        transform.DORotate(startRotation.eulerAngles, reloadTime).OnComplete(() => isReloading = false);
-        currentBulletIndex = 0;
-
-        for (int i=0; i<bulletHolders.Length; i++)
+   
+        if (type == EMagazinesType.RevolverCylinder)
         {
-            Transform bullet = mybullets[i];
-            if (bullet.localPosition != Vector3.zero)
+            transform.DORotate(startRotation.eulerAngles, reloadTime).OnComplete(() => isReloading = false);
+            transform.DOMove(startPosition, reloadTime);
+
+            for (int i = 0; i < bulletHolders.Length; i++)
             {
-                mybulletsRb[i].isKinematic = true;
-                bullet.parent = bulletHolders[i];
+                Transform bullet = mybullets[i];
+                if (bullet.localPosition != Vector3.zero)
+                {
+                    mybulletsRb[i].isKinematic = true;
+                    bullet.parent = bulletHolders[i];
 
 
-                bullet.localPosition = new Vector3(0, -3, 0);
-                bullet.localRotation = Quaternion.Euler(0, 0, 0);
-                bullet.DOLocalMove(Vector3.zero, reloadTime); 
+                    bullet.localPosition = new Vector3(0, -3, 0);
+                    bullet.localRotation = Quaternion.Euler(0, 0, 0);
+                    bullet.DOLocalMove(Vector3.zero, reloadTime);
+                }
+
+
             }
-  
 
         }
+        else if (type == EMagazinesType.STANAG)
+        {
+            Vector3 targetPos = transform.position + (transform.forward * -8f);
+
+            transform.DOMove(targetPos, reloadTime / 2).OnComplete(() => {
+
+                bulletHolderSet.localPosition = Vector3.zero;
+
+                for (int i = 0; i < bulletHolders.Length; i++)
+                {
+                    Transform bullet = mybullets[i];
+
+                    if (bullet.localPosition != Vector3.zero)
+                    {
+                        mybulletsRb[i].isKinematic = true;
+                        bullet.parent = bulletHolders[i];
+
+                        bullet.localPosition = Vector3.zero;
+                        bullet.localRotation = Quaternion.Euler(0, 0, 0);
+                    }
+
+
+                }
+
+                transform.DOMove(startPosition, reloadTime / 2).OnComplete(() => isReloading = false);
+                });
+        }
+
+        currentBulletIndex = 0;
+
+       
+
+  
 
         inGameUi.OnReload(currentAmo);
 
@@ -145,7 +216,7 @@ public class MagazineManager : MonoBehaviour
             newAmo = 0;
 
         currentAmo = newAmo;
-        if (currentAmo <= 1)
+        if (currentAmo <= warningMax)
             inGameUi.GiveLowAmoWarning();
 
         OnShotBullet();
@@ -161,14 +232,17 @@ public class MagazineManager : MonoBehaviour
 
         isReloading = true;
 
-        transform.position = StartPos - transform.right *  4;
-        transform.rotation = Quaternion.Euler(Vector3.zero);
+        foreach (var bullet in mybullets)
+            bullet.position = Vector3.forward * -1000;
 
         float switchTime = chnageGunTime;
 
         if (GameManager.instance != null)
             if (GameManager.instance.gameState != EGameState.inGame)
                 switchTime = 0;
+
+        transform.position = StartPos - transform.right * 4;
+        transform.rotation = Quaternion.Euler(Vector3.zero);
 
         transform.DORotate(startRot, switchTime);
         transform.DOMove(StartPos, switchTime).SetEase(Ease.OutElastic).OnComplete(() =>
@@ -177,5 +251,10 @@ public class MagazineManager : MonoBehaviour
             OnReloadBullets();
 
         });
+      
+
+
     }
 }
+
+

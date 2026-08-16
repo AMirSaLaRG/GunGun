@@ -11,5 +11,6 @@ public class PlayerData
     public int[] unlockedWeapons;
     public float musicVolume;
     public float sfxVolume;
+    public int lastGunId = 0;
     
 }

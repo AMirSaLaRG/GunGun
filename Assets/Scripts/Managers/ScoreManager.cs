@@ -39,7 +39,7 @@ public class ScoreManager : MonoBehaviour
     // ==========================================
     // ===== MAIN METHOD - Process Hit =====
     // ==========================================
-    public void OnHostageKilled() => ProcessHostageHit();
+    public void OnHostageKilled() => ProcessHostageHit(null);
 
     public void ProcessHit(HitData hitData)
     {
@@ -60,7 +60,7 @@ public class ScoreManager : MonoBehaviour
                 break;
 
             case EHitType.Hostage:
-                ProcessHostageHit();
+                ProcessHostageHit(hitData);
                 break;
 
             case EHitType.Khalas:
@@ -142,8 +142,11 @@ public class ScoreManager : MonoBehaviour
             AddCombo(1);
     }
 
-    private void ProcessHostageHit()
+    private void ProcessHostageHit(HitData hitData)
     {
+        if (hitData != null)
+            if (hitData.hitedTarget.isDead) return;
+
         currentHostageKilled++;
 
         ResetCombo();

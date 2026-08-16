@@ -12,7 +12,7 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour, IDamagable
 {
     private TouchControls controls;
-    private GunManager gunManager;
+    public GunManager gunManager {private set; get; }   
     public ScoreManager scoreManager {  get; private set; }
 
     [Header("Uis")]
@@ -67,14 +67,14 @@ public class PlayerController : MonoBehaviour, IDamagable
         Vector2 aimPos = controls.TouchScreen.Aim.ReadValue<Vector2>();
         List<HitData> hitDatas = gunManager.GunShot(aimPos);
 
-        if (hitDatas != null)
-        {
-            foreach (var hitData in hitDatas)
-                scoreManager.ProcessHit(hitData);
+    }
 
-            myCanvas.Onhit(mainCamera, hitDatas);
+    public void HandleShot(HitData hitData)
+    {
+        if (hitData == null) return;
 
-        }
+        scoreManager.ProcessHit(hitData);
+        myCanvas.Onhit(mainCamera, hitData);
     }
 
     public void TakeDamage(int damage, HitData hitedData)
