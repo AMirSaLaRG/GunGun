@@ -13703,12 +13703,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunManager
   allGuns:
-  - {fileID: 11400000, guid: 1b306f0ec6d24a942907f306898205f4, type: 2}
-  - {fileID: 11400000, guid: 16a76a34e6a21214c8e315160e1ce09a, type: 2}
   - {fileID: 11400000, guid: 3b91821625545f0408826a2e6dc56120, type: 2}
-  - {fileID: 11400000, guid: 93af2335602db33428e52fba7e85ba8b, type: 2}
-  - {fileID: 11400000, guid: 6525e2c2e2cd71d4ba03211060c28b38, type: 2}
-  - {fileID: 11400000, guid: 8d60a25115873534fb3ff61599672f4f, type: 2}
   unlockedGunsId: 
   magazineSocket: {fileID: 961924613}
   defaultHitVfx: {fileID: 22480150734997295, guid: c6847f47a8dd73d41802cf36a4cffca8, type: 3}
@@ -34408,6 +34403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 961924613}
     m_Modifications:
+    - target: {fileID: 5467121460545644517, guid: d32eb90839a1d114abb694d02d41e3b2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7512341332691847253, guid: d32eb90839a1d114abb694d02d41e3b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.26000008

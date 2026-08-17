@@ -47,6 +47,9 @@ public class UiArmory : MonoBehaviour
 
         gunsData.AddRange(gunManager.allGuns);
 
+        gunsData.Sort((a, b) => a.gunID.CompareTo(b.gunID));
+
+
         foreach (GunSo gunSo in gunsData)
         {
             UiGunItem newGunItem = Instantiate(gunItemPrefab, content.transform).GetComponent<UiGunItem>();

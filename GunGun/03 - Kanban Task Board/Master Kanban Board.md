@@ -25,12 +25,17 @@ kanban-plugin: board
 - [ ] add combo bonus something like call of
 - [ ] move damage to hitData
 - [ ] when buy a weapon should get equiped
+- [ ] shield should not be count as enemy it has other logics as target even get point and things but should not be count as enemy
 
 
 ## Mehrdad feedback
 
 - [ ] Leader board can insert name and be smaller
 - [ ] add reward on combo
+- [ ] not usful ( shield maybe better to get killed by the enemy ) it just feels
+- [ ] guns better to get upgrade over bought like 1 2 3
+- [ ] enemy shot fire and get some dramatic movie like 007 movies
+- [ ] the question mark on the enemy is nice can add some noise to it
 
 
 ## Bugs

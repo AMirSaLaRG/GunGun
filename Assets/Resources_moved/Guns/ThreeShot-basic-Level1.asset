@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0498c37e7951dec4d8b303f671dbf2b4, type: 3}
+  m_Name: ThreeShot-basic-Level1
+  m_EditorClassIdentifier: Assembly-CSharp::GunSo
+  gunIcon: {fileID: 21300000, guid: 210cead96ee7a014cabac943e7716e71, type: 3}
+  aboutGun: shots 3 bullet at same time
+  WeaponData:
+    gunName: 3-round burst Basic
+    gunShotType: 1
+    gunDamage: 1
+    bulletsOnEachShot: 1
+    gunPierce: 0
+    gunPrice: 30000
+    gunForce: 350
+    gunReloadTime: 2
+    magazineAmoCap: 12
+    rapitShootingDelay: 0.1
+    accuracy: 0.5
+    pointMultiplier: 1
+    comboMultiplier: 1
+    gunShotClip: {fileID: 8300000, guid: f484cbdb9090f7d459fb66e67c7992bf, type: 3}
+    gunEmptyClip: {fileID: 8300000, guid: 08ae8aea0be401849a8282905795472e, type: 3}
+    defaultHitClip: {fileID: 8300000, guid: 33b4b6fd3a5eeab449f9f4dfc87a6091, type: 3}
+    defaultHitVfx: {fileID: 22480150734997295, guid: c6847f47a8dd73d41802cf36a4cffca8, type: 3}
+    bulletHolePrefab: {fileID: 1389250963964583849, guid: 0634b4b1bef120c438f79939c3ad821e, type: 3}
+  gunMagazinePrefab: {fileID: 6458099295391715494, guid: d1c589987bcc5cf46bc232661a6aba0b, type: 3}
+  gunID: 3

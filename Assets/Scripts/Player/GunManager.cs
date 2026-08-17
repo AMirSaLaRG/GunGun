@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using static UnityEngine.Analytics.IAnalytic;
 
 public class GunManager : MonoBehaviour
@@ -37,22 +39,42 @@ public class GunManager : MonoBehaviour
     [SerializeField] private AudioSource gunShotSfx;
     [SerializeField] private AudioSource gunEmptyShotSfx;
 
-    private void Start()
+    private async void Start()
     {
+        await LoadAllGuns();
 
+        foreach (var gun in allGuns)
+            gunDictionary[gun.gunID] = gun;
 
         player = GetComponent<PlayerController>();
         magazineManager = GetComponent<MagazineManager>();
         hitDitector = GetComponent<HitDitector>();
 
-        foreach (var gun in allGuns)
-            gunDictionary[gun.gunID] = gun;
+        
 
         GetUnlockedGunsId();
 
         currentGunId = GameManager.instance.playerData.lastGunId;
 
         SetCurrentGun(currentGunId);
+    }
+
+    async System.Threading.Tasks.Task LoadAllGuns()
+    {
+        // Load all assets with label "Gun" (you set this earlier)
+        var handle = Addressables.LoadAssetsAsync<GunSo>("Gun", null);
+
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            allGuns = new List<GunSo>(handle.Result);
+            Debug.Log($"Loaded {allGuns.Count} guns!");
+        }
+        else
+        {
+            Debug.LogError("Failed to load guns!");
+        }
     }
 
     private void RefreshUnlockGuns()
@@ -88,16 +110,16 @@ public class GunManager : MonoBehaviour
         SetCurrentGun(currentGunId);
     }
 
-    public void SetCurrentGun(int gunId = 0)
+    public void SetCurrentGun(int gunId)
     {
-        GunSo gun = gunDictionary[0];
+        GunSo gun;
 
         if (gunDictionary.ContainsKey(gunId))
         {
             gun = gunDictionary[gunId];
         } else
         {
-            Debug.Log("Not valid Id");
+            gun = gunDictionary[0];
         }
         currentGun = gun;
         currentGunData = gun.WeaponData;
