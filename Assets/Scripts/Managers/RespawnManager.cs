@@ -13,6 +13,8 @@ public class RespawnManager : MonoBehaviour
     //public List<RespawnData> respawnInfo = new List<RespawnData>();
     public List<RespawnData> currentRespawnInfo = new List<RespawnData>();
     private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
+    [SerializeField] private float breathTimeToEmptyABox = .3f;
+
 
     [Header("RandomRespawnSetup")]
     private Vector2 respawnTime = new Vector2(1, 3);
@@ -76,12 +78,17 @@ public class RespawnManager : MonoBehaviour
     }
     public void OnLeavingTheBox(RespawnBox respawnBox, Target boxUser)
     {
-        boxManager.ReturnBox(respawnBox);
+        float timeToCleanTheBox = breathTimeToEmptyABox + boxUser.GetBodyDis();
 
-        isSceenClear = unitManager.RemoveTrack(boxUser); 
-
+        StartCoroutine(OnLeavingTheBoxCo(respawnBox, boxUser, timeToCleanTheBox));
     }
 
+    private IEnumerator OnLeavingTheBoxCo(RespawnBox respawnBox, Target boxUser, float time)
+    {
+        yield return new WaitForSeconds(time);
+        boxManager.ReturnBox(respawnBox);
+        isSceenClear = unitManager.RemoveTrack(boxUser);
+    }
 
     public void SetupBoxes(Transform BoxHolder)
     {

@@ -144,8 +144,6 @@ public class ScoreManager : MonoBehaviour
 
     private void ProcessHostageHit(HitData hitData)
     {
-        if (hitData != null)
-            if (hitData.hitedTarget.isDead) return;
 
         currentHostageKilled++;
 

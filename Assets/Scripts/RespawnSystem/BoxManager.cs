@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class BoxManager : MonoBehaviour
 {
+
     private RespawnManager respawnManager;
 
     private List<RespawnBox> myRespawnBoxes = new List<RespawnBox>();

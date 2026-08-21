@@ -62,6 +62,20 @@ public class GameManager : MonoBehaviour
 
     public GameObject GetUiPanel(EPanel panel) => uiManager.GetPanel(panel);
 
+    public void OnPause()
+    {
+        uiManager.SetPanel(EPanel.Pause);
+        gameState = EGameState.pause;
+        Time.timeScale = 0;
+    }
+
+    public void OnResume()
+    {
+        Time.timeScale = 1;
+        gameState = EGameState.inGame;
+
+        uiManager.SetPanel(EPanel.InGame);
+    }
 
     public void LevelSelection()
     {
@@ -115,13 +129,15 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator MainMenuFromLevelSelectionCo()
     {
-        elevator.LevelView();
-        yield return new WaitForSeconds(elevator.actionTime);
+        if (elevator != null)
+            elevator.LevelView();
+        yield return new WaitForSeconds(elevator != null ? elevator.actionTime : 0);
         uiManager.SetPanel(EPanel.MainMenu);
     }
 
     public void StartGame()
     {
+        Time.timeScale = 1;
         uiManager.SetPanel(EPanel.None);
         StartCoroutine(StartGameCo());
 
@@ -140,6 +156,12 @@ public class GameManager : MonoBehaviour
 
         playerController.SetGameStarted(true);
         levelManager.SetGameStart();
+    }
+
+    public void RestartGame()
+    {
+        GameOver();
+        StartGame();
     }
 
     public void SetToNextLevel()
@@ -198,9 +220,16 @@ public class GameManager : MonoBehaviour
         levelManager.SetGameEnd();
         gameState = EGameState.inMenu;
 
-
-
         SaveGameOver();
+    }
+
+    public void ShareBack()
+    {
+        if (gameState == EGameState.inMenu)
+            MainMenuFromLevelScene();
+        if (gameState == EGameState.pause)
+            OnPause();
+
     }
 
     public void OnSettingClick()
@@ -332,6 +361,8 @@ public class GameManager : MonoBehaviour
         playerData.unlockedWeapons = unlockedWeapons;
 
         SaveManager.instance.Save();
+
+        playerController.gunManager.SetCurrentGun(gun.gunID);
 
         return true;
 

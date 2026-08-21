@@ -6,15 +6,12 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] make the magazine smaller
-- [ ] Refactor the eleveator shit from game manager+
-- [ ] Add pause btn ingame ui
-	add pause function to game manager #code
+- [ ] make activator time by controlled by breath time in middle of game
 - [ ] change view tracker to respawn stand
 - [ ] Add Enemy projectiles to the targets
+- [ ] Refactor the eleveator shit from game manager+
 - [ ] addd some colider in building for windows behind ones
 - [ ] Create [[Enemy|enemy launcher]]
-- [ ] make activator time by controlled by breath time in middle of game
 - [ ] Add skill system for player
 - [ ] Add power up and bonus targets
 	- [ ] power ups the items that shooting them will activate ability
@@ -31,7 +28,6 @@ kanban-plugin: board
 	- [ ] General watch : Get Double points
 - [ ] add combo bonus something like call of
 - [ ] move damage to hitData
-- [ ] when buy a weapon should get equiped
 
 
 ## Mehrdad feedback
@@ -90,16 +86,24 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] Shield when get hit by multy shots get detected behind after first shot
-- [ ] problem with the air hit
-- [ ] Create and added meshes and texture for first level
-- [ ] refactored the entity respawner
-- [ ] Add Sky Box
-- [ ] sat up the respawn boxes and activators for first level
+- [ ] when gun changes in pause it do not works on the resume
+- [ ] make the magazine smaller
+- [ ] Hostage kill do not works
+- [ ] Add pause btn ingame ui
+	add pause function to game manager #code
+- [ ] when buy a weapon should get equiped
+- [ ] when a respawn box get empty it gave some time to respawn another one has a basic time or use body disapior added a fixed time and body disipier time get added to it
+- [ ] some smoke vfx on hostage death
 
 
 ## Done
 
+- [ ] Add Sky Box
+- [ ] sat up the respawn boxes and activators for first level
+- [ ] refactored the entity respawner
+- [ ] Create and added meshes and texture for first level
+- [ ] problem with the air hit
+- [ ] Shield when get hit by multy shots get detected holder after first shot
 - [ ] - [x] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
 		- [x] Create new script (GunController.cs / GunSystem.gd)
 		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController

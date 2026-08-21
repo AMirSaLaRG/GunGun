@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Hostage : Target
 {
+
+    [Header("HostageSetup")]
+    [SerializeField] private GameObject onDeathVfx;
     protected EnemyWithHostage myTaker;
     protected Transform myStandPoint;
     protected string triggerAnimSurvivedKeyWord = "Survived";
@@ -16,8 +19,8 @@ public class Hostage : Target
             myStandPoint = myBox.GetHostagePoint();
         if (myStandPoint != null)
             standPointPos = myStandPoint.position;
-        else
-            Debug.Log("Set Hostage Stand Point");
+        //else
+        //    Debug.Log("Set Hostage Stand Point");
 
     }
     protected override void AtEndOfDuration()
@@ -67,9 +70,10 @@ public class Hostage : Target
             myBox = null;
         }
 
-        base.AtDieAction();
+        onDeathVfx.SetActive(true);
+        onDeathVfx.transform.parent = null;
 
- 
+        base.AtDieAction();
     }
     public void Setup(EnemyWithHostage taker)
     {

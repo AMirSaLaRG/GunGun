@@ -39,6 +39,7 @@ public class Target : MonoBehaviour, IDamagable
 
     [SerializeField] protected int healthPoint = 1;
     [SerializeField] protected float bodyDispearAfterDeath = 4f;
+    public float GetBodyDis() => bodyDispearAfterDeath;
     [Header("TargetPoints")]
     [SerializeField] protected float points;
     [SerializeField] protected float bounusMovingPoint = .1f;

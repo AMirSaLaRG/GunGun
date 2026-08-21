@@ -92,23 +92,29 @@ public class HitDitector : MonoBehaviour
 
             return returnList;
         }
-        else
+        else if (mainHit.hitedTarget != null && mainHit.hitedTarget.TryGetComponent(out Hostage hostage))
         {
+            // Convert LayerMask to layer index
+            // REMEMBERR
+            int untargetableLayer = (int)Mathf.Log(whatIsUntargetable.value, 2);
 
-            returnList.Add(mainHit);
-
-            for (int i = 0; i < extraHit; i++)
-            {
-                float x = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
-                float y = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
-
-                HitData newHit = SingleShot(new Vector2(shotAim.x + x, shotAim.y + y));
-
-                returnList.Add(newHit);
-            }
-
-            return returnList;
+            hostage.gameObject.layer = untargetableLayer;
         }
+
+
+        returnList.Add(mainHit);
+
+        for (int i = 0; i < extraHit; i++)
+        {
+            float x = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+            float y = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+
+            HitData newHit = SingleShot(new Vector2(shotAim.x + x, shotAim.y + y));
+
+            returnList.Add(newHit);
+        }
+
+        return returnList;
 
         
     }
