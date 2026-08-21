@@ -67,16 +67,17 @@ public class GameManager : MonoBehaviour
     {
         if (uiManager == null) return;
         
-        uiManager.FadePanel(elevator.actionTime * .9f);
+        if (elevator != null)
+            uiManager.FadePanel(elevator.actionTime * .9f);
         levelManager.PopulateLevels();
 
         StartCoroutine(levelSelectionCo());
     }
     private IEnumerator levelSelectionCo()
     {
-        
-        elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator.actionTime);
+        if (elevator != null)
+            elevator.ChangeSideViewAnimation();
+        yield return new WaitForSeconds(elevator != null? elevator.actionTime: 0);
         uiManager.SetPanel(EPanel.LevelSelection);
     }
 
@@ -89,10 +90,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator OnLevelSelectedCo()
     {
-        elevator.SceneChangeAnim();
-        yield return new WaitForSeconds(elevator.actionTime * (.6f));
-        elevator.LevelView();
-        yield return new WaitForSeconds(elevator.actionTime);
+        if (elevator != null)
+            elevator.SceneChangeAnim();
+        yield return new WaitForSeconds(elevator != null? elevator.actionTime * (.6f) : 0);
+        if (elevator != null)
+            elevator.LevelView();
+        yield return new WaitForSeconds(elevator != null? elevator.actionTime : 0);
 
         uiManager.SetPanel(EPanel.Ready);
 
@@ -126,8 +129,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator StartGameCo()
     {
-        elevator.EnterTheLevel();
-        yield return new WaitForSeconds(elevator.actionTime * 2);
+        if (elevator != null)
+            elevator.EnterTheLevel();
+        yield return new WaitForSeconds(elevator != null? elevator.actionTime * 2 : 0);
 
         uiManager.SetPanel(EPanel.InGame);
         gameState = EGameState.inGame;
@@ -165,8 +169,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator LevelCompletedCo()
     {
-        elevator.LeaveScene();
-        yield return new WaitForSeconds(elevator.actionTime * 2);
+        if (elevator != null)
+            elevator.LeaveScene();
+        yield return new WaitForSeconds(elevator != null ? elevator.actionTime * 2 : 0);
         playerController.SetGameStarted(false);
         levelManager.SetGameEnd();
 
@@ -185,8 +190,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameOverCo()
     {
-        elevator.LeaveScene();
-        yield return new WaitForSeconds(elevator.actionTime * 2);
+        if (elevator != null)
+            elevator.LeaveScene();
+        yield return new WaitForSeconds(elevator != null ? elevator.actionTime * 2 : 0);
         uiManager.SetPanel(EPanel.GameOver);
         playerController.SetGameStarted(false);
         levelManager.SetGameEnd();

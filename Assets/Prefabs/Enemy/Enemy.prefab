@@ -11867,7 +11867,7 @@ MonoBehaviour:
   - {fileID: 219157215702246278}
   - {fileID: 3493877658621940864}
   takeShotVfx: {fileID: 4413521124262731454, guid: 2378e5a7d8338144a8d534d8acee49da, type: 3}
-  moveSpeed: 7
+  moveSpeed: 13
   rotationSpeed: 5
   duration: 5
   healthPoint: 1

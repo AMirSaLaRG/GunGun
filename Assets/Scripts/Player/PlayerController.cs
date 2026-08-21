@@ -65,8 +65,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         }
 
         Vector2 aimPos = controls.TouchScreen.Aim.ReadValue<Vector2>();
-        List<HitData> hitDatas = gunManager.GunShot(aimPos);
-
+        gunManager.GunShot(aimPos);
     }
 
     public void HandleShot(HitData hitData)

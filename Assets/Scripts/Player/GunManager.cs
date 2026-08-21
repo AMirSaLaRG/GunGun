@@ -149,6 +149,9 @@ public class GunManager : MonoBehaviour
 
         List<HitData> hitDatas = GatherHitData(shotAim);
 
+        if (hitDatas == null) return null;
+        if (hitDatas.Count == 0) return null;
+
         if (OnShotHit(hitDatas))
             return hitDatas;
 
@@ -168,12 +171,13 @@ public class GunManager : MonoBehaviour
                 break;
 
             case GunShotType.ThripleShot:
-                resault.AddRange(hitDitector.ThripleShot(shotAim, currentGunData.accuracy));
+                resault.AddRange(hitDitector.MultiShot(shotAim, currentGunData.accuracy, 3));
                 break;
 
 
             default:
-                return null;
+                resault = null;
+                break;
         }
 
         return resault;
@@ -181,10 +185,19 @@ public class GunManager : MonoBehaviour
 
     private bool OnShotHit(List<HitData> hitDatas)
     {
-        //foreach (var hit in hitDatas)
-        //    Debug.Log(hit.hitTYpe);
-
         if (hitDatas == null) return false;
+        if (hitDatas.Count == 0) return false;
+        foreach (var hit in hitDatas)
+        {
+            if (hit == null)
+            {
+                PlayGunShotSfx();
+                StartCoroutine(OnFreeSHotAirCo());
+                return false;
+            }
+
+        }
+
 
         HitData magaizne = hitDatas.Find(x => x.hitTYpe == EHitType.Magazine);
         if (magaizne != null)
@@ -204,6 +217,13 @@ public class GunManager : MonoBehaviour
         StartCoroutine(GunFireCo(hitDatas));
 
         return true;
+    }
+
+    private IEnumerator OnFreeSHotAirCo()
+    {
+        bool isShootingBullet = magazineManager.ConsumeAmmo(1);
+        yield return new WaitForSeconds(currentGunData.rapitShootingDelay);
+
     }
 
     private IEnumerator GunFireCo(List<HitData> hitDatas)
@@ -255,6 +275,7 @@ public class GunManager : MonoBehaviour
 
         MakeHoleOnHit(hitData);
     }
+
 
     private void MakeHoleOnHit(HitData hit)
     {

@@ -11,4 +11,5 @@ public enum EHitType
     Magazine = 6,
     None = 7,
     Player = 8,
+    Air = 9,
 }

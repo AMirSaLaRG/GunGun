@@ -6,9 +6,16 @@ kanban-plugin: board
 
 ## Backlog
 
+- [ ] make the magazine smaller
+- [ ] Refactor the eleveator shit from game manager+
+- [ ] Add pause btn ingame ui
+	add pause function to game manager #code
+- [ ] change view tracker to respawn stand
 - [ ] Add Enemy projectiles to the targets
+- [ ] addd some colider in building for windows behind ones
 - [ ] Create [[Enemy|enemy launcher]]
 - [ ] make activator time by controlled by breath time in middle of game
+- [ ] Add skill system for player
 - [ ] Add power up and bonus targets
 	- [ ] power ups the items that shooting them will activate ability
 	- [ ] bonus item 
@@ -25,7 +32,6 @@ kanban-plugin: board
 - [ ] add combo bonus something like call of
 - [ ] move damage to hitData
 - [ ] when buy a weapon should get equiped
-- [ ] shield should not be count as enemy it has other logics as target even get point and things but should not be count as enemy
 
 
 ## Mehrdad feedback
@@ -36,6 +42,14 @@ kanban-plugin: board
 - [ ] guns better to get upgrade over bought like 1 2 3
 - [ ] enemy shot fire and get some dramatic movie like 007 movies
 - [ ] the question mark on the enemy is nice can add some noise to it
+- [ ] add another currency that earned by different path like shooting a clow or box
+- [ ] there may be a bug with  summon looks like caused by hostage
+- [ ] add a roll shop to the game that get trigger by new currency
+- [ ] currencies should be manage by how much play or chance and the item rewards
+- [ ] close the boxes and open boxes is better to be seperated
+- [ ] pause menu
+- [ ] resum
+- [ ] retry menu
 
 
 ## Bugs
@@ -50,7 +64,7 @@ kanban-plugin: board
 ## To Do
 
 - [ ] - [ ] Shop 10/8 #art #code #ui
-		- [ ] weapons
+		- [x] weapons
 		- [ ] enemy Prefab
 		- [ ] enemy Warning Sign
 		- [ ] hit sprites
@@ -76,11 +90,26 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] Add three shot gun to the game 
-	- [x] create prefab #art
-	- [x] write code for 3 shot
-	- [x] handle the detection
-	- [x] create guns
+- [ ] Shield when get hit by multy shots get detected behind after first shot
+- [ ] problem with the air hit
+- [ ] Create and added meshes and texture for first level
+- [ ] refactored the entity respawner
+- [ ] Add Sky Box
+- [ ] sat up the respawn boxes and activators for first level
+
+
+## Done
+
+- [ ] - [x] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
+		- [x] Create new script (GunController.cs / GunSystem.gd)
+		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController
+		- [x] Move ammo, reload, and fire-rate variables to new script
+		- [x] Set up reference: PlayerController calls GunController.Shoot() on input
+		- [x] Test shooting, reloading, and weapon switching in-engine
+		- [x] switching function for gun 
+		- [x] switching middle of game ( later can be use for power  up and etx
+		- [x] switching before game starts need a user interface to use unlock weapons
+		- [x] switching animation
 - [ ] Gun Data and Gun manager.
 	- [x] All controls of gun should be on one behavior on Player #code
 	- [x] Create scriptable object or store the data of each gun on the gun manager #code
@@ -93,20 +122,11 @@ kanban-plugin: board
 		- [ ] unlock Requierments
 	- [x] Create or download Asset for each gun #art
 	- [x] Create user interface for gun selection #ui
-- [ ] - [ ] Refactor: Extract Gun System from [[PlayerController]] #code #refactor
-		- [x] Create new script (GunController.cs / GunSystem.gd)
-		- [x] Move shooting logic (Raycast/Projectiles) out of PlayerController
-		- [x] Move ammo, reload, and fire-rate variables to new script
-		- [x] Set up reference: PlayerController calls GunController.Shoot() on input
-		- [x] Test shooting, reloading, and weapon switching in-engine
-		- [x] switching function for gun 
-		- [x] switching middle of game ( later can be use for power  up and etx
-		- [x] switching before game starts need a user interface to use unlock weapons
-		- [x] switching animation
-
-
-## Done
-
+- [ ] Add three shot gun to the game 
+	- [x] create prefab #art
+	- [x] write code for 3 shot
+	- [x] handle the detection
+	- [x] create guns
 - [ ] [[WarningSign]] change enemies sign
 - [ ] [[02 - Asset/Hostage|Hostage]] change the prefab #art
 - [ ] Relocate the damage taking effects from [[01 - Gdd/UI/InGame|In Game]] to [[01 - GDD/UI/PlayerCanvas|player canvas]] and fix the not showing the sprite #code #art

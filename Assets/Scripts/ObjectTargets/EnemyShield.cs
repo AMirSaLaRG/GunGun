@@ -90,5 +90,5 @@ public class EnemyShield : Target
             RemoveShiedlEffect();
     }
 
-
+    public Enemy GetHolder() => myHolder;
 }

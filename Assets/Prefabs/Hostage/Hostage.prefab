@@ -25829,11 +25829,11 @@ MonoBehaviour:
   visuals: {fileID: 3835717565138771309}
   visualShields: []
   takeShotVfx: {fileID: 4413521124262731454, guid: 2378e5a7d8338144a8d534d8acee49da, type: 3}
-  moveSpeed: 7.5
+  moveSpeed: 13
   rotationSpeed: 10
-  duration: 2.2
+  duration: 2
   healthPoint: 1
-  bodyDispearAfterDeath: 1
+  bodyDispearAfterDeath: 0.1
   points: 100
   bounusMovingPoint: 0.1
   comboValue: 1

@@ -197,7 +197,7 @@ public class RespawnBox : MonoBehaviour
         if (hostageStandPoint != null)
             hostageStandPoint.GetComponent<MeshRenderer>().enabled = showPoints;
 
-        isSingleSummon = respawnPoints.Count <= 1;
+        //isSingleSummon = respawnPoints.Count <= 1;
     }
 
     [ContextMenu("testActive")]
@@ -242,7 +242,8 @@ public class RespawnBox : MonoBehaviour
         {
             Gizmos.color = Color.green;
             foreach (var respawnPoint in respawnPoints)
-                Gizmos.DrawLine(respawnPoint.transform.position, hostageStandPoint.position);
+                if (respawnPoint != null)
+                    Gizmos.DrawLine(respawnPoint.transform.position, hostageStandPoint.position);
         }
 
 

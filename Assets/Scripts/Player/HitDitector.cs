@@ -10,6 +10,7 @@ public class HitDitector : MonoBehaviour
     [SerializeField] private LayerMask whatIsUntargetable;
     [SerializeField] private float acuracyThreshold = 100;
 
+
     private Camera mainCamera;
 
 
@@ -25,20 +26,40 @@ public class HitDitector : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
             return OnHit(hit);
 
+        if (hit.collider == null)
+            return AirHit();
+
+
         return null;
     }
 
-    public List<HitData> ThripleShot(Vector2 shotAim, float acuracy)
+    private HitData AirHit()
+    {
+        HitData hit = new HitData()
+        {
+            hitTYpe = EHitType.Missed,
+            hitPos = new Vector3(-99999, -999999, -999999),
+
+        };
+
+        return hit;
+
+    }
+
+    public List<HitData> MultiShot(Vector2 shotAim, float acuracy, int shots)
     {
         float shotThreshold = Mathf.Lerp(acuracyThreshold, 0, acuracy);
 
         List<HitData> returnList = new List<HitData>();
 
-        //Detect aim hit
         HitData mainHit = SingleShot(shotAim);
+        if (mainHit == null)
+            return null;
+
+        float extraHit = shots - 1;
+
         if (mainHit.hitedTarget != null && mainHit.hitedTarget.TryGetComponent(out Enemy enemy))
         {
-            float extraHit = 2;
             returnList.Add(mainHit);
 
             for (int i = 0; i < extraHit; i++)
@@ -46,7 +67,7 @@ public class HitDitector : MonoBehaviour
                 HitData extraHitData = mainHit.Copy();
 
                 extraHitData.hitPos = mainHit.hitedTarget.GetRandomPointOnCollider();
-                extraHitData.hitForce *= 0.3f;
+                extraHitData.hitForce *= 0.1f;
 
                 returnList.Add(extraHitData);
             }
@@ -54,19 +75,42 @@ public class HitDitector : MonoBehaviour
             return returnList;
         }
 
-        returnList.Add(mainHit);
-
-        for (int i = 0; i < 2; i++)
+        else if (mainHit.hitedTarget != null && mainHit.hitedTarget.TryGetComponent(out EnemyShield enemyShield))
         {
-            float x = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
-            float y = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+            returnList.Add(mainHit);
 
-            HitData newHit = SingleShot(new Vector2(shotAim.x + x, shotAim.y + y));
+            for (int i = 0; i < extraHit; i++)
+            {
+                HitData extraHitData = mainHit.Copy();
 
-            returnList.Add(newHit);
+                extraHitData.hitedTarget = enemyShield.GetHolder();
+                extraHitData.hitPos = enemyShield.GetHolder().GetRandomPointOnCollider();
+                extraHitData.hitForce *= 0.5f;
+
+                returnList.Add(extraHitData);
+            }
+
+            return returnList;
+        }
+        else
+        {
+
+            returnList.Add(mainHit);
+
+            for (int i = 0; i < extraHit; i++)
+            {
+                float x = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+                float y = UnityEngine.Random.Range(-shotThreshold, shotThreshold);
+
+                HitData newHit = SingleShot(new Vector2(shotAim.x + x, shotAim.y + y));
+
+                returnList.Add(newHit);
+            }
+
+            return returnList;
         }
 
-        return returnList;
+        
     }
 
     private HitData OnHit(RaycastHit hit)
@@ -108,13 +152,18 @@ public class HitDitector : MonoBehaviour
         }
 
         else if (target.TryGetComponent(out EnemyShield enemyShiedl))
-            return EHitType.Shield;
+        {
+            if (enemyShiedl.isDead == true)
+                return EHitType.Enemy;
+            else
+                return EHitType.Shield;
+        }
 
         else if (target.TryGetComponent(out Hostage hostage))
         {
             if (hostage.isDead)
                 return EHitType.Missed;
-            else 
+            else
                 return EHitType.Hostage;
         }
 

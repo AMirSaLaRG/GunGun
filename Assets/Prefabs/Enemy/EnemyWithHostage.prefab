@@ -16587,7 +16587,7 @@ MonoBehaviour:
   visuals: {fileID: 2184719389273361409}
   visualShields: []
   takeShotVfx: {fileID: 4413521124262731454, guid: 2378e5a7d8338144a8d534d8acee49da, type: 3}
-  moveSpeed: 5
+  moveSpeed: 10
   rotationSpeed: 5
   duration: 5
   healthPoint: 1
