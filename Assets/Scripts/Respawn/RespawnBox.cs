@@ -43,12 +43,15 @@ public class RespawnBox : MonoBehaviour
 
     private void Start()
     {
+
         HideGuides();
 
     }
 
     private void HideGuides()
     {
+        GetGuides();
+
         foreach (var point in waypoints)
             if (point.TryGetComponent<Renderer>(out Renderer r))
                 r.enabled = false;
@@ -128,6 +131,11 @@ public class RespawnBox : MonoBehaviour
     public GameObject GetActivator() => myActivateItem.gameObject;
 
     private void OnValidate()
+    {
+        GetGuides();
+    }
+
+    private void GetGuides()
     {
         // Clear waypoints if parent is null
         if (waypointsParent == null)

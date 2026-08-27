@@ -13959,7 +13959,7 @@ PrefabInstance:
     - target: {fileID: 2635205971413601646, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: myActivateItem
       value: 
-      objectReference: {fileID: 597624833}
+      objectReference: {fileID: 0}
     - target: {fileID: 2635205971413601646, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: scaleDirection.x
       value: 1
@@ -14474,7 +14474,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 597624832}
-  - component: {fileID: 597624833}
   m_Layer: 0
   m_Name: GroundFloorDoors
   m_TagString: Untagged
@@ -14499,18 +14498,6 @@ Transform:
   - {fileID: 8720924735099017648}
   m_Father: {fileID: 2921238332277097328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &597624833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597624831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a36ed3620d706f4b9c349e79b4c2c32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GroundFloorDoubleDoor
 --- !u!4 &603773561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1085594043158665313, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
@@ -18541,6 +18528,10 @@ PrefabInstance:
     - target: {fileID: 2635205971413601646, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: respawnPoints.Array.size
       value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635205971413601646, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      propertyPath: secondaryWayPointsParent
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4083468629417618422, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30282,30 +30273,111 @@ MonoBehaviour:
   waweData:
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 5
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0.1
-    ActiveBoxes: 20
+    nextWaweDelay: 0.55
+    ActiveBoxes: 8
     minMaxNumSummon: {x: 1, y: 2}
     minMaxRandomIntervalSummon: {x: 1, y: 2}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 1
+      respawnProb: 0.791
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.086
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.083
     - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.372
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 0.55
+    ActiveBoxes: 11
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.791
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.086
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.083
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.372
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 0.55
+    ActiveBoxes: 13
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.791
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.086
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.083
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.372
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 0.55
+    ActiveBoxes: 15
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.791
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.086
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.083
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.372
     isWaweEnded: 0
 --- !u!1 &1287243242
 GameObject:
@@ -39363,7 +39435,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 30
+  m_Intensity: 25
   m_Range: 7.96
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -39406,7 +39478,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
-  m_ColorTemperature: 20000
+  m_ColorTemperature: 1500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -39790,6 +39862,10 @@ PrefabInstance:
     - target: {fileID: 7478202452449151685, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.z
       value: -5.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416237635588603718, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8528239074816719276, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalScale.z
