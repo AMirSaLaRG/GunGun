@@ -36,7 +36,7 @@ public class UiCountTo : MonoBehaviour
 
     private IEnumerator CountToCo(float duration)
     {
-        Debug.Log("StartCo" + duration);
+        //Debug.Log("StartCo" + duration);z
 
         float elaps = 0;
         float currentNum = 0;

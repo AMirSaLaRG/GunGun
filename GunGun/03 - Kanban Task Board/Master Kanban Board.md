@@ -6,59 +6,46 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] make activator time by controlled by breath time in middle of game
-- [ ] change view tracker to respawn stand
-- [ ] Add Enemy projectiles to the targets
-- [ ] Refactor the eleveator shit from game manager+
-- [ ] addd some colider in building for windows behind ones
-- [ ] Create [[Enemy|enemy launcher]]
-- [ ] Add skill system for player
-- [ ] Add power up and bonus targets
-	- [ ] power ups the items that shooting them will activate ability
-	- [ ] bonus item 
-		- [ ] items with points
-		- [ ] secret items 
-		- [ ] achive items
-	- [ ] handle respawn and movement
-	- [ ] create visuals for it
-- [ ] Add Ability System to the Player.
-	- [ ] Adrenaline rush : time get slow 
-	- [ ] Supper gun : Get a supper gun
-	- [ ] Sniper Squad : helps to kill enemies.
-	- [ ] General watch : Get Double points
+- [ ] shop popup can be dedicated to shop manager
+- [ ] when reviving the scar sprite should disipear faster
 - [ ] add combo bonus something like call of
-- [ ] move damage to hitData
 
 
 ## Mehrdad feedback
 
-- [ ] Leader board can insert name and be smaller
-- [ ] add reward on combo
-- [ ] not usful ( shield maybe better to get killed by the enemy ) it just feels
 - [ ] guns better to get upgrade over bought like 1 2 3
 - [ ] enemy shot fire and get some dramatic movie like 007 movies
-- [ ] the question mark on the enemy is nice can add some noise to it
+- [ ] Leader board can insert name and be smaller
+- [ ] add reward on combo
 - [ ] add another currency that earned by different path like shooting a clow or box
 - [ ] there may be a bug with  summon looks like caused by hostage
 - [ ] add a roll shop to the game that get trigger by new currency
 - [ ] currencies should be manage by how much play or chance and the item rewards
+- [ ] spawn az kenar bashe !?
+- [ ] tashkhis hostage sakhte
+- [ ] hostage rahate yoho biad ke darsade eshtebah bere balatar
+- [ ] go next kar nemikone chon yedoonas
+- [ ] too menu ye axe background bashe ghashang mishe
+- [ ] doshmani ke maro koshte 007 moshakhas she
+- [ ] dara ke baz mishe (bahal) vali az lahaze graphicy irad dare rang bandia doross nisst
+
+
+## mehrdads done
+
 - [ ] close the boxes and open boxes is better to be seperated
+- [ ] zoom out kuchike
 - [ ] pause menu
-- [ ] resum
 - [ ] retry menu
-
-
-## Bugs
-
-- [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
-
-
-## In Progress
-
+- [ ] resum
+- [ ] the question mark on the enemy is nice can add some noise to it
 
 
 ## To Do
 
+- [ ] Add skill system for player
+- [ ] Refactor the eleveator shit from game manager+
+- [ ] Add Enemy projectiles to the targets
+- [ ] change view tracker to respawn stand
 - [ ] - [ ] Shop 10/8 #art #code #ui
 		- [x] weapons
 		- [ ] enemy Prefab
@@ -70,7 +57,22 @@ kanban-plugin: board
 		- [ ] combo
 - [ ] - [ ] Daily and weekly Tasks #art #code #ui 
 		- [ ] In Game user Interface shows
+- [ ] Create [[Enemy|enemy launcher]]
+- [ ] move damage to hitData
+- [ ] Add power up and bonus targets
+	- [ ] power ups the items that shooting them will activate ability
+	- [ ] bonus item 
+		- [ ] items with points
+		- [ ] secret items 
+		- [ ] achive items
+	- [ ] handle respawn and movement
+	- [ ] create visuals for it
 - [ ] - [ ] ObjectPool #code
+- [ ] Add Ability System to the Player.
+	- [ ] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [ ] General watch : Get Double points
 - [ ] - [ ] Lightning managment #art #render
 - [ ] - [ ] Add more [[Enemy|enemy]]
 		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
@@ -84,20 +86,39 @@ kanban-plugin: board
 - [ ] - [ ] Create [[02 - Asset/Level1|level one asset]] #art #blender
 
 
+## In Progress
+
+
+
 ## Done Before Comit
 
-- [ ] when gun changes in pause it do not works on the resume
-- [ ] make the magazine smaller
-- [ ] Hostage kill do not works
-- [ ] Add pause btn ingame ui
-	add pause function to game manager #code
-- [ ] when buy a weapon should get equiped
-- [ ] when a respawn box get empty it gave some time to respawn another one has a basic time or use body disapior added a fixed time and body disipier time get added to it
-- [ ] some smoke vfx on hostage death
+- [ ] respawn box view tracker get buged should change with way points
+	refactor respawn box
+	refactor target move logic
+	repair current respawn boxes
+- [ ] restart has bug do not works on full open windows
+- [ ] Add shop Manager for pereches
+- [ ] Refactor Game Manager
+- [ ] added noise to warning sign of enemy
+- [ ] addd some colider in building for windows behind ones
+- [ ] make activator time by controlled by breath time in middle of game
+- [ ] in game ui should get changes
+	- [x] add some bar for data display
+	- [x] make it smaller uses alot of space
+	- [x] enemy image get changes
+- [ ] add some text fwhen wave changes
 
 
 ## Done
 
+- [ ] some smoke vfx on hostage death
+- [ ] when a respawn box get empty it gave some time to respawn another one has a basic time or use body disapior added a fixed time and body disipier time get added to it
+- [ ] when buy a weapon should get equiped
+- [ ] Add pause btn ingame ui
+	add pause function to game manager #code
+- [ ] Hostage kill do not works
+- [ ] make the magazine smaller
+- [ ] when gun changes in pause it do not works on the resume
 - [ ] Add Sky Box
 - [ ] sat up the respawn boxes and activators for first level
 - [ ] refactored the entity respawner
@@ -165,6 +186,12 @@ kanban-plugin: board
 	enemy and hostage now get stuck together while moving and never reach the distance
 
 
+## Bugs
+
+- [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
+- [ ] on try again a set of activator main door was closed but it was active
+
+
 ## fixed but not sure
 
 - [ ] respawn manager don't get scene clear i think the problem should be on target feed back it do not trigger to check
@@ -177,6 +204,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

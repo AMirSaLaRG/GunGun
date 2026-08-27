@@ -7,7 +7,6 @@ public class Hostage : Target
     [Header("HostageSetup")]
     [SerializeField] private GameObject onDeathVfx;
     protected EnemyWithHostage myTaker;
-    protected Transform myStandPoint;
     protected string triggerAnimSurvivedKeyWord = "Survived";
 
     private Vector3 standPointPos;
@@ -16,9 +15,17 @@ public class Hostage : Target
     {
         base.Start();
         if (myBox != null)
-            myStandPoint = myBox.GetHostagePoint();
-        if (myStandPoint != null)
-            standPointPos = myStandPoint.position;
+        {
+            if (myTaker != null)
+            {
+                myWayPoints = myBox.GetSecondaryWayPoints();
+                transform.position = myWayPoints[0].position;
+                MoveByWayPoints();
+               
+            }
+
+        }
+ 
         //else
         //    Debug.Log("Set Hostage Stand Point");
 
@@ -37,30 +44,28 @@ public class Hostage : Target
     {
         if (myTaker == null)
             if (myBox != null)
-                myBox.LeavingTheBox(this);
+                myBox.RespawnLeftTheBox(this);
 
         transform.DOKill();
     }
 
-    protected override void OnEnteringViewTracker(Vector3 centerPoint)
-    {
+    //protected override void AtFinalPositionAction()
+    //{
+    //    if (myTaker == null)
+    //        base.AtFinalPositionAction();
+    //    else
+    //    {
+    //        Vector3 targetPos = new Vector3(standPointPos.x, transform.position.y, standPointPos.z);
+    //        float distance = Vector3.Distance(transform.position, targetPos);
+    //        float duration = distance / moveSpeed;
 
-        if (myTaker == null)
-        {
-            base.OnEnteringViewTracker(centerPoint);
-        } else
-        {
-            Vector3 targetPos = new Vector3(standPointPos.x, transform.position.y, standPointPos.z);
-            float distance = Vector3.Distance(transform.position, targetPos);
-            float duration = distance / moveSpeed;
+    //        transform.DOMove(targetPos, duration).SetEase(Ease.Linear).OnComplete(() =>
+    //        {
+    //            base.AtFinalPositionAction();
+    //        });
+    //    }
+    //}
 
-            transform.DOMove(targetPos, duration).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                base.OnEnteringViewTracker(centerPoint);
-            });
-        }
-            
-    }
     protected override void AtDieAction()
     {
 
@@ -86,5 +91,4 @@ public class Hostage : Target
         AtEndOfDuration();
     }
 
-    public void SetStandPod(Transform standPoint) => myStandPoint = standPoint;
 }

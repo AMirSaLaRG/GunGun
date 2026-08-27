@@ -60,11 +60,11 @@ public class Target : MonoBehaviour, IDamagable
 
     protected RespawnBox myBox;
     protected RespawnManager myRespawnManager;
+    protected DG.Tweening.Sequence moveSq;
 
     public bool isDead { get { return healthPoint <= 0; } }
     protected bool canTakeDamage = true;
     public bool isMoving { protected set; get; } = true;
-    public bool isRotating {protected set; get;} = false;
     protected Vector3 facingPosition;
 
     private float DurationEndTime = 0;
@@ -75,6 +75,7 @@ public class Target : MonoBehaviour, IDamagable
     private Vector3 StartingScale;
     private float scaleTime = 1f;
 
+    protected Transform[] myWayPoints;
 
 
     protected string boolAnimRunKeyWord = "IsRunning";
@@ -88,6 +89,11 @@ public class Target : MonoBehaviour, IDamagable
         mycollider = GetComponent<CapsuleCollider>();
         DurationEndTime = Mathf.Infinity;
 
+        StartingScale = transform.localScale;
+
+
+
+
     }
 
     protected virtual void Start()
@@ -97,37 +103,58 @@ public class Target : MonoBehaviour, IDamagable
 
         BaseMoveSpeed = moveSpeed;
 
-        StartingScale = transform.localScale;
 
         if (isScaling)
             ScaleToOrginal();
+
+        if (myWayPoints != null && myWayPoints.Length > 0)
+            MoveByWayPoints();
+
     }
 
 
     protected virtual void Update()
     {
-        if (isStatic)
+        bool flowControl = IsTargetAtFinalState();
+        if (!flowControl)
+        {
             return;
+        }
+
+
+        if (isDurationEnded == false)
+            CheckDurationEnded();
+
+    }
+
+   
+
+    private bool IsTargetAtFinalState()
+    {
+        if (isStatic)
+            return false;
 
         if (isMoving)
-            MoveForward();
-        if (anim  != null) 
-            anim?.SetBool(boolAnimRunKeyWord, isMoving);
+            return false;
 
+        if (isDead)
+            return false;
 
-        if (isRotating)
-            LookAt(facingPosition);
+        return true;
+    }
 
-        if (isMoving == false && isRotating == false)
-            if (isDurationEnded == false)
-                CheckDurationEnded();
+    private void TargetAtFinalPosition()
+    {
+        DurationEndTime = Time.time + duration;
 
+        AtFinalPositionAction();
     }
 
     protected virtual void CheckAndSetMyType()
     {
 
     }
+
 
 
     public void SetUpTarget(PlayerController player, RespawnManager respawnManager, RespawnBox myNewBox, RespawnType myNewType)
@@ -215,50 +242,99 @@ public class Target : MonoBehaviour, IDamagable
 
     }
 
-    public virtual void SetTargetsFace(Vector3 newtargetPos)
+    public virtual void SetTargetWayPoints(Transform[] newWayPoints)
     {
-        targetPos = newtargetPos;
-
-
-        Vector3 facingDirection = (targetPos - transform.position).normalized;
-        facingDirection.y = 0f;
-
-        transform.forward = facingDirection;
+        myWayPoints = newWayPoints;
+        if (myWayPoints == null || myWayPoints.Length < 1) return;
+        MoveByWayPoints();
     }
 
-    protected virtual void MoveForward()
+    protected virtual void MoveByWayPoints()
     {
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
-    }
-    protected virtual void MoveBackrward()
-    {
-        transform.position -= transform.forward * moveSpeed * Time.deltaTime;
-    }
+        if (anim != null)
+            anim?.SetBool(boolAnimRunKeyWord, true);
 
-    public virtual void SetUpMove(float newMoveSpeed, bool newIsMoving, Vector3 toward)
-    {
-        moveSpeed = newMoveSpeed;
-        isMoving = newIsMoving;
-        transform.LookAt(toward);
-    }
+        if (myWayPoints == null || myWayPoints.Length < 2) return;
 
-    public void SlowTarget(float percentage)
-    {
-        moveSpeed = BaseMoveSpeed * percentage;
-    }
+        if (moveSq != null)
+            moveSq.Kill();
 
-    protected virtual void LookAt(Vector3 lookPosition)
-    {
-        Quaternion targetRotation = GetDirectionTowardLookPosition(lookPosition);
+        moveSq = DOTween.Sequence();
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        // Store current Y
+        float yPos = transform.position.y;
 
-        float angle = Quaternion.Angle(transform.rotation, targetRotation);
+        // Start at first waypoint (only X and Z)
+        transform.position = new Vector3(myWayPoints[0].position.x, yPos, myWayPoints[0].position.z);
 
-        if (angle < .5f)
+        Vector3 previousPos = new Vector3(
+        myWayPoints[0].position.x,
+        yPos,
+        myWayPoints[0].position.z
+    );
+
+        for (int i = 1; i < myWayPoints.Length; i++)
         {
-            isRotating = false;
+            int index = i;
+            float yOffset = 0;
+            if (isScaling && i == 0)
+                yOffset = 3;// this magic number tries to fix eye look on run for fix it should put a empty on eye of target and get differents of it by center and put it as eye height or height
+
+            // Target with locked Y
+            Vector3 target = new Vector3(
+                myWayPoints[index].position.x,
+                yPos + yOffset, 
+                myWayPoints[index].position.z
+            );
+
+            // Calculate duration based on distance
+            Vector3 previousPosFlat = new Vector3(previousPos.x, 0, previousPos.z);
+            Vector3 targetPosFlat = new Vector3(target.x, 0, target.z);
+            float distance = Vector3.Distance(previousPosFlat, targetPosFlat);
+            float duration = distance / moveSpeed;
+
+            // Move X and Z
+            moveSq.Append(
+                transform.DOMoveX(myWayPoints[index].position.x, duration)
+                    .SetEase(Ease.Linear)
+            );
+
+            moveSq.Join(
+                transform.DOMoveZ(myWayPoints[index].position.z, duration)
+                    .SetEase(Ease.Linear)
+            );
+
+            // Rotate while moving (JOIN with the movement)
+            moveSq.Join(
+                transform.DOLookAt(target, 0.1f)
+                    .SetEase(Ease.OutQuad)
+            );
+
+            previousPos = target;
         }
+
+        moveSq.OnComplete(() =>
+        {
+            isMoving = false;
+            anim?.SetBool(boolAnimRunKeyWord, false);
+            TargetAtFinalPosition();
+        });
+    }
+
+    protected virtual void SpeedUpTarget(float startSpeed, float endSpeed, float duration)
+    {
+        StartCoroutine(SpeedUpTargetCo(startSpeed, endSpeed, duration));
+    }
+    private IEnumerator SpeedUpTargetCo(float startSpeed, float endSpeed, float duration)
+    {
+        float elapse = 0;
+        while (elapse < duration)
+        {
+            moveSpeed = Mathf.Lerp(startSpeed, endSpeed, elapse / duration);
+            yield return null;
+            elapse += Time.deltaTime;
+        }
+        moveSpeed = endSpeed;
     }
 
     protected Quaternion GetDirectionTowardLookPosition(Vector3 lookPosition)
@@ -268,51 +344,30 @@ public class Target : MonoBehaviour, IDamagable
         return targetRotation;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void AtFinalPositionAction()
     {
-        if (isMoving == false)
-            return;
-        if (other.gameObject.TryGetComponent(out ViewTracker tracked))
-        {
-            OnEnteringViewTracker(tracked.transform.position);
-
-        }
-
-    }
-
-    protected virtual void OnEnteringViewTracker(Vector3 centerOfTracker)
-    {
+        isAtFinalPosition = true;
         isMoving = false;
 
         if (facingPosition == null)
             facingPosition = player.mainCamera.transform.position;
-
-        TargetAtFinalPosition();
-
-        isRotating = true;
+         
+        StartLookitAt(facingPosition);
     }
 
-    private void TargetAtFinalPosition()
+    private void StartLookitAt(Vector3 facingPosition)
     {
-        StartDurationTime();
-        AtFinalPositionAction();
+        float d = 1 / rotationSpeed;
 
+        transform.DOLookAt(facingPosition, d)
+                    .SetEase(Ease.OutQuad);
     }
 
-    private void StartDurationTime()
-    {
-        DurationEndTime = Time.time + duration;
-    }
-
-    protected virtual void AtFinalPositionAction()
-    {
-        isAtFinalPosition = true;
-    }
+  
 
     private void CheckDurationEnded()
     {
-        if (isDead)
-            return;
+
 
         GiveAtPosWarningSign();
 
@@ -337,7 +392,7 @@ public class Target : MonoBehaviour, IDamagable
 
 
         if (myBox != null)
-            myBox.LeavingTheBox(this);
+            myBox.RespawnLeftTheBox(this);
 
         transform.DOKill();
 
@@ -359,17 +414,20 @@ public class Target : MonoBehaviour, IDamagable
     protected virtual void AtDieAction()
     {
         if (myBox != null)
-            myBox.LeavingTheBox(this);
+            myBox.RespawnLeftTheBox(this);
 
         if (anim != null)
             anim?.SetBool(boolAnimDieKeyWord, true);
 
-   
+        if (moveSq != null)
+            moveSq.Kill();
+
+        if (anim != null)
+            anim?.SetBool(boolAnimRunKeyWord, false);
 
         rb.constraints = RigidbodyConstraints.None;
 
         isMoving = false;
-        isRotating = false;
 
         transform.DOKill();
 
@@ -407,12 +465,7 @@ public class Target : MonoBehaviour, IDamagable
         }
 
     }
-
-    public float GetMoveSpeed() => moveSpeed;
     public int GetComboValue() => comboValue;
-
-    public void SetMyRespawnManager(RespawnManager respawnManager) => myRespawnManager = respawnManager;
-    public void SetMyBox(RespawnBox box) => myBox = box;
 
     public void SetMyDuration(float duration) => this.duration = duration;
 
@@ -421,22 +474,8 @@ public class Target : MonoBehaviour, IDamagable
         DOTween.Kill(gameObject);
     }
 
-    protected virtual void SpeedUpTarget(float startSpeed, float endSpeed, float duration)
-    {
-        StartCoroutine(SpeedUpTargetCo(startSpeed,endSpeed, duration));
-    }
 
-    private IEnumerator SpeedUpTargetCo(float startSpeed, float endSpeed, float duration)
-    {
-        float elapse = 0;
-        while (elapse < duration)
-        {
-            moveSpeed = Mathf.Lerp(startSpeed, endSpeed, elapse / duration);
-            yield return null;
-            elapse += Time.deltaTime;
-        }
-        moveSpeed = endSpeed;
-    }
+  
 
     
 }

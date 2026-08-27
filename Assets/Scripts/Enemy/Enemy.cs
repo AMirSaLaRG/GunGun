@@ -13,19 +13,12 @@ public class Enemy : Target
     [SerializeField] protected GameObject projectal;
     [SerializeField] protected float projectalSpeed = 100;
 
-
-
-    [Header("DanceSetup")]
-    [SerializeField] private float danceTime = 2f;
-    [SerializeField] private float danceMoveRange = 1.5f;
-    [SerializeField] private float danceRotationRange = 15f;
-    private float danceCycleDelay = .4f;
-
     [Header("Sfx Setup")]
     [SerializeField] protected AudioSource shotSfx;
 
     [Header("Shooting Warning Sign Setup")]
     [SerializeField] private ParticleSystem ShootingWarningSign;
+    [SerializeField] private AudioSource ShootingWarningSfx;
     [SerializeField] private float warningSecondsBeforShoot;
     private Coroutine shootingWarningSignCo;
 
@@ -51,12 +44,6 @@ public class Enemy : Target
         startingPos = transform.position;
 
 
-
-    }
-
-    protected override void Update()
-    {
-        base.Update();
 
     }
 
@@ -90,18 +77,20 @@ public class Enemy : Target
     protected override void AtDieAction()
     {
         base.AtDieAction();
-        DanceSequence(false, true);
+
+        Debug.Log("Die");
+
+        ShootingWarningSign.Stop();
 
         if (shootCo != null)
             StopCoroutine(shootCo);
+
         if (shootingWarningSignCo != null)
             StopCoroutine(shootingWarningSignCo);
     }
 
     protected override void AtEndOfDurationAction()
     {
-        DanceSequence(false, true);
-
         base.AtEndOfDurationAction();
     }
     protected override void AtFinalPositionAction()
@@ -111,29 +100,26 @@ public class Enemy : Target
         startingRotation = transform.eulerAngles;
         startingPos = transform.position;
 
-        if (ShouldDance)
-            DanceSequence(true);
-
-        ShootThePlayer();
+        AtFinalPositionEnemyAction();
     }
 
 
-    private void ShootThePlayer()
-    {
-        AimAtPlayerAndShoot();
-    }
-
-    private void AimAtPlayerAndShoot()
+    protected virtual void AtFinalPositionEnemyAction()
     {
         
-        shootCo = StartCoroutine(AimAtPlayerAndShootCo());
+        shootCo = StartCoroutine(AitmAndShootCo());
 
     }
 
-    private IEnumerator AimAtPlayerAndShootCo()
+    private IEnumerator AitmAndShootCo()
     {
         Aiming();
+        if (isDead) yield break;
+
         yield return new WaitForSeconds(attackTime);
+
+        if (isDead) yield break;
+
         Shoot();
     }
 
@@ -152,13 +138,7 @@ public class Enemy : Target
     }
 
     public void SetDanceMode(bool enable) => ShouldDance = enable;
-    [ContextMenu("DanceCancelTest")]
-    public void CancelDance()
-    {
-        SetDanceMode(false);
-        DanceSequence(false);
-    }
-
+ 
     protected void GiveShootingWarningSign(float NextShotTimeFromNow)
     {
         if (ShootingWarningSign == null)
@@ -167,7 +147,10 @@ public class Enemy : Target
         float timeToGiveSign = NextShotTimeFromNow - warningSecondsBeforShoot;
 
         if (timeToGiveSign <= 0)
+        {
+            AudioManager.instance.PlaySfx(ShootingWarningSfx);
             ShootingWarningSign.Play();
+        }
         else
             shootingWarningSignCo = StartCoroutine(GiveShootingWarningSignCo(timeToGiveSign));
     }
@@ -175,58 +158,11 @@ public class Enemy : Target
     private IEnumerator GiveShootingWarningSignCo(float timeToGiveSign)
     {
         yield return new WaitForSeconds(timeToGiveSign);
+        if (isDead) yield break;
+
+        AudioManager.instance.PlaySfx(ShootingWarningSfx);
         ShootingWarningSign.Play();
     }
 
-    private void DanceSequence(bool enable,bool imediate = false, Action callback = null)
-    {
-
-        if (enable)
-        {
-            danceSq = DOTween.Sequence();
-
-
-            danceSq.Append(transform.DORotate(new Vector3(startingRotation.x, startingRotation.y, -danceRotationRange), danceTime / 2))
-                .Join(transform.DOMoveX(startingPos.x -danceMoveRange, danceTime / 2))
-                .Append(transform.DORotate(new Vector3(startingRotation.x, startingRotation.y, 0), danceTime / 2))
-                .Join(transform.DOMoveX(startingPos.x, danceTime / 2))
-                .Append(transform.DORotate(new Vector3(startingRotation.x, startingRotation.y, danceRotationRange), danceTime / 2))
-                .Join(transform.DOMoveX(startingPos.x + danceMoveRange, danceTime / 2))
-                .Append(transform.DORotate(new Vector3(startingRotation.x, startingRotation.y, 0), danceTime / 2))
-                .Join(transform.DOMoveX(startingPos.x, danceTime / 2))
-                .AppendInterval(danceCycleDelay)
-                .SetLoops(-1, LoopType.Restart)
-                .SetLink(gameObject)
-                .OnComplete(() => callback.Invoke());
-
-            isDancing = true;
-        } else
-        {
-            if (danceSq != null && danceSq.IsActive())
-            {
-                if (imediate == false)
-                {
-                    danceSq.Kill();
-                    transform.DORotate(new Vector3(startingRotation.x, startingRotation.y, 0), danceTime / 2);
-                    transform.DOMoveX(startingPos.x, danceTime / 2).OnComplete(() =>
-                    {
-                        danceSq = null;
-                        isDancing = false;
-                    });
-                }
-                
-                if (imediate)
-                {
-                    danceSq.Kill();
-                    danceSq = null;
-                    isDancing = false;
-                }
-
-            
-            }
-        }
-        
-
-
-    }
+  
 }

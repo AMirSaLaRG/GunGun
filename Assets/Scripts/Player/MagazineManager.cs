@@ -37,7 +37,7 @@ public class MagazineManager : MonoBehaviour
     {
         inGameUi = FindFirstObjectByType<UiInGame>();
         if (inGameUi == null )
-            inGameUi = GameManager.instance.GetUiPanel(EPanel.InGame).GetComponent<UiInGame>();
+            inGameUi = GameManager.instance?.GetUiPanel(EPanel.InGame).GetComponent<UiInGame>();
 
         mybullets = new Transform[bulletHolders.Length];
         mybulletsRb = new Rigidbody[bulletHolders.Length];
@@ -238,7 +238,7 @@ public class MagazineManager : MonoBehaviour
         float switchTime = chnageGunTime;
 
         if (GameManager.instance != null)
-            if (GameManager.instance.gameState != EGameState.inGame)
+            if (GameManager.instance.gameState != EGameState.InGame)
                 switchTime = 0;
 
         transform.position = StartPos - transform.right * 4;

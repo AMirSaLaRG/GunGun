@@ -9,6 +9,7 @@ using UnityEngine;
 public class WaweManager : MonoBehaviour
 {
     private RespawnManager respawnManager;
+    private PlayerController player;
 
   
     [Header ("Setup")]
@@ -34,6 +35,7 @@ public class WaweManager : MonoBehaviour
     private void Awake()
     {
         respawnManager = FindFirstObjectByType<RespawnManager>();
+        player = FindFirstObjectByType<PlayerController>();
     }
 
     private void Start()
@@ -70,8 +72,103 @@ public class WaweManager : MonoBehaviour
         if (isTimeForEvent())
             ExecuteSequence();
 
+        if (respawnManager.isSceenClear)
+            if (CheckToExecuteWave())
+                ExecuteWawe(waweData[currentWaveIndex]);
 
-        StartWawe();
+    }
+
+    private void ExecuteWawe(WaveData data)
+    {
+        CleanData(data);
+
+        isWaweEnded = false;
+        isTimeForNextWawe = false;
+
+        respawnManager.SetupRandom(data);
+
+        float displayTime = currentWaveIndex == 0 ? 1 : waweData[currentWaveIndex - 1].nextWaweDelay;
+
+        player.WaveChange(displayTime);
+
+
+        if (data.Type == WaveType.TimeBase)
+            SetTimerForWawe(data.durationIfTimeBase);
+        
+    }
+
+    private void SetTimerForWawe(float durationIfTimeBase)
+    {
+        float activateTimeOfBoxes = currentWaveIndex != 0 ? waweData[currentWaveIndex - 1].nextWaweDelay : 2;
+        StartCoroutine(DurationCo(durationIfTimeBase + activateTimeOfBoxes));
+    }
+
+
+    private IEnumerator DurationCo(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        respawnManager.BreakRespawn();
+
+        isWaweEnded = true;
+        isTimeForNextWawe = true;
+        taskIsSq = false;
+
+        //StartCoroutine(BreathTimeBetweenTwoWawes());
+
+        currentWaveIndex++;
+
+    }
+
+    private IEnumerator BreathTimeBetweenTwoWawes()
+    {
+        float duration = 0f;
+        if (taskIsSq)
+            duration = 2f;
+        else
+            duration = waweData[currentWaveIndex].nextWaweDelay;
+
+
+        yield return new WaitForSeconds(duration);
+        isTimeForNextWawe = true;
+        taskIsSq = false;
+    }
+
+    private bool CheckToExecuteWave()
+    {
+        if (isWaweEnded == false)
+            return false;
+
+        if (isTimeForNextWawe == false)
+            return false;
+
+        if (taskIsSq)
+            return false;
+
+        if (waweData == null || waweData.Count == 0)
+        {
+
+            Debug.Log("Plz write Wawe Data first!");
+            return false;
+        }
+
+        if (currentWaveIndex >= waweData.Count)
+        {
+            startSaftyTriggerIn(5);
+
+            if (respawnManager.isSceenClear || isSaftyAtEndTriggered)
+            {
+                GameManager.instance.LevelCompleted();
+                isWaweEnded = true;
+                isTimeForNextWawe = false;
+                isSaftyAtEndTriggered = false;
+
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     public void StartWaves()
@@ -139,42 +236,7 @@ public class WaweManager : MonoBehaviour
         taskIsSq = false;
     }
 
-    private void StartWawe()
-    {
-        if (isWaweEnded == false)
-            return;
-
-        if (isTimeForNextWawe == false)
-            return;
-
-        if (taskIsSq)
-            return;
-
-        if (waweData == null || waweData.Count == 0)
-        {
-    
-            Debug.Log("Plz write Wawe Data first!");
-            return;
-        }
-
-        if (currentWaveIndex == waweData.Count)
-        {
-            startSaftyTriggerIn(5);
-
-            if (respawnManager.isSceenClear || isSaftyAtEndTriggered)
-            {
-                GameManager.instance.LevelCompleted();
-                isWaweEnded = true;
-                isTimeForNextWawe = false;
-                isSaftyAtEndTriggered = false;
-
-            }
-
-            return;
-        }
-
-        ExecuteWawe(waweData[currentWaveIndex]);
-    }
+ 
 
     private void startSaftyTriggerIn(float time)
     {
@@ -187,39 +249,7 @@ public class WaweManager : MonoBehaviour
             isSaftyAtEndTriggered = true;
     }
 
-    private void ExecuteWawe(WaveData data)
-    {
-        CleanData(data);
 
-        isWaweEnded = false;
-        isTimeForNextWawe = false;
-        currentWaveIndex++;      
-
-        respawnManager.SetupRandom(data.respawns, data.ActiveBoxes, 
-            data.minMaxRandomIntervalSummon, data.minMaxNumSummon, 
-            data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
-
-        if (data.Type == WaveType.TimeBase)
-        {
-
-            SetTimerForWawe(data.durationIfTimeBase);
-        }
-    }
-
-    private void SetTimerForWawe(float durationIfTimeBase)
-    {
-        float duration = durationIfTimeBase;
-        StartCoroutine(DurationCo(duration));
-    }
-
-    
-    private IEnumerator DurationCo(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        respawnManager.BreakRespawn();
-        isWaweEnded = true;
-        StartCoroutine(BreathTimeBetweenTwoWawes());
-    }
     private void CleanData(WaveData data)
     {
         CleanRepeat(data);
@@ -242,26 +272,8 @@ public class WaweManager : MonoBehaviour
 
        
     }
-    private void RespawnManagerTaskOver()
-    {
-        isWaweEnded = true;
 
-        StartCoroutine(BreathTimeBetweenTwoWawes());
-    }
 
-    private IEnumerator BreathTimeBetweenTwoWawes()
-    {
-        float duration = 0f;
-        if (taskIsSq)
-            duration = 2f;
-        else
-            duration = waweData[currentWaveIndex - 1].nextWaweDelay;
-        
-
-        yield return new WaitForSeconds(duration);
-        isTimeForNextWawe = true;
-        taskIsSq = false;
-    }
 
     private static void CleanProbs(WaveData data)
     {
@@ -296,6 +308,8 @@ public class WaweManager : MonoBehaviour
                
 
         StopAllCoroutines();
+
+        respawnManager.ClearScene();
     }
 
 }

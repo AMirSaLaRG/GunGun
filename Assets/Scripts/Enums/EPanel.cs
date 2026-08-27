@@ -13,6 +13,7 @@ public enum EPanel
     None = 8,
     Ready = 9,
     LeaderBoard = 10,
+    LastChance = 11,
 }
 
 public enum EDPanel

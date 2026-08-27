@@ -59,7 +59,7 @@ public class UiVictoryPanel : MonoBehaviour
             GetStartingPosAndScale();
         }
 
-        int starEarned = GameManager.instance?.ChecklevelStarsEarned() ?? 0;
+        int starEarned = GameManager.instance?.CheckLevelStarsEarned() ?? 0;
 
         GetAndSetRank();
         StarAnimation(starEarned);

@@ -13,6 +13,10 @@ public class PlayerCanvas : MonoBehaviour
     private ScoreManager scoreManager;
 
     [SerializeField] private Image screenPanel;
+    [Header("MainMessageText")]
+    [SerializeField] private TextMeshProUGUI mainMsgText;
+    private Coroutine mainTextCo;
+
     [Header("ScaleSetup")]
     [SerializeField] private float maxDistance;
     [SerializeField] private float minScale;
@@ -103,9 +107,9 @@ public class PlayerCanvas : MonoBehaviour
 
     private IEnumerator DeadSpriteAnimation()
     {
-
-        screenPanel.color = Color.red;
-        screenPanel.DOFade(.4f, takingDamageUiTime / 2);
+        yield return null;
+        //screenPanel.color = Color.red;
+        //screenPanel.DOFade(.4f, takingDamageUiTime / 2);
 
 
         ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
@@ -273,6 +277,7 @@ public class PlayerCanvas : MonoBehaviour
 
         while (elapsed < duration)
         {
+
             float x = UnityEngine.Random.Range(-1f, 1f) * intensity;
             float y = UnityEngine.Random.Range(-1f, 1f) * intensity;
             mainCamera.localPosition = originalPos + new Vector3(x, y, 0);
@@ -282,5 +287,47 @@ public class PlayerCanvas : MonoBehaviour
         }
 
         mainCamera.localPosition = originalPos;
+    }
+
+    public void waveChange(float displayTime = 1)
+    {
+        if (mainTextCo != null)
+        {
+            StopCoroutine(mainTextCo);
+            
+        }
+
+        mainMsgText.text = $"Get Ready For Next Wave!";
+
+
+        Color textC = mainMsgText.color;
+        textC.a = 1;
+        mainMsgText.color = textC;
+
+
+        ClearMainText(displayTime);
+    }
+
+    private void ClearMainText(float displayTime)
+    {
+        mainTextCo = StartCoroutine(ClearMainTextCo(displayTime));
+    }
+
+    private IEnumerator ClearMainTextCo(float displayTime = 1)
+    {
+        float elapse = 0;
+        Color theColor = mainMsgText.color;
+        Color orginalColor = mainMsgText.color;
+
+        while (elapse < displayTime)
+        {
+            theColor.a = Mathf.Lerp(1, 0, elapse / displayTime);
+            mainMsgText.color = theColor;
+            yield return null;
+            elapse += Time.deltaTime;
+        }
+
+        theColor.a = 0;
+        mainMsgText.color = theColor;
     }
 }

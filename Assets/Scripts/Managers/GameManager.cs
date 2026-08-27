@@ -10,16 +10,19 @@ public class GameManager : MonoBehaviour
     public bool isTesting = false;
     public void TogleTestMode() => isTesting = !isTesting;
 
-    public LevelManager levelManager { private set; get; }
+    public LevelManager levelManager { private set; get;}
     public UiManager uiManager {private set; get;}
-    public ElevatorMainMenu elevator {private set; get;}
+    public ScoreManager scoreManager {private set; get;}
+    public MenuTransitionController menuTranstionController {private set; get;}
     public PlayerController playerController {private set; get;}
     public PlayerData playerData {private set; get;}
 
-    public ScoreManager scoreManager {private set; get;}
     public EGameState gameState {private set; get;} = EGameState.inMenu;
 
-    private int currenLevelIndex = 0;
+    private EPanel currentPanelOnProgress;
+    private EGameState currentGameStateInProgress;
+
+    private int currentLevelIndex = 0;
 
     public bool isVibrateOn = true;
 
@@ -41,7 +44,7 @@ public class GameManager : MonoBehaviour
 
         levelManager = FindFirstObjectByType<LevelManager>();
         uiManager = FindFirstObjectByType<UiManager>();
-        elevator = FindFirstObjectByType<ElevatorMainMenu>();
+        menuTranstionController = FindFirstObjectByType<MenuTransitionController>();
         playerController = FindFirstObjectByType<PlayerController>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
     }
@@ -49,9 +52,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gameState = EGameState.inMenu;
-        uiManager.SetPanel(EPanel.MainMenu);
+        uiManager?.SetPanel(EPanel.MainMenu);
         playerController.SetGameStarted(false);
-
 
         if (isTesting)
         {
@@ -60,167 +62,263 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void CallGameStart()
+    {
+        playerController.SetGameStarted(true);
+        levelManager.SetGameStart();
+        scoreManager.ResetAll();
+    }
+
+    private void CallGameOver()
+    {
+
+        playerController.SetGameStarted(false);
+        levelManager.SetGameEnd();
+    }
+
+    private void ChangeGameState(EGameState state)
+    {
+
+        switch (state)
+        {
+            case EGameState.inMenu:
+                if (gameState == EGameState.pause)
+                {
+                    Time.timeScale = 1;
+                    CallGameOver();
+                }
+
+                else if (gameState == EGameState.InGame)
+                {
+                    Debug.Log("This Should Never Happens now !!!");
+
+                    Time.timeScale = 1;
+                    CallGameOver();
+                }
+                gameState = EGameState.inMenu;
+                break;
+            case EGameState.InGame:
+                Time.timeScale = 1;
+
+                if (gameState == EGameState.inMenu)
+                    CallGameStart();
+
+                gameState = EGameState.InGame;
+                break;
+            case EGameState.pause:
+                Time.timeScale = 0;
+                gameState = EGameState.pause;
+                break;
+        }
+    }
+
+    public void StartGame()
+    {
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.InGame;
+        currentGameStateInProgress = EGameState.InGame;
+
+        if (menuTranstionController != null)
+        {
+            menuTranstionController.EnterTheLevel();
+            return;
+        }
+
+        OnMenuTransitionFinished();
+    }
+
+    public void RestartGame()
+    {
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.InGame;
+        currentGameStateInProgress = EGameState.InGame;
+
+        SaveGameResults();
+        CallGameOver();
+        CallGameStart();
+
+        OnMenuTransitionFinished();
+    }
+
+    public void OnLastChance()
+    {
+        uiManager.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.LastChance;
+        currentGameStateInProgress = EGameState.pause;
+
+        OnMenuTransitionFinished();
+    }
+
+    public void ReviveThePlayer()
+    {
+        scoreManager.ClearHostageKill();
+        playerController.ReviveThePlayer();
+
+        OnResume();
+    }
+
+    public void GameOver()
+    {
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.GameOver;
+        currentGameStateInProgress = EGameState.inMenu;
+
+        playerController.OnGameOver();
+
+        SaveGameResults();
+
+        if (menuTranstionController != null)
+            menuTranstionController.LeaveScene();
+
+        OnMenuTransitionFinished();
+    }
+
+    public void LevelCompleted()
+    {
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.Victory;
+        currentGameStateInProgress = EGameState.inMenu;
+
+        SaveGameResults();
+
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.LeaveScene();
+            return;
+        }
+
+        OnMenuTransitionFinished();
+    }
+
+    public void OnMenuTransitionFinished()
+    {
+        uiManager?.SetPanel(currentPanelOnProgress);
+        ChangeGameState(currentGameStateInProgress);
+    }
+
     public GameObject GetUiPanel(EPanel panel) => uiManager.GetPanel(panel);
 
     public void OnPause()
     {
-        uiManager.SetPanel(EPanel.Pause);
-        gameState = EGameState.pause;
-        Time.timeScale = 0;
+
+        currentPanelOnProgress = EPanel.Pause;
+        currentGameStateInProgress = EGameState.pause;
+
+        OnMenuTransitionFinished();
     }
 
     public void OnResume()
     {
-        Time.timeScale = 1;
-        gameState = EGameState.inGame;
+        currentPanelOnProgress = EPanel.InGame;
+        currentGameStateInProgress = EGameState.InGame;
 
-        uiManager.SetPanel(EPanel.InGame);
+        OnMenuTransitionFinished();
     }
 
     public void LevelSelection()
     {
         if (uiManager == null) return;
-        
-        if (elevator != null)
-            uiManager.FadePanel(elevator.actionTime * .9f);
-        levelManager.PopulateLevels();
+        currentPanelOnProgress = EPanel.LevelSelection;
+        currentGameStateInProgress = EGameState.inMenu;
 
-        StartCoroutine(levelSelectionCo());
-    }
-    private IEnumerator levelSelectionCo()
-    {
-        if (elevator != null)
-            elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator != null? elevator.actionTime: 0);
-        uiManager.SetPanel(EPanel.LevelSelection);
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            uiManager.FadePanel(menuTranstionController.actionTime * .9f);
+            menuTranstionController.ChangeSideViewAnimation();
+            return;
+        }
+        OnMenuTransitionFinished();
     }
 
     public void OnLevelSelected()
     {
-        uiManager.SetPanel(EPanel.None);
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.Ready;
 
-        StartCoroutine(OnLevelSelectedCo());
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.LevelView();
+            return;
+        }
+        OnMenuTransitionFinished();
     }
-
-    private IEnumerator OnLevelSelectedCo()
-    {
-        if (elevator != null)
-            elevator.SceneChangeAnim();
-        yield return new WaitForSeconds(elevator != null? elevator.actionTime * (.6f) : 0);
-        if (elevator != null)
-            elevator.LevelView();
-        yield return new WaitForSeconds(elevator != null? elevator.actionTime : 0);
-
-        uiManager.SetPanel(EPanel.Ready);
-
-
-    }
-
-
     public void MainMenuFromLevelScene()
     {
-        uiManager.SetPanel(EPanel.MainMenu);
+        
+        uiManager?.SetPanel(EPanel.MainMenu);
     }
-
     public void MainMenuFromSideView()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(MainMenuFromLevelSelectionCo());
-    }
-    private IEnumerator MainMenuFromLevelSelectionCo()
-    {
-        if (elevator != null)
-            elevator.LevelView();
-        yield return new WaitForSeconds(elevator != null ? elevator.actionTime : 0);
-        uiManager.SetPanel(EPanel.MainMenu);
-    }
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.MainMenu;
+        currentGameStateInProgress = EGameState.inMenu;
 
-    public void StartGame()
-    {
-        Time.timeScale = 1;
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(StartGameCo());
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.LevelView();
+            return;
+        }
 
+        OnMenuTransitionFinished();
     }
 
-    private IEnumerator StartGameCo()
+    public void StartNextLevel()
     {
-        if (elevator != null)
-            elevator.EnterTheLevel();
-        yield return new WaitForSeconds(elevator != null? elevator.actionTime * 2 : 0);
-
-        uiManager.SetPanel(EPanel.InGame);
-        gameState = EGameState.inGame;
-
-        scoreManager.ResetAll();
-
-        playerController.SetGameStarted(true);
-        levelManager.SetGameStart();
-    }
-
-    public void RestartGame()
-    {
-        GameOver();
-        StartGame();
-    }
-
-    public void SetToNextLevel()
-    {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(SetToNextLevelCo());
-    }
-
-    private IEnumerator SetToNextLevelCo()
-    {
-        elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator.actionTime);
+        uiManager?.SetPanel(EPanel.None);
+        uiManager.FadePanel();
         levelManager.LoadNextLevel();
-        elevator.SceneChangeAnim();
-        yield return new WaitForSeconds(elevator.actionTime * (.6f));
-        elevator.LevelView();
-        yield return new WaitForSeconds(elevator.actionTime);
-        uiManager.SetPanel(EPanel.Ready);
 
+        currentPanelOnProgress = EPanel.Ready;
+        currentGameStateInProgress = EGameState.inMenu;
+
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.ChangeAndEnterNextLevel();
+            return;
+        }
+
+        OnMenuTransitionFinished();
     }
 
-    public void LevelCompleted()
+    public void OnSettingClick()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(LevelCompletedCo());
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.Settings;
+
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.ChangeSideViewAnimation();
+            return;
+        }
+
+        OnMenuTransitionFinished();
     }
 
-    private IEnumerator LevelCompletedCo()
+    public void OnLeaderBoardClick()
     {
-        if (elevator != null)
-            elevator.LeaveScene();
-        yield return new WaitForSeconds(elevator != null ? elevator.actionTime * 2 : 0);
-        playerController.SetGameStarted(false);
-        levelManager.SetGameEnd();
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.LeaderBoard;
 
-        uiManager.SetPanel(EPanel.Victory);
-        gameState = EGameState.inMenu;
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.ChangeSideViewAnimation();
+            return;
+        }
 
-
-
-        SaveLevelCompleted();
+        OnMenuTransitionFinished();
     }
-    public void GameOver()
+    public void CreditWindow()
     {
-        uiManager.SetPanel(EPanel.None);
-        StartCoroutine(GameOverCo());
-    }
+        uiManager?.SetPanel(EPanel.None);
+        currentPanelOnProgress = EPanel.Credits;
 
-    private IEnumerator GameOverCo()
-    {
-        if (elevator != null)
-            elevator.LeaveScene();
-        yield return new WaitForSeconds(elevator != null ? elevator.actionTime * 2 : 0);
-        uiManager.SetPanel(EPanel.GameOver);
-        playerController.SetGameStarted(false);
-        levelManager.SetGameEnd();
-        gameState = EGameState.inMenu;
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.ChangeSideViewAnimation();
+            return;
+        }
 
-        SaveGameOver();
+        OnMenuTransitionFinished();
     }
 
     public void ShareBack()
@@ -229,106 +327,33 @@ public class GameManager : MonoBehaviour
             MainMenuFromLevelScene();
         if (gameState == EGameState.pause)
             OnPause();
-
     }
 
-    public void OnSettingClick()
+    private void SaveGameResults()
     {
-        uiManager.SetPanel(EPanel.Settings);
-
-        //uiManager.SetPanel(EPanel.None);
-        //StartCoroutine(OnSettingClickCo());
-    }
-
-    private IEnumerator OnSettingClickCo()
-    {
-        elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator.actionTime);
-        uiManager.SetPanel(EPanel.Settings);
-    }
-    public void OnLeaderBoardClick()
-    {
-        uiManager.SetPanel(EPanel.LeaderBoard);
-
-        //uiManager.SetPanel(EPanel.None);
-        //StartCoroutine(OnLeaderBoardClickCo());
-    }
-
-    private IEnumerator OnLeaderBoardClickCo()
-    {
-        elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator.actionTime);
-        uiManager.SetPanel(EPanel.LeaderBoard);
-    }
-
-    public void CreaditWindow()
-    {
-        uiManager.SetPanel(EPanel.Credits);
-
-
-        //uiManager.SetPanel(EPanel.None);
-        //StartCoroutine(CreaditWindowCo());
-
-    }
-
-    private IEnumerator CreaditWindowCo()
-    {
-        elevator.ChangeSideViewAnimation();
-        yield return new WaitForSeconds(elevator.actionTime);
-        uiManager.SetPanel(EPanel.Credits);
-    }
-    private void SaveLevelCompleted()
-    {
-        
         float points = scoreManager.points;
-        int currentLevelIndex = levelManager.currentLevelIndex;
+        int levelIndex = levelManager.currentLevelIndex;
 
-        if (playerData.levelPoints[currentLevelIndex] < points)
-            playerData.levelPoints[currentLevelIndex] = points;
+        if (playerData.levelPoints[levelIndex] < points)
+            playerData.levelPoints[levelIndex] = points;
 
-        int earnedStart = ChecklevelStarsEarned();
-        if (playerData.levelStars[currentLevelIndex] < earnedStart)
-            playerData.levelStars[currentLevelIndex] = earnedStart;
- 
-        if (playerData.unlockedLevel < currentLevelIndex + 1)
-            playerData.unlockedLevel = currentLevelIndex + 1;
+        int earnedStars = CheckLevelStarsEarned();
+        if (playerData.levelStars[levelIndex] < earnedStars)
+            playerData.levelStars[levelIndex] = earnedStars;
 
         playerData.totalPoints += points;
 
         SaveManager.instance.Save();
-        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, scoreManager.currentKills, levelManager.GetLevelName(currentLevelIndex), out int rank);
+        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points,
+            scoreManager.currentKills, levelManager.GetLevelName(levelIndex), out int rank);
         currentLeaderBoardRank = rank;
-
-    }
-    private void SaveGameOver()
-    {
-        float points = scoreManager.points;
-        int currentLevelIndex = levelManager.currentLevelIndex;
-
-        if (playerData.levelPoints[currenLevelIndex] < points)
-            playerData.levelPoints[currentLevelIndex] = points;
-
-
-        int earnedStart = ChecklevelStarsEarned();
-        if (playerData.levelStars[currenLevelIndex] < earnedStart)
-            playerData.levelStars[currenLevelIndex] = earnedStart;
-
-        playerData.totalPoints += points;
-
-
-        SaveManager.instance.Save();
-        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points, scoreManager.currentKills, levelManager.GetLevelName(currentLevelIndex), out int rank);
-        currentLeaderBoardRank = rank;
-
     }
 
-    public int ChecklevelStarsEarned()
+    public int CheckLevelStarsEarned()
     {
         float[] requirepoints =levelManager.currentLevelStarPoints;
         if (requirepoints == null || requirepoints.Length == 0)
             return 0;
-
-
 
         for (int i = 0; i < requirepoints.Length; i++)
         {
@@ -337,41 +362,7 @@ public class GameManager : MonoBehaviour
                 return i;
         }
 
-        return 3;
-    }
-
-    public bool GunPurche(GunSo gun)
-    {
-        float gunPrice = gun.WeaponData.gunPrice;
-        float playerPoints = playerData.totalPoints;
-
-        if (isTesting)
-            playerPoints = Mathf.Infinity;
-
-
-        if (playerPoints < gunPrice)
-            return false;
-
-        ChangePlayersPoints(-gunPrice);
-
-        int[] unlockedWeapons = new int[playerData.unlockedWeapons.Length + 1];
-        playerData.unlockedWeapons.CopyTo(unlockedWeapons, 0);
-        unlockedWeapons[unlockedWeapons.Length - 1] = gun.gunID;
-
-        playerData.unlockedWeapons = unlockedWeapons;
-
-        SaveManager.instance.Save();
-
-        playerController.gunManager.SetCurrentGun(gun.gunID);
-
-        return true;
-
-    }
-
-    private void ChangePlayersPoints(float gunPrice)
-    {
-        playerData.totalPoints += gunPrice;
-        uiManager.UpdateTotalPoints();
+        return requirepoints.Length;
     }
 
     public void QuitGame()

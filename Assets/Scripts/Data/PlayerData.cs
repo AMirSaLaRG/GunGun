@@ -5,6 +5,7 @@ public class PlayerData
 {
     public string name;
     public float totalPoints;
+    public int soldirCoins;
     public int[] levelStars;      // stars per level
     public float[] levelPoints;     // points per level
     public int unlockedLevel = 1;

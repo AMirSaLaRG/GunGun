@@ -16,6 +16,8 @@ public class GunManager : MonoBehaviour
     private MagazineManager magazineManager;
     private HitDitector hitDitector;
     private PlayerController player;
+    private ShopManager shopManager;
+
 
     [Header("All Guns")]
     public List<GunSo> allGuns = new List<GunSo>();  // All guns in the game
@@ -49,6 +51,7 @@ public class GunManager : MonoBehaviour
         player = GetComponent<PlayerController>();
         magazineManager = GetComponent<MagazineManager>();
         hitDitector = GetComponent<HitDitector>();
+        shopManager = FindFirstObjectByType<ShopManager>();
 
         
 
@@ -89,7 +92,7 @@ public class GunManager : MonoBehaviour
 
         if (unlockedGunsId.Count == 0)
         {
-            GameManager.instance.GunPurche(gunDictionary[0]);
+            shopManager.GunPurchase(gunDictionary[0]);
             unlockedGunsId.AddRange(GameManager.instance.playerData.unlockedWeapons);
         }
     }
@@ -329,4 +332,6 @@ public class GunManager : MonoBehaviour
         controls.TouchScreen.Test.performed -= SwitchGunOne;
         controls.Disable();
     }
+
+
 }

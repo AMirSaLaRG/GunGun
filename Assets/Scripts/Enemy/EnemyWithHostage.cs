@@ -12,7 +12,8 @@ public class EnemyWithHostage : Enemy
     {
         base.Start();
 
-        facingPosition = myBox.GetHostagePoint().position;
+        Transform[] hostageWaypoints = myBox.GetSecondaryWayPoints();
+        facingPosition = hostageWaypoints[hostageWaypoints.Length - 1].position;
 
         SpeedUpTarget(0, BaseMoveSpeed, .5f);
 
@@ -48,10 +49,7 @@ public class EnemyWithHostage : Enemy
         myHostage.TriggerAtEndOfDuration();
     }
 
-    protected override void OnEnteringViewTracker(Vector3 centerOfTracker)
-    {
-        base.OnEnteringViewTracker(centerOfTracker);
-    }
+
 
     public void AtHostageDeath()
     {

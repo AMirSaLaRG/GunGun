@@ -22,6 +22,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject victory;
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject LeaderBoard;
+    [SerializeField] private GameObject lastChance;
 
     [Header("MenuDynamicOnTop")]
     [SerializeField] private GameObject onTopInMenu;
@@ -49,6 +50,7 @@ public class UiManager : MonoBehaviour
         victory?.SetActive(panel == EPanel.Victory);
         gameOver?.SetActive(panel == EPanel.GameOver);
         LeaderBoard?.SetActive(panel == EPanel.LeaderBoard);
+        lastChance?.SetActive(panel == EPanel.LastChance);
 
         onTopInMenu?.SetActive(panel != EPanel.InGame);
 
@@ -92,12 +94,18 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    public void FadePanel(float time)
+    public void FadePanel(float time = .5f)
     {
         if (fadePanel == null) return;
         SetPanel(EPanel.None);
+        Image img = fadePanel.GetComponent<Image>();
+
+        Color c = img.color;
+        c.a = 1;
+        img.color = c;
+
         fadePanel.SetActive(true);
-        fadePanel.GetComponent<Image>().DOFade(0, time).OnComplete(() => {
+        img.DOFade(0, time).SetEase(Ease.InQuint).OnComplete(() => {
             fadePanel.SetActive(false);
 
         });

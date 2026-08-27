@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     private int healthPoint;
 
     private bool isDead;
+    private bool canTakeDamage = true;
+    private HitData hitTaken;
 
     private void Awake()
     {
@@ -49,7 +51,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private void OnTap(InputAction.CallbackContext context)
     {
-        if (GameManager.instance.gameState != EGameState.inGame) return;
+        if (GameManager.instance.gameState != EGameState.InGame) return;
 
         StartCoroutine(CheckScreenTouch());
     }
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("Tapped on UI - ignoring");
+            //Debug.Log("Tapped on UI - ignoring");
             yield break;
         }
 
@@ -81,31 +83,66 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (isDead)
             return;
 
+        if (canTakeDamage == false)
+            return;
+
+        hitTaken = hitedData;
         //ResetCombo();
 
         healthPoint -= damage;
-        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
         if (healthPoint <= 0)
         {
+            isDead = true;
+
             if (GameManager.instance.isTesting)
                 return;
 
-            isDead = true;
-            GameManager.instance.GameOver();
-        }
+            GameManager.instance.OnLastChance();
+
+        } else
+            myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
+
 
     }
 
 
+    public void ReviveThePlayer()
+    {
+        healthPoint = healthPointCap;
+        scoreManager.ClearHostageKill();
+        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitTaken.hitPos));
+        hitTaken = null;
+        isDead = false;
+        canTakeDamage = false;
+
+
+        Invoke(nameof(CanTakeDamage), 1.5f);
+    }
+
+    public void OnGameOver()
+    {
+        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitTaken.hitPos));
+        hitTaken = null;
+    }
+    private void CanTakeDamage () => canTakeDamage = true;
     public void SetGameStarted(bool gameStarted)
     {
         this.gameStarted = gameStarted;
         isDead = !gameStarted;
+        canTakeDamage = gameStarted;
         if (gameStarted)
             gunManager.ReadyTheGun();
 
     }
 
+    public void EquipNewWeapon(int gunId)
+    {
+        gunManager.SetCurrentGun(gunId);
+    }
+    internal void WaveChange(float displayTime)
+    {
+        myCanvas.waveChange(displayTime);
+    }
     private void OnEnable()
     {
         controls?.Enable();
@@ -116,4 +153,5 @@ public class PlayerController : MonoBehaviour, IDamagable
         controls.Disable();
     }
 
+  
 }

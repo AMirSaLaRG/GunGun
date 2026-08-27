@@ -6,16 +6,18 @@ public class SimpleActivator : EntityActivator
 
 
 
-    public override void SetActive(out float activateTime)
+    public override void SetActive(out float activateTime, float forceTime = 0)
     {
+        float duration = forceTime == 0 ? activateTransitionTime : forceTime;
+
         foreach (var item in ActivateItems)
             item.SetActive(true);
-        base.SetActive(out activateTime);
+        base.SetActive(out activateTime, duration);
     }
 
-    public override void SetDeActive()
+    public override void SetDeActive(bool isImediatly = false)
     {
-        base.SetDeActive();
+        base.SetDeActive(isImediatly);
         foreach (var item in ActivateItems)
             item.SetActive(false);
     }

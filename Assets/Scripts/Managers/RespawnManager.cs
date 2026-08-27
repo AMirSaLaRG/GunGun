@@ -10,7 +10,6 @@ public class RespawnManager : MonoBehaviour
     private UnitManager unitManager;
 
     [Header("Setup")]
-    //public List<RespawnData> respawnInfo = new List<RespawnData>();
     public List<RespawnData> currentRespawnInfo = new List<RespawnData>();
     private Vector2Int minMaxAvailableRespawns = new Vector2Int(1, 1);
     [SerializeField] private float breathTimeToEmptyABox = .3f;
@@ -21,7 +20,6 @@ public class RespawnManager : MonoBehaviour
 
     public System.Action jobDone;
 
-    //private List<Target> targetTracker = new List<Target>();
 
     private bool isOnRandomRespawn = false;
 
@@ -33,7 +31,7 @@ public class RespawnManager : MonoBehaviour
     private float nextTimeToRespawn = 0;
 
     private bool onEventMode;
-    public bool isSceenClear { private set; get; }
+    public bool isSceenClear { private set; get; } = true;
     private bool isEventEnded;
 
     private int waveActiveBoxes;
@@ -76,7 +74,7 @@ public class RespawnManager : MonoBehaviour
         RespawnRandomInterval();
 
     }
-    public void OnLeavingTheBox(RespawnBox respawnBox, Target boxUser)
+    public void OnRespawnLeaveTheBox(RespawnBox respawnBox, Target boxUser)
     {
         float timeToCleanTheBox = breathTimeToEmptyABox + boxUser.GetBodyDis();
 
@@ -221,9 +219,11 @@ public class RespawnManager : MonoBehaviour
     public void ClearScene()
     {
         BreakRespawn();
-        boxManager.DeActiveAllBoxes();
+        boxManager.DeActiveAllBoxes(true);
         boxManager.ResetBoxes();
         unitManager.ClearTheScene();
+
+        isSceenClear = true;
     }
 
     private void RespawnTargetRandomly(RespawnData respawnData)
@@ -260,14 +260,14 @@ public class RespawnManager : MonoBehaviour
         taker.Setup(newHostage);
         newHostage.Setup(taker);
     }
-    private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0, bool usingLastSide = false)
+    private Target RespawnTargetOn(RespawnData targetData, RespawnBox respawnBox, float duration = 0)
     {
         GameObject myPrefab = targetData.prefab;
 
         if (myPrefab == null)
             myPrefab = unitManager.GetBasicUnitData(targetData.respawnType).prefab;
 
-        Target newTarget = respawnBox.RespawnRandomSide(myPrefab, usingLastSide);
+        Target newTarget = respawnBox.RespawnTarget(myPrefab);
 
         newTarget.SetUpTarget(player, this, respawnBox, targetData.respawnType);
 
@@ -295,25 +295,23 @@ public class RespawnManager : MonoBehaviour
     }
 
     #region SetupRandom
-    public void SetupRandom(List<RespawnData> newRespawns,
-        int newActiveBoxes,
-        Vector2 newMinMaxIntervalSummon,
-        Vector2Int newMinMaxParallarRespawns,
-        int newCountDown = 0, RespawnType newCountDownType = RespawnType.BaseEnemy)
+    public void SetupRandom(WaveData data)
     {
-        waveActiveBoxes = newActiveBoxes;
+        waveActiveBoxes = data.ActiveBoxes;
         startingNextWawe = true;
 
         unitManager.SetOnWaitingForSceneClear();
 
+        boxManager.SetActivateTime(data.nextWaweDelay);
 
-        ReplcaeRespawnInfo(newRespawns);
 
-        SetNewRespawnTime(newMinMaxIntervalSummon);
+        ReplcaeRespawnInfo(data.respawns);
 
-        SetNewRespawnNumber(newMinMaxParallarRespawns);
+        SetNewRespawnTime(data.minMaxRandomIntervalSummon);
 
-        CheckAndSetRespawnBase(newCountDown, newCountDownType);
+        SetNewRespawnNumber(data.minMaxNumSummon);
+
+        CheckAndSetRespawnBase(data.respawnNumIfRespawnBase, data.respawnTypeIfRespawnBase);
 
         isOnRandomRespawn = true;
     }

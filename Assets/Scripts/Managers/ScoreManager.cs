@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -151,14 +152,17 @@ public class ScoreManager : MonoBehaviour
 
         if (currentHostageKilled >= hostageKillAllowed)
         {
-            GameManager.instance?.GameOver();
+            GameManager.instance?.OnLastChance();
         }
     }
-
+    internal void ClearHostageKill()
+    {
+        currentHostageKilled = 0;
+        ResetCombo();
+    }
     private void ProcessMissHit()
     {
         ResetCombo();
-        UpdateUi();
 
     }
 
@@ -254,4 +258,6 @@ public class ScoreManager : MonoBehaviour
                 inGameUi.SetComboTimer(comboIntervalCooldown);
         }
     }
+
+   
 }

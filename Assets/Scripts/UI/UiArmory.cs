@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class UiArmory : MonoBehaviour
 {
     [Header("Setup")]
+    [SerializeField] private ShopManager shopManager;
     [SerializeField] private Transform content;
     [SerializeField] private GameObject gunItemPrefab;
     [SerializeField] private GunManager gunManager;
@@ -126,7 +127,7 @@ public class UiArmory : MonoBehaviour
 
     public void Buy()
     {
-        bool bought = GameManager.instance.GunPurche(lookingGun);
+        bool bought = shopManager.GunPurchase(lookingGun);
         if (bought)
         {
             popupWarningText.text = "SUCCESSFUL\nYou bought the Gun \n Congratulation";
@@ -148,15 +149,26 @@ public class UiArmory : MonoBehaviour
 
     private void PopUpBtnFadeEffect(bool isFading = true)
     {
-        float targetValue = isFading ? 0 : 1;
+       
+        if (isFading)
+        {
+            Image[] images = BuyBtn.GetComponentsInChildren<Image>();
+            foreach (Image image in images)
+                image.DOFade(0, .5f).SetUpdate(true);
 
-        Image[] images = BuyBtn.GetComponentsInChildren<Image>();
-        foreach (Image image in images)
-            image.DOFade(targetValue, .5f);
-
-        TextMeshProUGUI[] texts = BuyBtn.GetComponentsInChildren<TextMeshProUGUI>();
-        foreach (TextMeshProUGUI text in texts)
-            text.DOFade(targetValue, .5f);
+            TextMeshProUGUI[] texts = BuyBtn.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI text in texts)
+                text.DOFade(0, .5f).SetUpdate(true);
+        } else
+        {
+            Image[] images = BuyBtn.GetComponentsInChildren<Image>();
+            foreach (Image image in images)
+                image.DOFade(1, 0f).SetUpdate(true);
+            TextMeshProUGUI[] texts = BuyBtn.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI text in texts)
+                text.DOFade(1, 0f).SetUpdate(true);
+        }
+        
     }
 
     private void OnEnable()

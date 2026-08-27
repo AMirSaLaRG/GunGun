@@ -16,6 +16,8 @@ public class BoxManager : MonoBehaviour
 
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
 
+    private float activateTimeAtEnd = 0;
+    public float currentActiveTime { private set; get; } = 0;
     public bool ManagingBoxes { private set; get; } = false;
 
     private void Awake()
@@ -203,7 +205,7 @@ public class BoxManager : MonoBehaviour
 
     private void ActiveBox(RespawnBox box, out float activeTime)
     {
-        box.ActiveThisBox(out float time);
+        box.ActiveThisBox(out float time, currentActiveTime);
         activeTime = time;
 
         PutBoxOnReadyList(box);
@@ -215,10 +217,10 @@ public class BoxManager : MonoBehaviour
         RemoveBoxFromReadyList(box);
     }
 
-    public void DeActiveAllBoxes()
+    public void DeActiveAllBoxes(bool isImediate = false)
     {
         foreach (var box in myRespawnBoxes)
-            box.DeActivateThisBox();
+            box.DeActivateThisBox(isImediate);
 
         activeEmptyBoxes.Clear();
         activeEmptyBoxesDoubleRespawn.Clear();
@@ -276,4 +278,10 @@ public class BoxManager : MonoBehaviour
 
     private void OnBoxManagment() => ManagingBoxes = true;
     private void BoxManagmentOver() => ManagingBoxes = false;
+
+    internal void SetActivateTime(float timeBetweenWaves)
+    {
+        currentActiveTime = activateTimeAtEnd;
+        activateTimeAtEnd = timeBetweenWaves;
+    }
 }

@@ -6,8 +6,9 @@ using UnityEngine;
 [System.Serializable]
 public class EntityActivator : MonoBehaviour, IBoxActivator
 {
+    [SerializeField] protected bool onlyEnable = false;
     [SerializeField] protected BoxCollider myActivateItemCollider;
-    [SerializeField] protected float activateTransitionTIme = 1.5f;
+    [SerializeField] protected float activateTransitionTime = 1.5f;
     [SerializeField] protected Ease ActivateEase;
 
     private Vector3 closePos;
@@ -24,6 +25,7 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
 
     protected virtual void Awake()
     {
+   
 
         closePos = transform.localPosition;
         closeScale = transform.localScale;
@@ -41,26 +43,37 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
         openQuaternion = transform.localRotation;
     }
 
-    public virtual void SetActive(out float activateTime)
+    public virtual void SetActive(out float activateTime, float forceTime = 0)
     {
+
+        float duration = forceTime == 0? activateTransitionTime : forceTime;
 
         activateTime = 0;
 
         if (isActive)
             return;
+
+        if (onlyEnable)
+        {
+            Debug.Log("SetActive");
+
+            gameObject.SetActive(true);
+            isActive = true;
+            return;
+        }
         myActivateItemCollider.enabled = false;
 
         // Create a sequence to animate all transforms together
         Sequence openSequence = DOTween.Sequence();
 
         // Scale
-        openSequence.Join(transform.DOScale(openScale, activateTransitionTIme).SetEase(ActivateEase));
+        openSequence.Join(transform.DOScale(openScale, duration).SetEase(ActivateEase));
 
         // Rotation
-        openSequence.Join(transform.DOLocalRotateQuaternion(openQuaternion, activateTransitionTIme).SetEase(ActivateEase));
+        openSequence.Join(transform.DOLocalRotateQuaternion(openQuaternion, duration).SetEase(ActivateEase));
 
         // Position
-        openSequence.Join(transform.DOLocalMove(openPos, activateTransitionTIme).SetEase(ActivateEase));
+        openSequence.Join(transform.DOLocalMove(openPos, duration).SetEase(ActivateEase));
 
         // When complete, re-enable collider
         openSequence.OnComplete(() =>
@@ -69,29 +82,48 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
         });
 
         isActive = true;
-        activateTime = activateTransitionTIme;
+        activateTime = duration;
     }
 
-    public virtual void SetDeActive()
+    public virtual void SetDeActive(bool isReseting = false)
     {
         if (isActive == false) return;
+
+        float duration = activateTransitionTime;
+
+        if (isReseting)
+            duration = 0;
+
+        if (onlyEnable)
+        {
+            gameObject.SetActive(false);
+            isActive = false;
+            return;
+        }
 
         Sequence closeSequence = DOTween.Sequence();
 
         // Scale
-        closeSequence.Join(transform.DOScale(closeScale, activateTransitionTIme).SetEase(ActivateEase));
+        closeSequence.Join(transform.DOScale(closeScale, duration).SetEase(ActivateEase));
 
         // Rotation
-        closeSequence.Join(transform.DOLocalRotateQuaternion(closeQuaternion, activateTransitionTIme).SetEase(ActivateEase));
+        closeSequence.Join(transform.DOLocalRotateQuaternion(closeQuaternion, duration).SetEase(ActivateEase));
 
         // Position
-        closeSequence.Join(transform.DOLocalMove(closePos, activateTransitionTIme).SetEase(ActivateEase));
+        closeSequence.Join(transform.DOLocalMove(closePos, duration).SetEase(ActivateEase));
 
         isActive = false;
     }
 
-    public virtual void CheckCloseRequsts()
+    public virtual void CheckCloseRequsts(bool isImediate = false)
     {
+        if (isImediate)
+        {
+            StopAllCoroutines();
+            SetDeActive(true);
+            return;
+        }
+
         foreach (var box in myRespawnBoxes)
         {
             if (box.isActive == true)
@@ -101,6 +133,11 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
             }
         }
         SetDeActive();
+    }
+
+    public virtual void ResetBox()
+    {
+        SetDeActive(true);
     }
 
     public void AddBox(RespawnBox myBox)
