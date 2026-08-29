@@ -34,6 +34,9 @@ public class RespawnBox : MonoBehaviour
 
     private void Awake()
     {
+        GetGuides();
+
+
         if (secondaryWayPoints == null || secondaryWayPoints.Length == 0)
             isSingleSummon = true;
 
@@ -50,7 +53,6 @@ public class RespawnBox : MonoBehaviour
 
     private void HideGuides()
     {
-        GetGuides();
 
         foreach (var point in waypoints)
             if (point.TryGetComponent<Renderer>(out Renderer r))

@@ -5,8 +5,6 @@ using DG.Tweening;
 
 public class Enemy : Target
 {
-    
-
     [Header("EnemySetup")]
     [SerializeField] protected float attackTime = 3f;
     [SerializeField] protected int damage = 1;
@@ -15,19 +13,18 @@ public class Enemy : Target
 
     [Header("Sfx Setup")]
     [SerializeField] protected AudioSource shotSfx;
+    [SerializeField] private ParticleSystem shotVfx;
+
 
     [Header("Shooting Warning Sign Setup")]
-    [SerializeField] private ParticleSystem ShootingWarningSign;
+    [SerializeField] private ParticleSystem ShootingWarningSignVfx;
+    [SerializeField] private Animator uiSignsCanvas;
     [SerializeField] private AudioSource ShootingWarningSfx;
     [SerializeField] private float warningSecondsBeforShoot;
     private Coroutine shootingWarningSignCo;
 
-
     private Vector3 startingRotation;
     private Vector3 startingPos;
-
-
-
 
     public bool ShouldDance = false;
     private bool isDancing = false;
@@ -42,7 +39,6 @@ public class Enemy : Target
         base.Start();
         startingRotation = transform.eulerAngles;
         startingPos = transform.position;
-
 
 
     }
@@ -79,20 +75,14 @@ public class Enemy : Target
         base.AtDieAction();
 
         Debug.Log("Die");
-
-        ShootingWarningSign.Stop();
-
-        if (shootCo != null)
-            StopCoroutine(shootCo);
-
-        if (shootingWarningSignCo != null)
-            StopCoroutine(shootingWarningSignCo);
+        StopWarningSign();
     }
 
     protected override void AtEndOfDurationAction()
     {
         base.AtEndOfDurationAction();
     }
+
     protected override void AtFinalPositionAction()
     {
         base.AtFinalPositionAction();
@@ -102,7 +92,6 @@ public class Enemy : Target
 
         AtFinalPositionEnemyAction();
     }
-
 
     protected virtual void AtFinalPositionEnemyAction()
     {
@@ -123,15 +112,20 @@ public class Enemy : Target
         Shoot();
     }
 
-
     protected virtual void Shoot()
     {
         anim.SetTrigger(triggerAnimAttackKeyWord);
         GameObject newBullet = Instantiate(projectal, transform.position, GetDirectionTowardLookPosition(facingPosition));
         AudioManager.instance.PlaySfx(shotSfx, true);
         newBullet.GetComponent<EnemyProjectal>().SetUP(projectalSpeed, damage, player);
+        if (shotVfx != null)
+            shotVfx.gameObject.SetActive(true);
+
+        StopWarningSign();
+        uiSignsCanvas.Play("shoted");
+
     }
-    
+
     protected virtual void Aiming()
     {
         GiveShootingWarningSign(attackTime);
@@ -141,16 +135,11 @@ public class Enemy : Target
  
     protected void GiveShootingWarningSign(float NextShotTimeFromNow)
     {
-        if (ShootingWarningSign == null)
-            return;
 
         float timeToGiveSign = NextShotTimeFromNow - warningSecondsBeforShoot;
 
         if (timeToGiveSign <= 0)
-        {
-            AudioManager.instance.PlaySfx(ShootingWarningSfx);
-            ShootingWarningSign.Play();
-        }
+            StartWarningSign();
         else
             shootingWarningSignCo = StartCoroutine(GiveShootingWarningSignCo(timeToGiveSign));
     }
@@ -160,9 +149,36 @@ public class Enemy : Target
         yield return new WaitForSeconds(timeToGiveSign);
         if (isDead) yield break;
 
-        AudioManager.instance.PlaySfx(ShootingWarningSfx);
-        ShootingWarningSign.Play();
+        StartWarningSign();
     }
 
-  
+    private void StartWarningSign() // THIS SHOULD GET ON TARGET NOT ONLY ENEMY
+    {
+        AudioManager.instance.PlaySfx(ShootingWarningSfx);
+        if (ShootingWarningSignVfx == null)
+            ShootingWarningSignVfx.Play();
+
+        if (uiSignsCanvas != null)
+            uiSignsCanvas.Play("warningSignStarts");
+    }
+
+    private void StopWarningSign()
+    {
+        if (ShootingWarningSignVfx != null)
+        {
+            ShootingWarningSignVfx.gameObject.SetActive(false);
+            ShootingWarningSignVfx.Stop();
+        }
+
+        if (uiSignsCanvas != null)
+            uiSignsCanvas.Play("stopWarningSign");
+
+        if (shootCo != null)
+            StopCoroutine(shootCo);
+
+        if (shootingWarningSignCo != null)
+            StopCoroutine(shootingWarningSignCo);
+    }
+
+    
 }

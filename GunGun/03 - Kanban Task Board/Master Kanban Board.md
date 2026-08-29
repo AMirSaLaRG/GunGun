@@ -6,9 +6,7 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] shop popup can be dedicated to shop manager
-- [ ] when reviving the scar sprite should disipear faster
-- [ ] add combo bonus something like call of
+- [ ] Create a standard frame for game fucose should be inside there
 
 
 ## Mehrdad feedback
@@ -28,6 +26,8 @@ kanban-plugin: board
 - [ ] too menu ye axe background bashe ghashang mishe
 - [ ] doshmani ke maro koshte 007 moshakhas she
 - [ ] dara ke baz mishe (bahal) vali az lahaze graphicy irad dare rang bandia doross nisst
+- [ ] bad feeling it is on the air
+- [ ] need some threshold around to fucose in midle
 
 
 ## mehrdads done
@@ -51,6 +51,9 @@ kanban-plugin: board
 		- [ ] enemy Prefab
 		- [ ] enemy Warning Sign
 		- [ ] hit sprites
+- [ ] add combo bonus something like call of
+- [ ] when reviving the scar sprite should disipear faster
+- [ ] shop popup can be dedicated to shop manager
 - [ ] - [ ] Achivements 15/8 #art #code #ui 
 		- [ ] kills
 		- [ ] powerup
@@ -107,6 +110,8 @@ kanban-plugin: board
 	- [x] make it smaller uses alot of space
 	- [x] enemy image get changes
 - [ ] add some text fwhen wave changes
+- [ ] added sprite as warning sign to get better render on phone
+- [ ] added enemy world space ui
 
 
 ## Done

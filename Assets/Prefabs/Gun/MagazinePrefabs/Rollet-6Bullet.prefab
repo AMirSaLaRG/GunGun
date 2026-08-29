@@ -251,7 +251,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7458009637074585011, guid: 07f7be2721ca5ea44b0d92ff7ada5cdf, type: 3}
   switchTIme: 0.3
   reloadTime: 0.3
+  chnageGunTime: 1.1
   reloadSfx: {fileID: 7135004412473385766}
+  warningMax: 1
+  type: 0
+  bulletHolderSet: {fileID: 0}
 --- !u!33 &1161430244699623249
 MeshFilter:
   m_ObjectHideFlags: 0

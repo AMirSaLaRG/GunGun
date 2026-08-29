@@ -123,7 +123,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7458009637074585011, guid: 07f7be2721ca5ea44b0d92ff7ada5cdf, type: 3}
   switchTIme: 0.3
   reloadTime: 0.3
+  chnageGunTime: 1.1
   reloadSfx: {fileID: 718214199460640209}
+  warningMax: 1
+  type: 0
+  bulletHolderSet: {fileID: 0}
 --- !u!65 &9056547931013472533
 BoxCollider:
   m_ObjectHideFlags: 0
