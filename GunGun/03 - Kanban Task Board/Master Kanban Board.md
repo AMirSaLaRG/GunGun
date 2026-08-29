@@ -6,7 +6,6 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] Create a standard frame for game fucose should be inside there
 
 
 ## Mehrdad feedback
@@ -95,28 +94,31 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] respawn box view tracker get buged should change with way points
-	refactor respawn box
-	refactor target move logic
-	repair current respawn boxes
-- [ ] restart has bug do not works on full open windows
-- [ ] Add shop Manager for pereches
-- [ ] Refactor Game Manager
-- [ ] added noise to warning sign of enemy
-- [ ] addd some colider in building for windows behind ones
-- [ ] make activator time by controlled by breath time in middle of game
-- [ ] in game ui should get changes
-	- [x] add some bar for data display
-	- [x] make it smaller uses alot of space
-	- [x] enemy image get changes
-- [ ] add some text fwhen wave changes
-- [ ] added sprite as warning sign to get better render on phone
-- [ ] added enemy world space ui
+- [ ] fix sprite don't get hidden when game restart or revive
+- [ ] added immunity icon on player canvas
 
 
 ## Done
 
+- [ ] Create a standard frame for game fucose should be inside there
+- [ ] added enemy world space ui
+- [ ] added sprite as warning sign to get better render on phone
+- [ ] add some text fwhen wave changes
+- [ ] in game ui should get changes
+	- [x] add some bar for data display
+	- [x] make it smaller uses alot of space
+	- [x] enemy image get changes
+- [ ] make activator time by controlled by breath time in middle of game
+- [ ] addd some colider in building for windows behind ones
+- [ ] added noise to warning sign of enemy
+- [ ] Refactor Game Manager
+- [ ] Add shop Manager for pereches
+- [ ] respawn box view tracker get buged should change with way points
+	refactor respawn box
+	refactor target move logic
+	repair current respawn boxes
 - [ ] some smoke vfx on hostage death
+- [ ] restart has bug do not works on full open windows
 - [ ] when a respawn box get empty it gave some time to respawn another one has a basic time or use body disapior added a fixed time and body disipier time get added to it
 - [ ] when buy a weapon should get equiped
 - [ ] Add pause btn ingame ui

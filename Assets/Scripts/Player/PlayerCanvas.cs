@@ -55,6 +55,9 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private float onComboAndPointOffsetY;
     [SerializeField] private float onComboAndPointOffsetRandom;
 
+    [Header("OnImunity")]
+    [SerializeField] private Image ImunityImage;
+
 
     [Header("TakingDamageUi")]
     [SerializeField] private Transform takingDamageElements;
@@ -107,23 +110,24 @@ public class PlayerCanvas : MonoBehaviour
 
     private IEnumerator DeadSpriteAnimation()
     {
+        
+
         yield return null;
         //screenPanel.color = Color.red;
         //screenPanel.DOFade(.4f, takingDamageUiTime / 2);
-
-
-        ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
-
         DieVisualImage.transform.localEulerAngles = Vector3.forward * UnityEngine.Random.Range(0, 360);
         DieVisualImage.transform.localScale = Vector3.zero;
-        DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic);
-        DieVisualImage.DOFade(.4f, takingDamageUiTime / 2);
+        DieVisualImage.transform.DOScale(1, takingDamageUiTime).SetEase(Ease.OutElastic).SetUpdate(true);
+        DieVisualImage.DOFade(.4f, takingDamageUiTime / 2).SetUpdate(true) ;
+
+
+      
 
         int saftyCheck = 0;
         while (true)
         {
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(.2f);
             if (GameManager.instance.gameState == EGameState.inMenu)
                 break;
             saftyCheck++;
@@ -270,6 +274,11 @@ public class PlayerCanvas : MonoBehaviour
         StartCoroutine(ShakeScreenCo(duration, intensity, mainCamera));
     }
 
+    public void ShakeScreen()
+    {
+        ShakeScreen(screenShakeDurationDie, screenShakeIntansityDie, mainCamera.transform);
+    }
+
     private IEnumerator ShakeScreenCo(float duration, float intensity, Transform mainCamera)
     {
         Vector3 originalPos = Camera.main.transform.localPosition;
@@ -329,5 +338,19 @@ public class PlayerCanvas : MonoBehaviour
 
         theColor.a = 0;
         mainMsgText.color = theColor;
+    }
+
+    internal void OnImunity(float time)
+    {
+        float startingAlpha = 1;
+        float endAlpha = 0;
+
+        ImunityImage.DOFade(startingAlpha, 0);
+        ImunityImage.DOFade(endAlpha, time * 5/6);
+    }
+
+    internal void OnImunity(object imunityTimeAfterRevive)
+    {
+        throw new NotImplementedException();
     }
 }

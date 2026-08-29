@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public WeaponData currentGun { private set; get; }
     public Camera mainCamera {  get; private set; }
+    public float ImunityTimeAfterRevive { get; private set; } = 4;
 
     private bool gameStarted = false;
 
@@ -36,7 +37,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private bool isDead;
     private bool canTakeDamage = true;
-    private HitData hitTaken;
 
     private void Awake()
     {
@@ -47,6 +47,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         controls.TouchScreen.Shoot.performed += ctx => OnTap(ctx);
 
+    }
+
+    private void Start()
+    {
+        healthPoint = healthPointCap;
     }
 
     private void OnTap(InputAction.CallbackContext context)
@@ -86,45 +91,40 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (canTakeDamage == false)
             return;
 
-        hitTaken = hitedData;
-        //ResetCombo();
+        if (GameManager.instance.isTesting)
+            return;
 
         healthPoint -= damage;
+        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
+
         if (healthPoint <= 0)
         {
             isDead = true;
-
-            if (GameManager.instance.isTesting)
-                return;
-
             GameManager.instance.OnLastChance();
-
-        } else
-            myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
-
-
+        }
     }
 
 
     public void ReviveThePlayer()
     {
         healthPoint = healthPointCap;
-        scoreManager.ClearHostageKill();
-        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitTaken.hitPos));
-        hitTaken = null;
+        myCanvas.ShakeScreen();
+        myCanvas.OnImunity(ImunityTimeAfterRevive);
         isDead = false;
         canTakeDamage = false;
 
 
-        Invoke(nameof(CanTakeDamage), 1.5f);
+        Invoke(nameof(RemoveImunity), ImunityTimeAfterRevive);
     }
 
     public void OnGameOver()
     {
-        myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitTaken.hitPos));
-        hitTaken = null;
+        myCanvas.ShakeScreen();
     }
-    private void CanTakeDamage () => canTakeDamage = true;
+    private void RemoveImunity()
+    {
+        canTakeDamage = true;
+    }
     public void SetGameStarted(bool gameStarted)
     {
         this.gameStarted = gameStarted;

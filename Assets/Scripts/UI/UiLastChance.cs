@@ -50,6 +50,7 @@ public class UiLastChance : MonoBehaviour
     {
         if (shopManager.AnotherChanceRequest())
         {
+            popUp.SetActive(false);
             GameManager.instance.ReviveThePlayer();
         }
         else
