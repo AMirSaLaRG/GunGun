@@ -3306,6 +3306,81 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &124955788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 124955789}
+  - component: {fileID: 124955791}
+  - component: {fileID: 124955790}
+  m_Layer: 6
+  m_Name: OnImuneIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &124955789
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124955788}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1253488697}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 625.2216, y: 625.22}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &124955790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124955788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 4f557b71e86deb54685b3527975b376a, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &124955791
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124955788}
+  m_CullTransparentMesh: 1
 --- !u!1 &125523770
 GameObject:
   m_ObjectHideFlags: 0
@@ -11897,6 +11972,186 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 501516209}
   m_CullTransparentMesh: 1
+--- !u!1 &501719643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 501719644}
+  - component: {fileID: 501719645}
+  m_Layer: 0
+  m_Name: PentHouse Stage 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &501719644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501719643}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.5, y: 4.20207, z: 28.39063}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1998019054}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &501719645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501719643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaweManager
+  waweData:
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 5
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 6
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.6, y: 1.4}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 2, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
 --- !u!1 &508909339
 GameObject:
   m_ObjectHideFlags: 0
@@ -20713,6 +20968,7 @@ MonoBehaviour:
   comboIntervalCooldown: 4
   onMoveHitPointBonuse: 1.2
   khalasHitPointBonuse: 0.1
+  ImunityTimeAfterRevive: 5.5
 --- !u!4 &849324135
 Transform:
   m_ObjectHideFlags: 0
@@ -29544,6 +29800,7 @@ RectTransform:
   - {fileID: 1114869032}
   - {fileID: 7537731867356662768}
   - {fileID: 1740048598}
+  - {fileID: 124955789}
   m_Father: {fileID: 885133548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -29590,6 +29847,7 @@ MonoBehaviour:
   onComboAndPointOffsetX: 35
   onComboAndPointOffsetY: -100
   onComboAndPointOffsetRandom: 25
+  ImunityImage: {fileID: 124955790}
   takingDamageElements: {fileID: 1376606260}
   takingDamageUiTime: 0.75
   DieVisualImage: {fileID: 1876494487}
@@ -30164,7 +30422,7 @@ GameObject:
   - component: {fileID: 1287202931}
   - component: {fileID: 1287202932}
   m_Layer: 0
-  m_Name: FirstLevel-Wave-1
+  m_Name: PentHouse Stage 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30200,111 +30458,138 @@ MonoBehaviour:
   waweData:
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
+    durationIfTimeBase: 12
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0.55
-    ActiveBoxes: 8
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    nextWaweDelay: 1.1
+    ActiveBoxes: 5
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.791
+      respawnProb: 1
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.086
+      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.083
+      respawnProb: 0
     - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.372
+      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
+    durationIfTimeBase: 12
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0.55
-    ActiveBoxes: 11
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    nextWaweDelay: 1.1
+    ActiveBoxes: 6
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.791
+      respawnProb: 1
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.086
+      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.083
+      respawnProb: 0
     - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.372
+      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
+    durationIfTimeBase: 12
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0.55
-    ActiveBoxes: 13
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
     minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.791
+      respawnProb: 1
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.086
+      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.083
+      respawnProb: 0
     - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.372
+      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
+    durationIfTimeBase: 12
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0.55
-    ActiveBoxes: 15
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
     minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.6, y: 1.4}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.791
+      respawnProb: 1
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.086
+      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.083
+      respawnProb: 0
     - respawnType: 3
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.372
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 2, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
     isWaweEnded: 0
 --- !u!1 &1287243242
 GameObject:
@@ -33062,7 +33347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1409066754}
   m_Layer: 0
-  m_Name: FirstLevel
+  m_Name: PentHouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41356,6 +41641,186 @@ MonoBehaviour:
   myActivators:
   - {fileID: 2052352511}
   - {fileID: 1050327054}
+--- !u!1 &1791690990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1791690992}
+  - component: {fileID: 1791690991}
+  m_Layer: 0
+  m_Name: PentHouse Stage 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1791690991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791690990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaweManager
+  waweData:
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 5
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.9, y: 1.8}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 8
+    minMaxNumSummon: {x: 3, y: 3}
+    minMaxRandomIntervalSummon: {x: 3.7, y: 3.7}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 9
+    minMaxNumSummon: {x: 1, y: 3}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.2
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    isWaweEnded: 0
+  - Type: 0
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 12
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    nextWaweDelay: 1.1
+    ActiveBoxes: 7
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 1.8}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    isWaweEnded: 0
+--- !u!4 &1791690992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791690990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.5, y: 4.20207, z: 28.39063}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1998019054}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1794681559
 GameObject:
   m_ObjectHideFlags: 0
@@ -43505,6 +43970,7 @@ GameObject:
   - component: {fileID: 1876494486}
   - component: {fileID: 1876494488}
   - component: {fileID: 1876494487}
+  - component: {fileID: 1876494489}
   m_Layer: 6
   m_Name: WainImage
   m_TagString: Untagged
@@ -43569,6 +44035,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1876494485}
   m_CullTransparentMesh: 1
+--- !u!65 &1876494489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876494485}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &1876615693
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47045,26 +47532,36 @@ MonoBehaviour:
   levelItemPrefab: {fileID: 8658423823536776067, guid: 6fc89e95bbfd2d54eb19aaa163113cca, type: 3}
   contentParent: {fileID: 1079430635}
   levels:
-  - levelName: FirstLevel-one
-    thumbnail: {fileID: 21300018, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
+  - levelName: PentHouse Stage 1
+    thumbnail: {fileID: 21300000, guid: 8941e7772f2260a47adf2d3ae6fa0819, type: 3}
     waveManager: {fileID: 1287202932}
     respawnBoxHolder: {fileID: 922218301}
     items:
     - {fileID: 1409066754}
     isLock: 1
-    pointsForOneStar: 10000
-    pointsFortwoStar: 20000
-    pointsForthreeStar: 30000
-  - levelName: FirstLevel-one
-    thumbnail: {fileID: 21300018, guid: 7ab74e659e1f0a34d9cfec21c478fc12, type: 3}
-    waveManager: {fileID: 1287202932}
-    respawnBoxHolder: {fileID: 1325263372}
+    pointsForOneStar: 700
+    pointsFortwoStar: 1250
+    pointsForthreeStar: 2000
+  - levelName: PentHouse Stage 2
+    thumbnail: {fileID: 21300000, guid: 8941e7772f2260a47adf2d3ae6fa0819, type: 3}
+    waveManager: {fileID: 501719645}
+    respawnBoxHolder: {fileID: 922218301}
     items:
-    - {fileID: 1599106808}
+    - {fileID: 1409066754}
     isLock: 1
-    pointsForOneStar: 10000
-    pointsFortwoStar: 20000
-    pointsForthreeStar: 30000
+    pointsForOneStar: 700
+    pointsFortwoStar: 1250
+    pointsForthreeStar: 2000
+  - levelName: PentHouse Stage 3
+    thumbnail: {fileID: 21300000, guid: 8941e7772f2260a47adf2d3ae6fa0819, type: 3}
+    waveManager: {fileID: 1791690991}
+    respawnBoxHolder: {fileID: 922218301}
+    items:
+    - {fileID: 1409066754}
+    isLock: 1
+    pointsForOneStar: 700
+    pointsFortwoStar: 1250
+    pointsForthreeStar: 2000
 --- !u!4 &1998019054
 Transform:
   m_ObjectHideFlags: 0
@@ -47079,6 +47576,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1287202931}
+  - {fileID: 501719644}
+  - {fileID: 1791690992}
   - {fileID: 1621419621}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48391,6 +48890,7 @@ GameObject:
   - component: {fileID: 2042168917}
   - component: {fileID: 2042168919}
   - component: {fileID: 2042168918}
+  - component: {fileID: 2042168920}
   m_Layer: 0
   m_Name: Building02_1
   m_TagString: Untagged
@@ -48470,6 +48970,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042168916}
   m_Mesh: {fileID: 8362175797403549478, guid: 654ee314545906341948a3e895650401, type: 3}
+--- !u!65 &2042168920
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042168916}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.999998, y: 22.273045, z: 9.999998}
+  m_Center: {x: -0.000011205673, y: 11.136524, z: 0.0000019073486}
 --- !u!1 &2043767587
 GameObject:
   m_ObjectHideFlags: 0

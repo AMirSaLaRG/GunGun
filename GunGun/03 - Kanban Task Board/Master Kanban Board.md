@@ -6,6 +6,8 @@ kanban-plugin: board
 
 ## Backlog
 
+- [ ] design first level
+- [ ] design second level
 
 
 ## Mehrdad feedback
@@ -94,12 +96,12 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] fix sprite don't get hidden when game restart or revive
-- [ ] added immunity icon on player canvas
 
 
 ## Done
 
+- [ ] added immunity icon on player canvas
+- [ ] fix sprite don't get hidden when game restart or revive
 - [ ] Create a standard frame for game fucose should be inside there
 - [ ] added enemy world space ui
 - [ ] added sprite as warning sign to get better render on phone

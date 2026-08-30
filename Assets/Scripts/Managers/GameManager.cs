@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
         currentPanelOnProgress = EPanel.Victory;
         currentGameStateInProgress = EGameState.inMenu;
 
-        SaveGameResults();
+        SaveGameResults(true);
 
         if (menuTranstionController != null && gameState == EGameState.inMenu)
         {
@@ -329,7 +329,7 @@ public class GameManager : MonoBehaviour
             OnPause();
     }
 
-    private void SaveGameResults()
+    private void SaveGameResults(bool isCompleted = false)
     {
         float points = scoreManager.points;
         int levelIndex = levelManager.currentLevelIndex;
@@ -340,6 +340,11 @@ public class GameManager : MonoBehaviour
         int earnedStars = CheckLevelStarsEarned();
         if (playerData.levelStars[levelIndex] < earnedStars)
             playerData.levelStars[levelIndex] = earnedStars;
+
+        if (isCompleted)
+            if (playerData.levelStars[levelIndex] > 0)
+                if (playerData.unlockedLevel < currentLevelIndex + 1)
+                    playerData.unlockedLevel = currentLevelIndex + 1;
 
         playerData.totalPoints += points;
 

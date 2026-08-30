@@ -24,12 +24,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private float comboIntervalCooldown = 2;
     [SerializeField] private float onMoveHitPointBonuse = 1.2f;
     [SerializeField] private float khalasHitPointBonuse = 1.1f;
+    [SerializeField] private float ImunityTimeAfterRevive  = 4;
 
 
 
     public WeaponData currentGun { private set; get; }
     public Camera mainCamera {  get; private set; }
-    public float ImunityTimeAfterRevive { get; private set; } = 4;
 
     private bool gameStarted = false;
 

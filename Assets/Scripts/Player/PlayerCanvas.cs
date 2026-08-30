@@ -345,6 +345,9 @@ public class PlayerCanvas : MonoBehaviour
         float startingAlpha = 1;
         float endAlpha = 0;
 
+        Debug.Log(time);
+
+
         ImunityImage.DOFade(startingAlpha, 0);
         ImunityImage.DOFade(endAlpha, time * 5/6);
     }
