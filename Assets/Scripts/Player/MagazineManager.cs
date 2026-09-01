@@ -9,7 +9,6 @@ public class MagazineManager : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] private float switchTIme = .3f;
     [SerializeField] private float reloadTime = .5f;
-    [SerializeField] private float chnageGunTime = 1.1f;
     [SerializeField] private AudioSource reloadSfx;
     [SerializeField] private int warningMax = 1;
     [SerializeField] private EMagazinesType type;
@@ -225,7 +224,7 @@ public class MagazineManager : MonoBehaviour
 
     public bool IsEmpty() => currentAmo <= 0;
 
-    internal void PutMagazineInSocket()
+    internal void PutMagazineInSocket(float changeGunTime)
     {
         Vector3 StartPos = transform.position;
         Vector3 startRot = transform.rotation.eulerAngles;
@@ -235,17 +234,16 @@ public class MagazineManager : MonoBehaviour
         foreach (var bullet in mybullets)
             bullet.position = Vector3.forward * -1000;
 
-        float switchTime = chnageGunTime;
 
         if (GameManager.instance != null)
             if (GameManager.instance.gameState != EGameState.InGame)
-                switchTime = 0;
+                changeGunTime = 0;
 
         transform.position = StartPos - transform.right * 4;
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
-        transform.DORotate(startRot, switchTime);
-        transform.DOMove(StartPos, switchTime).SetEase(Ease.OutElastic).OnComplete(() =>
+        transform.DORotate(startRot, changeGunTime);
+        transform.DOMove(StartPos, changeGunTime).SetEase(Ease.OutElastic).OnComplete(() =>
         {
             isReloading = false;
             OnReloadBullets();

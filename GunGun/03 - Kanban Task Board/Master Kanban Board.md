@@ -6,29 +6,31 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] design first level
-- [ ] design second level
+- [ ] make survival mode for first level
+	- [ ] Create survival manager
+	- [ ] Create survival difficulty
+- [ ] write some history for game #writing
+- [ ] need to put some reward on middle of level with time or wave
+	updating reward manager #code
+- [ ] fix bug of Retry i try it but do not happens again
 
 
 ## Mehrdad feedback
 
 - [ ] guns better to get upgrade over bought like 1 2 3
+- [ ] add reward on combo
+- [ ] go next kar nemikone chon yedoonas
 - [ ] enemy shot fire and get some dramatic movie like 007 movies
 - [ ] Leader board can insert name and be smaller
-- [ ] add reward on combo
 - [ ] add another currency that earned by different path like shooting a clow or box
 - [ ] there may be a bug with  summon looks like caused by hostage
 - [ ] add a roll shop to the game that get trigger by new currency
 - [ ] currencies should be manage by how much play or chance and the item rewards
-- [ ] spawn az kenar bashe !?
 - [ ] tashkhis hostage sakhte
 - [ ] hostage rahate yoho biad ke darsade eshtebah bere balatar
-- [ ] go next kar nemikone chon yedoonas
 - [ ] too menu ye axe background bashe ghashang mishe
 - [ ] doshmani ke maro koshte 007 moshakhas she
 - [ ] dara ke baz mishe (bahal) vali az lahaze graphicy irad dare rang bandia doross nisst
-- [ ] bad feeling it is on the air
-- [ ] need some threshold around to fucose in midle
 
 
 ## mehrdads done
@@ -38,6 +40,9 @@ kanban-plugin: board
 - [ ] pause menu
 - [ ] retry menu
 - [ ] resum
+- [ ] spawn az kenar bashe !?
+- [ ] need some threshold around to fucose in midle
+- [ ] bad feeling it is on the air
 - [ ] the question mark on the enemy is nice can add some noise to it
 
 
@@ -96,10 +101,24 @@ kanban-plugin: board
 
 ## Done Before Comit
 
+- [ ] add penalty for hostage death to reset reward
+- [ ] to each wave add string to display
+- [ ] add light to activators on top
+- [ ] when there is no more level go next get disabled
+- [ ] add reward for combo
+	- [x] in game ui create as place for claim rewards #ui 
+	- [x] need some reward manager #code
+	- [x] i think score manager should handle rewards
+- [ ] gun at start should be basic one
+- [ ] between waves for scene clear wait make combo drop fix that
 
 
 ## Done
 
+- [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
+- [ ] on try again a set of activator main door was closed but it was active
+- [ ] design first level
+- [ ] design second level
 - [ ] added immunity icon on player canvas
 - [ ] fix sprite don't get hidden when game restart or revive
 - [ ] Create a standard frame for game fucose should be inside there
@@ -197,8 +216,9 @@ kanban-plugin: board
 
 ## Bugs
 
-- [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
-- [ ] on try again a set of activator main door was closed but it was active
+- [ ] after retry
+	spawn boxes get buged
+	a set of respawn box of windows both items are de active the box is active the enemy spawned
 
 
 ## fixed but not sure
@@ -213,6 +233,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,true,true,true,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

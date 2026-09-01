@@ -2209,6 +2209,7 @@ MonoBehaviour:
   myActivators:
   - {fileID: 8632775537446056915}
   - {fileID: 9135749489735608722}
+  - {fileID: 813963379}
 --- !u!1 &76180484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2874,99 +2875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 4
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.5
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.3
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 6
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.8}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 8
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.5}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 10
-    minMaxNumSummon: {x: 1, y: 3}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.4}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
+  wawesData: []
 --- !u!1 &121677436
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,6 +4348,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1193700493}
+    - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 806148433}
     - targetCorrespondingSourceObject: {fileID: 1085594043158665313, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1464115901}
@@ -4660,11 +4572,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4444665172391900500, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.436
+      value: -1.38
       objectReference: {fileID: 0}
     - target: {fileID: 4444665172391900500, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.135
+      value: 4.16
       objectReference: {fileID: 0}
     - target: {fileID: 4889538116618401416, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4736,11 +4648,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8628244049335379731, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.19
+      value: 0.24
       objectReference: {fileID: 0}
     - target: {fileID: 8628244049335379731, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.3
+      value: 3.93
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12016,14 +11928,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
+  wawesData:
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 5
+    startingDelay: 2
+    ActiveBoxes: 4
     minMaxNumSummon: {x: 1, y: 1}
     minMaxRandomIntervalSummon: {x: 0.8, y: 2}
     respawns:
@@ -12031,25 +11944,18 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.13
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
+    startingDelay: 2
     ActiveBoxes: 6
     minMaxNumSummon: {x: 1, y: 1}
     minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
@@ -12058,99 +11964,78 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.143
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
+    startingDelay: 2
+    ActiveBoxes: 8
     minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
+    minMaxRandomIntervalSummon: {x: 0.6, y: 1.5}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.6, y: 1.4}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
+      respawnProb: 0.14
     - respawnType: 2
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 0.17
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 10
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
+    startingDelay: 2
+    ActiveBoxes: 8
     minMaxNumSummon: {x: 2, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    minMaxRandomIntervalSummon: {x: 2, y: 2}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
     - respawnType: 1
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
+      respawnProb: 0.23
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 10
+    minMaxNumSummon: {x: 1, y: 3}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.299
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.304
     isWaweEnded: 0
 --- !u!1 &508909339
 GameObject:
@@ -13489,6 +13374,125 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0052413545, y: 0.0009000002, z: 0.008712622}
   m_Center: {x: -0.008455203, y: 0.039549965, z: 0.045347776}
+--- !u!1 &568546141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 568546143}
+  - component: {fileID: 568546142}
+  m_Layer: 0
+  m_Name: '***RewardManager***'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &568546142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568546141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f12a351cdc05174abc34da22b2ff14e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RewardManager
+  RewardItemHolder: {fileID: 568927531}
+  RewardItemPrefab: {fileID: 5782416203112799721, guid: 3b9e8b3feb7d7d1449e5946d1076508a, type: 3}
+  gunComboRewards:
+  - combo: 5
+    gunId: 1
+  - combo: 10
+    gunId: 2
+  - combo: 15
+    gunId: 3
+  - combo: 25
+    gunId: 4
+  - combo: 40
+    gunId: 5
+--- !u!4 &568546143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568546141}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 362.24036, y: 1457.6477, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &568927530
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 568927531}
+  - component: {fileID: 568927532}
+  m_Layer: 6
+  m_Name: RewardHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &568927531
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568927530}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1583627734}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 640}
+  m_SizeDelta: {x: 200, y: 800}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &568927532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568927530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 50
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 8
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!65 &570441935
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19127,99 +19131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 4
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1
-    ActiveBoxes: 3
-    minMaxNumSummon: {x: 1, y: 1}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.885
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.102
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 4
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1
-    ActiveBoxes: 3
-    minMaxNumSummon: {x: 1, y: 1}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.885
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.157
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 4
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1
-    ActiveBoxes: 3
-    minMaxNumSummon: {x: 1, y: 1}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.885
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.102
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 4
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1
-    ActiveBoxes: 3
-    minMaxNumSummon: {x: 1, y: 1}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.885
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.243
-    isWaweEnded: 0
+  wawesData: []
 --- !u!4 &771490950
 Transform:
   m_ObjectHideFlags: 0
@@ -19860,6 +19772,300 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801128421}
   m_CullTransparentMesh: 1
+--- !u!1 &806148432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806148433}
+  - component: {fileID: 806148436}
+  - component: {fileID: 806148435}
+  - component: {fileID: 806148434}
+  m_Layer: 6
+  m_Name: Point Light_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &806148433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806148432}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.68, y: 4.1399994, z: 1.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 995111657}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &806148434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806148432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1665c777f42dbfd40911237ca875202b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityActivator
+  onlyEnable: 1
+  myActivateItemCollider: {fileID: 0}
+  activateTransitionTime: 1.5
+  ActivateEase: 0
+  openPos: {x: 0, y: 0, z: 0}
+  openScale: {x: 0, y: 0, z: 0}
+  openQuaternion: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &806148435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806148432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &806148436
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806148432}
+  m_Enabled: 1
+  serializedVersion: 12
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 40
+  m_Range: 3.07
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 1500
+  m_UseColorTemperature: 1
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
+--- !u!1 &813963377
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 813963378}
+  - component: {fileID: 813963381}
+  - component: {fileID: 813963380}
+  - component: {fileID: 813963379}
+  m_Layer: 6
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &813963378
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813963377}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.88, y: 4.48, z: 2.84}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1676849376}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &813963379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813963377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1665c777f42dbfd40911237ca875202b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityActivator
+  onlyEnable: 1
+  myActivateItemCollider: {fileID: 0}
+  activateTransitionTime: 1.5
+  ActivateEase: 0
+  openPos: {x: 0, y: 0, z: 0}
+  openScale: {x: 0, y: 0, z: 0}
+  openQuaternion: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &813963380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813963377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &813963381
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813963377}
+  m_Enabled: 1
+  serializedVersion: 12
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 40
+  m_Range: 3.07
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 1500
+  m_UseColorTemperature: 1
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &815916350
 GameObject:
   m_ObjectHideFlags: 0
@@ -21006,6 +21212,7 @@ MonoBehaviour:
   defaultHitVfx: {fileID: 22480150734997295, guid: c6847f47a8dd73d41802cf36a4cffca8, type: 3}
   defaultbulletHole: {fileID: 1389250963964583849, guid: 0634b4b1bef120c438f79939c3ad821e, type: 3}
   holeLifetime: 12
+  changeGunTime: 0.3
   defaultHitSfx: {fileID: 1742153114}
   gunShotSfx: {fileID: 577094457}
   gunEmptyShotSfx: {fileID: 1470939224}
@@ -22680,6 +22887,153 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945576919}
   m_CullTransparentMesh: 1
+--- !u!1 &946901710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 946901711}
+  - component: {fileID: 946901714}
+  - component: {fileID: 946901713}
+  - component: {fileID: 946901712}
+  m_Layer: 6
+  m_Name: Point Light_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &946901711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946901710}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8374719, z: -0, w: 0.54648036}
+  m_LocalPosition: {x: 0.24, y: 4.01, z: -3.69}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2048454227}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &946901712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946901710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1665c777f42dbfd40911237ca875202b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityActivator
+  onlyEnable: 1
+  myActivateItemCollider: {fileID: 0}
+  activateTransitionTime: 1.5
+  ActivateEase: 0
+  openPos: {x: 0, y: 0, z: 0}
+  openScale: {x: 0, y: 0, z: 0}
+  openQuaternion: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &946901713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946901710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &946901714
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946901710}
+  m_Enabled: 1
+  serializedVersion: 12
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 40
+  m_Range: 3.07
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 1500
+  m_UseColorTemperature: 1
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!65 &955418847
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24238,6 +24592,7 @@ MonoBehaviour:
   myActivators:
   - {fileID: 6682985150415361484}
   - {fileID: 5634940538029174165}
+  - {fileID: 946901712}
 --- !u!1 &1014786871
 GameObject:
   m_ObjectHideFlags: 0
@@ -27731,6 +28086,153 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124956922}
   m_CullTransparentMesh: 1
+--- !u!1 &1127349640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127349641}
+  - component: {fileID: 1127349644}
+  - component: {fileID: 1127349643}
+  - component: {fileID: 1127349642}
+  m_Layer: 6
+  m_Name: Point Light_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1127349641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127349640}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8374719, z: -0, w: 0.54648036}
+  m_LocalPosition: {x: 2.41, y: 4.479999, z: -2.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1214317966}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1127349642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127349640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1665c777f42dbfd40911237ca875202b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityActivator
+  onlyEnable: 1
+  myActivateItemCollider: {fileID: 0}
+  activateTransitionTime: 1.5
+  ActivateEase: 0
+  openPos: {x: 0, y: 0, z: 0}
+  openScale: {x: 0, y: 0, z: 0}
+  openQuaternion: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1127349643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127349640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &1127349644
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127349640}
+  m_Enabled: 1
+  serializedVersion: 12
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 40
+  m_Range: 3.07
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 1500
+  m_UseColorTemperature: 1
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &1137691936
 GameObject:
   m_ObjectHideFlags: 0
@@ -28518,6 +29020,7 @@ MonoBehaviour:
   myActivators:
   - {fileID: 7954778756953185468}
   - {fileID: 8964732481454349992}
+  - {fileID: 806148434}
 --- !u!1 &1195385287
 GameObject:
   m_ObjectHideFlags: 0
@@ -28762,16 +29265,16 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 4
+  m_Intensity: 2.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.811
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -29033,6 +29536,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1672197702}
+    - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1127349641}
     - targetCorrespondingSourceObject: {fileID: 1085594043158665313, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: 1
       addedObject: {fileID: 353125052}
@@ -30455,14 +30961,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
+  wawesData:
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 5
+    startingDelay: 2
+    ActiveBoxes: 4
     minMaxNumSummon: {x: 1, y: 1}
     minMaxRandomIntervalSummon: {x: 0.8, y: 2}
     respawns:
@@ -30470,25 +30977,14 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
+    startingDelay: 2
     ActiveBoxes: 6
     minMaxNumSummon: {x: 1, y: 1}
     minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
@@ -30497,99 +30993,54 @@ MonoBehaviour:
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 15
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
+    startingDelay: 2
+    ActiveBoxes: 8
     minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
+    minMaxRandomIntervalSummon: {x: 0.6, y: 1.5}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
     isWaweEnded: 0
   - Type: 0
+    waveText: 
     eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
+    durationIfTimeBase: 10
     respawnNumIfRespawnBase: 0
     respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.6, y: 1.4}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
+    startingDelay: 2
+    ActiveBoxes: 8
     minMaxNumSummon: {x: 2, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    minMaxRandomIntervalSummon: {x: 2, y: 2}
     respawns:
     - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
       respawnProb: 1
-    - respawnType: 2
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 10
+    minMaxNumSummon: {x: 1, y: 3}
+    minMaxRandomIntervalSummon: {x: 1, y: 2}
+    respawns:
+    - respawnType: 0
       prefab: {fileID: 0}
       icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
+      respawnProb: 1
     isWaweEnded: 0
 --- !u!1 &1287243242
 GameObject:
@@ -37274,6 +37725,7 @@ RectTransform:
   - {fileID: 1910998564}
   - {fileID: 1941376443}
   - {fileID: 1935131115}
+  - {fileID: 568927531}
   m_Father: {fileID: 885133548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -39780,6 +40232,7 @@ MonoBehaviour:
   myActivators:
   - {fileID: 6051465681326053310}
   - {fileID: 9011866230581622787}
+  - {fileID: 1127349642}
 --- !u!1 &1676396351
 GameObject:
   m_ObjectHideFlags: 0
@@ -40222,6 +40675,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75327049}
+    - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 813963378}
     - targetCorrespondingSourceObject: {fileID: 1085594043158665313, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1041803538}
@@ -41650,7 +42106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1791690992}
-  - component: {fileID: 1791690991}
+  - component: {fileID: 1791690993}
   m_Layer: 0
   m_Name: PentHouse Stage 3
   m_TagString: Untagged
@@ -41658,154 +42114,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1791690991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1791690990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 5
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.9, y: 1.8}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 8
-    minMaxNumSummon: {x: 3, y: 3}
-    minMaxRandomIntervalSummon: {x: 3.7, y: 3.7}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 9
-    minMaxNumSummon: {x: 1, y: 3}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.1
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.2
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 1.1
-    ActiveBoxes: 7
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 0.8, y: 1.8}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 1
-    isWaweEnded: 0
 --- !u!4 &1791690992
 Transform:
   m_ObjectHideFlags: 0
@@ -41821,6 +42129,131 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1998019054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1791690993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791690990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaweManager
+  wawesData:
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 4
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.13
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.13
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 6
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.7, y: 1.7}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.143
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.143
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 8
+    minMaxNumSummon: {x: 1, y: 2}
+    minMaxRandomIntervalSummon: {x: 0.6, y: 1.5}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.14
+    - respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.17
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.17
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 10
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 8
+    minMaxNumSummon: {x: 2, y: 2}
+    minMaxRandomIntervalSummon: {x: 2, y: 2}
+    respawns:
+    - respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    - respawnType: 1
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0.23
+    isWaweEnded: 0
+  - Type: 0
+    waveText: 
+    eventSequenceSo: {fileID: 0}
+    durationIfTimeBase: 15
+    respawnNumIfRespawnBase: 0
+    respawnTypeIfRespawnBase: 0
+    startingDelay: 2
+    ActiveBoxes: 10
+    minMaxNumSummon: {x: 1, y: 1}
+    minMaxRandomIntervalSummon: {x: 0.8, y: 1.5}
+    respawns:
+    - respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 1
+    isWaweEnded: 0
 --- !u!1 &1794681559
 GameObject:
   m_ObjectHideFlags: 0
@@ -47554,7 +47987,7 @@ MonoBehaviour:
     pointsForthreeStar: 2000
   - levelName: PentHouse Stage 3
     thumbnail: {fileID: 21300000, guid: 8941e7772f2260a47adf2d3ae6fa0819, type: 3}
-    waveManager: {fileID: 1791690991}
+    waveManager: {fileID: 0}
     respawnBoxHolder: {fileID: 922218301}
     items:
     - {fileID: 1409066754}
@@ -48362,142 +48795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f628dfd534450ef46ab958393f7f02d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaweManager
-  waweData:
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 12
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 10
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.5
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.372
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.298
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.298
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 10
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 3
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 2}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.5
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.372
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.298
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.298
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 6
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.8}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 8
-    minMaxNumSummon: {x: 1, y: 2}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.5}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
-  - Type: 0
-    eventSequenceSo: {fileID: 0}
-    durationIfTimeBase: 15
-    respawnNumIfRespawnBase: 0
-    respawnTypeIfRespawnBase: 0
-    nextWaweDelay: 0
-    ActiveBoxes: 10
-    minMaxNumSummon: {x: 1, y: 3}
-    minMaxRandomIntervalSummon: {x: 1, y: 1.4}
-    respawns:
-    - respawnType: 0
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.6
-    - respawnType: 1
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 2
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    - respawnType: 3
-      prefab: {fileID: 0}
-      icon: {fileID: 0}
-      respawnProb: 0.4
-    isWaweEnded: 0
+  wawesData: []
 --- !u!4 &2016192284
 Transform:
   m_ObjectHideFlags: 0
@@ -49396,15 +49694,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.19
+      value: -3.01
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.2
+      value: 3.3
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 43.95
+      value: 44.14
       objectReference: {fileID: 0}
     - target: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       propertyPath: m_LocalRotation.w
@@ -49443,6 +49741,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1005994559}
+    - targetCorrespondingSourceObject: {fileID: 9014226969361849842, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 946901711}
     - targetCorrespondingSourceObject: {fileID: 1085594043158665313, guid: 0f8b86311d428f6449287ca0a5625d81, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1944195735}
@@ -131550,6 +131851,7 @@ SceneRoots:
   - {fileID: 1645523078}
   - {fileID: 653052675}
   - {fileID: 368207266}
+  - {fileID: 568546143}
   - {fileID: 8954893412872741061}
   - {fileID: 1998019054}
   - {fileID: 547599298}

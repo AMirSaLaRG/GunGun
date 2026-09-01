@@ -35,6 +35,7 @@ public class GunManager : MonoBehaviour
     [SerializeField] private GameObject defaultHitVfx;
     [SerializeField] private GameObject defaultbulletHole;
     [SerializeField] private float holeLifetime;
+    [SerializeField] private float changeGunTime = 0.3f;
 
     [Header ("Sfx")]
     [SerializeField] private AudioSource defaultHitSfx;
@@ -59,7 +60,7 @@ public class GunManager : MonoBehaviour
 
         currentGunId = GameManager.instance.playerData.lastGunId;
 
-        SetCurrentGun(currentGunId);
+        ResetTheGun();
     }
 
     async System.Threading.Tasks.Task LoadAllGuns()
@@ -97,6 +98,13 @@ public class GunManager : MonoBehaviour
         }
     }
 
+    public bool IsGunUnlocked(int gunId, out GunSo gunData)
+    {
+        bool isUnlocked = unlockedGunsId.Contains(gunId);
+        gunData = allGuns.Find(x => x.gunID ==  gunId);
+
+        return isUnlocked;
+    }
     public List<int> GetUnlockedGunsId()
     {
         RefreshUnlockGuns();
@@ -142,7 +150,7 @@ public class GunManager : MonoBehaviour
 
         GameObject newMagazine = Instantiate(gun.gunMagazinePrefab, magazineSocket);
         magazineManager = newMagazine.GetComponent<MagazineManager>();
-        magazineManager.PutMagazineInSocket();
+        magazineManager.PutMagazineInSocket(changeGunTime);
     }
 
     public List<HitData> GunShot(Vector2 shotAim)
@@ -313,9 +321,9 @@ public class GunManager : MonoBehaviour
             magazineManager.OnReloadBullets();
     }
 
-    public void ReadyTheGun()
+    public void ResetTheGun()
     {
-        SetCurrentGun(currentGunId);
+        SetCurrentGun(0);
     }
     private void OnEnable()
     {

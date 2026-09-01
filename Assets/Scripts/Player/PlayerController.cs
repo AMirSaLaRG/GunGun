@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         isDead = !gameStarted;
         canTakeDamage = gameStarted;
         if (gameStarted)
-            gunManager.ReadyTheGun();
+            gunManager.ResetTheGun();
 
     }
 
@@ -139,9 +139,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         gunManager.SetCurrentGun(gunId);
     }
-    internal void WaveChange(float displayTime)
+    internal void WaveChange(WaveData data, string waveNum)
     {
-        myCanvas.waveChange(displayTime);
+        myCanvas.waveChange(data, waveNum);
     }
     private void OnEnable()
     {

@@ -302,7 +302,7 @@ public class RespawnManager : MonoBehaviour
 
         unitManager.SetOnWaitingForSceneClear();
 
-        boxManager.SetActivateTime(data.nextWaweDelay);
+        boxManager.SetActivateTime(data.startingDelay);
 
 
         ReplcaeRespawnInfo(data.respawns);

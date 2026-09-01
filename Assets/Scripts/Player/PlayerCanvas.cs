@@ -298,7 +298,7 @@ public class PlayerCanvas : MonoBehaviour
         mainCamera.localPosition = originalPos;
     }
 
-    public void waveChange(float displayTime = 1)
+    public void waveChange(WaveData data, string waveNumber)
     {
         if (mainTextCo != null)
         {
@@ -306,7 +306,10 @@ public class PlayerCanvas : MonoBehaviour
             
         }
 
-        mainMsgText.text = $"Get Ready For Next Wave!";
+        if (data.waveText == null ||  data.waveText.Length == 0)
+            mainMsgText.text = $"Get Ready For Wave:\n {waveNumber}";
+        else
+            mainMsgText.text = $"{data.waveText}: \n { waveNumber}";
 
 
         Color textC = mainMsgText.color;
@@ -314,7 +317,7 @@ public class PlayerCanvas : MonoBehaviour
         mainMsgText.color = textC;
 
 
-        ClearMainText(displayTime);
+        ClearMainText(data.startingDelay);
     }
 
     private void ClearMainText(float displayTime)

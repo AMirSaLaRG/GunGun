@@ -16,7 +16,6 @@ public class BoxManager : MonoBehaviour
 
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
 
-    private float activateTimeAtEnd = 0;
     public float currentActiveTime { private set; get; } = 0;
     public bool ManagingBoxes { private set; get; } = false;
 
@@ -281,7 +280,7 @@ public class BoxManager : MonoBehaviour
 
     internal void SetActivateTime(float timeBetweenWaves)
     {
-        currentActiveTime = activateTimeAtEnd;
-        activateTimeAtEnd = timeBetweenWaves;
+        currentActiveTime = timeBetweenWaves;
+        
     }
 }

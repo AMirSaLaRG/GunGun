@@ -107,13 +107,20 @@ public class LevelManager : MonoBehaviour
         GameManager.instance.OnLevelSelected();
     }
 
-    public void LoadNextLevel()
+    public bool LoadNextLevel()
     {
         currentLevelIndex++;
+
+        if (currentLevelIndex >= levels.Count)
+        {
+            Debug.Log("No more levels to load.");
+            return false;
+        }
 
         int index = currentLevelIndex;
 
         LoadLevel(index);
+        return true;
     }
 
     private void SetUpLevelData(LevelItemData levelToLoad)

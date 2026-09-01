@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public ScoreManager scoreManager {private set; get;}
     public MenuTransitionController menuTranstionController {private set; get;}
     public PlayerController playerController {private set; get;}
+    public RewardManager rewardManager {private set; get;}
     public PlayerData playerData {private set; get;}
 
     public EGameState gameState {private set; get;} = EGameState.inMenu;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
         menuTranstionController = FindFirstObjectByType<MenuTransitionController>();
         playerController = FindFirstObjectByType<PlayerController>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        rewardManager = FindFirstObjectByType<RewardManager>();
     }
 
     private void Start()
@@ -67,6 +69,7 @@ public class GameManager : MonoBehaviour
         playerController.SetGameStarted(true);
         levelManager.SetGameStart();
         scoreManager.ResetAll();
+        rewardManager.ResetRewards();
     }
 
     private void CallGameOver()
@@ -266,7 +269,12 @@ public class GameManager : MonoBehaviour
     {
         uiManager?.SetPanel(EPanel.None);
         uiManager.FadePanel();
-        levelManager.LoadNextLevel();
+
+        if (levelManager.LoadNextLevel() == false)
+        {
+            LevelSelection();
+            return;
+        }
 
         currentPanelOnProgress = EPanel.Ready;
         currentGameStateInProgress = EGameState.inMenu;

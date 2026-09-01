@@ -74,7 +74,6 @@ public class Enemy : Target
     {
         base.AtDieAction();
 
-        Debug.Log("Die");
         StopWarningSign();
     }
 

@@ -8,12 +8,14 @@ public class WaveData
 {
     public WaveType Type;
 
+    [TextArea] public string waveText;
+
     public LevelEventSequenceSo eventSequenceSo;
 
     public float durationIfTimeBase;
     public int respawnNumIfRespawnBase;
     public RespawnType respawnTypeIfRespawnBase;
-    public float nextWaweDelay = 2f;
+    public float startingDelay = 2f;
     public int ActiveBoxes;
 
     public Vector2Int minMaxNumSummon = new Vector2Int(1,1);

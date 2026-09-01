@@ -10,11 +10,12 @@ public class WaweManager : MonoBehaviour
 {
     private RespawnManager respawnManager;
     private PlayerController player;
+    private ScoreManager scoreManager;
 
   
     [Header ("Setup")]
 
-    [SerializeField] private List<WaveData> waweData;
+    [SerializeField] private List<WaveData> wawesData;
     //private List<WaveData> waweData = new List<WaveData>();
     private bool isStarted = false;
 
@@ -36,6 +37,7 @@ public class WaweManager : MonoBehaviour
     {
         respawnManager = FindFirstObjectByType<RespawnManager>();
         player = FindFirstObjectByType<PlayerController>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
     private void Start()
@@ -44,7 +46,7 @@ public class WaweManager : MonoBehaviour
 
         List<WaveData> refrenceSqData = new List<WaveData>();
 
-        foreach (var data in waweData)
+        foreach (var data in wawesData)
         {
             if (data.Type == WaveType.EventBase || data.eventSequenceSo != null)
             {
@@ -55,7 +57,7 @@ public class WaweManager : MonoBehaviour
 
         foreach (var d in refrenceSqData)
         {
-            waweData.Remove(d);
+            wawesData.Remove(d);
         }
 
         foreach (var sq in sqs)
@@ -74,7 +76,7 @@ public class WaweManager : MonoBehaviour
 
         if (respawnManager.isSceenClear)
             if (CheckToExecuteWave())
-                ExecuteWawe(waweData[currentWaveIndex]);
+                ExecuteWawe(wawesData[currentWaveIndex]);
 
     }
 
@@ -86,21 +88,30 @@ public class WaweManager : MonoBehaviour
         isTimeForNextWawe = false;
 
         respawnManager.SetupRandom(data);
+        string waveNum = GetCurrentWaveText();
 
-        float displayTime = currentWaveIndex == 0 ? 1 : waweData[currentWaveIndex - 1].nextWaweDelay;
-
-        player.WaveChange(displayTime);
+        player.WaveChange(data, waveNum);
+        scoreManager.ExtandComboTime(data.startingDelay);
 
 
         if (data.Type == WaveType.TimeBase)
-            SetTimerForWawe(data.durationIfTimeBase);
-        
+            SetTimerForWawe(data);
+
     }
 
-    private void SetTimerForWawe(float durationIfTimeBase)
+    private string GetCurrentWaveText()
     {
-        float activateTimeOfBoxes = currentWaveIndex != 0 ? waweData[currentWaveIndex - 1].nextWaweDelay : 2;
-        StartCoroutine(DurationCo(durationIfTimeBase + activateTimeOfBoxes));
+        string waveNum = (currentWaveIndex + 1).ToString();
+        if (currentWaveIndex == wawesData.Count - 1)
+            waveNum = "FINAL";
+        if (currentWaveIndex == 0)
+            waveNum = "START";
+        return waveNum;
+    }
+
+    private void SetTimerForWawe(WaveData data)
+    {
+        StartCoroutine(DurationCo(data.durationIfTimeBase + data.startingDelay));
     }
 
 
@@ -120,20 +131,6 @@ public class WaweManager : MonoBehaviour
 
     }
 
-    private IEnumerator BreathTimeBetweenTwoWawes()
-    {
-        float duration = 0f;
-        if (taskIsSq)
-            duration = 2f;
-        else
-            duration = waweData[currentWaveIndex].nextWaweDelay;
-
-
-        yield return new WaitForSeconds(duration);
-        isTimeForNextWawe = true;
-        taskIsSq = false;
-    }
-
     private bool CheckToExecuteWave()
     {
         if (isWaweEnded == false)
@@ -145,14 +142,14 @@ public class WaweManager : MonoBehaviour
         if (taskIsSq)
             return false;
 
-        if (waweData == null || waweData.Count == 0)
+        if (wawesData == null || wawesData.Count == 0)
         {
 
             Debug.Log("Plz write Wawe Data first!");
             return false;
         }
 
-        if (currentWaveIndex >= waweData.Count)
+        if (currentWaveIndex >= wawesData.Count)
         {
             startSaftyTriggerIn(5);
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
+    private RewardManager rewardManager;
+
     [Header("Ui Elements")]
     [SerializeField] private PlayerCanvas playerCanvas;
     [SerializeField] private UiInGame inGameUi;
@@ -31,6 +33,11 @@ public class ScoreManager : MonoBehaviour
     public int khalasShotCount { get; private set; }
     private Enemy lastKill;
     private float lastComboTime;
+
+    private void Start()
+    {
+        rewardManager = FindFirstObjectByType<RewardManager>();
+    }
 
     void Update()
     {
@@ -149,6 +156,7 @@ public class ScoreManager : MonoBehaviour
         currentHostageKilled++;
 
         ResetCombo();
+        rewardManager.Penalty();
 
         if (currentHostageKilled >= hostageKillAllowed)
         {
@@ -192,6 +200,16 @@ public class ScoreManager : MonoBehaviour
         lastComboTime = Time.time;
         UpdateUi();
 
+        rewardManager.CheckForComboReward(currentCombo);
+    }
+
+    public void ExtandComboTime(float time)
+    {
+        if (isOnCombo)
+        {
+            lastComboTime += Time.time + time + comboIntervalCooldown;
+            UpdateUi(false , time + comboIntervalCooldown);
+        }
     }
 
     public void ResetCombo()
@@ -241,7 +259,7 @@ public class ScoreManager : MonoBehaviour
     // ==========================================
     // ===== UI UPDATE =====
     // ==========================================
-    private void UpdateUi(bool comboChanged = true)
+    private void UpdateUi(bool comboChanged = true, float time = -1)
     {
         inGameUi.ComboChange(currentCombo);
         inGameUi.KillChange(currentKills);
@@ -256,6 +274,10 @@ public class ScoreManager : MonoBehaviour
             }
             else
                 inGameUi.SetComboTimer(comboIntervalCooldown);
+        } else
+        {
+            if (time > 0)
+                inGameUi.SetComboTimer(time);
         }
     }
 
