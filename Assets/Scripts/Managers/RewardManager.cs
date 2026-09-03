@@ -11,6 +11,10 @@ public class RewardManager : MonoBehaviour
 
     [Header("GunComboRewards")]
     [SerializeField] private GunRewardOnComboData[] gunComboRewards;
+    [SerializeField] private GameObject GunRewardVfx;
+    [SerializeField] private Transform vfxPos;
+    [SerializeField] private AudioSource gunRewardSfx;
+    [SerializeField] private AudioSource gunPenaltySfx;
 
     private UiRewardItem gunReward;
 
@@ -38,51 +42,47 @@ public class RewardManager : MonoBehaviour
         foreach (var gunReward in gunComboRewards)
         {
             if (currentCombo == gunReward.combo)
-                if (gunManager.IsGunUnlocked(gunReward.gunId, out GunSo gunData))
+                if (gunManager.IsGunUnlocked(gunReward.gunId))
                 {
-                    GiveGunReward(gunData);
+                    GiveGunReward(gunReward);
                     lastComboRewardGiven = currentCombo;
                 }
         }
 
 
     }
-    public void GiveGunReward(GunSo gunData)
+    public void GiveGunReward(GunRewardOnComboData reward)
     {
-        Debug.Log("Giving Gun Reward" + gunData.gunID);
-        if (gunReward != null)
-            Destroy(gunReward.gameObject);
+        if (reward.isInstant == true)
+            playerController.EquipNewWeapon(reward.gunId, true);
+        else
+            playerController.SetSecondaryWeapon(reward.gunId);
 
-        UiRewardItem newItem = Instantiate(RewardItemPrefab, RewardItemHolder).GetComponent<UiRewardItem>();
-
-        Debug.Log("Created ui" + newItem.gameObject.name);
-
-
-        RewardData rewardData = new RewardData
-        {
-            type = ERewardType.Gun,
-            hasAutoClaimed = false,
-        };
-
-        newItem.Setup(rewardData, gunData.gunIcon, () =>
-        {
-            playerController.EquipNewWeapon(gunData.gunID);
-        });
-
-        gunReward = newItem;
+        Instantiate(GunRewardVfx, vfxPos.position, Quaternion.identity);
+        AudioManager.instance.PlaySfx(gunRewardSfx);
     }
 
     public void ResetRewards()
     {
+        if (lastComboRewardGiven > 1)
+            AudioManager.instance.PlaySfx(gunPenaltySfx);
+
         lastComboRewardGiven = 0;
+
+
         if (gunReward != null)
             Destroy(gunReward.gameObject);
         gunReward = null;
+        
     }
 
     public void Penalty()
     {
-        playerController.EquipNewWeapon(0);
+        
+
+        playerController.ResetRewards();
         ResetRewards();
+        
+
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ public class GunManager : MonoBehaviour
     [Header("All Guns")]
     public List<GunSo> allGuns = new List<GunSo>();  // All guns in the game
     public Dictionary<int, GunSo> gunDictionary { private set; get; } = new Dictionary<int, GunSo>();
+    public Dictionary<int, MagazineManager> magazineDisctionary { private set; get; } = new Dictionary<int, MagazineManager>();
 
     [Header("Player's Unlocked Guns")]
     public List<int> unlockedGunsId = new List<int>();
@@ -35,13 +37,20 @@ public class GunManager : MonoBehaviour
     [SerializeField] private GameObject defaultHitVfx;
     [SerializeField] private GameObject defaultbulletHole;
     [SerializeField] private float holeLifetime;
-    [SerializeField] private float changeGunTime = 0.3f;
+    [SerializeField] private float changeGunTime = 0.05f;
 
     [Header ("Sfx")]
     [SerializeField] private AudioSource defaultHitSfx;
     [SerializeField] private AudioSource gunShotSfx;
     [SerializeField] private AudioSource gunEmptyShotSfx;
 
+    private bool isShooting = false;
+
+    private int mainWeaponId;
+    private int secondaryWeaponId;
+    public bool hasSecondaryWeapon { private set; get; } = false;
+
+    private Coroutine fireCo;
     private async void Start()
     {
         await LoadAllGuns();
@@ -49,8 +58,11 @@ public class GunManager : MonoBehaviour
         foreach (var gun in allGuns)
             gunDictionary[gun.gunID] = gun;
 
+        SetUpMagazine();
+
+
+
         player = GetComponent<PlayerController>();
-        magazineManager = GetComponent<MagazineManager>();
         hitDitector = GetComponent<HitDitector>();
         shopManager = FindFirstObjectByType<ShopManager>();
 
@@ -98,12 +110,18 @@ public class GunManager : MonoBehaviour
         }
     }
 
-    public bool IsGunUnlocked(int gunId, out GunSo gunData)
+    public bool IsGunUnlocked(int gunId)
     {
         bool isUnlocked = unlockedGunsId.Contains(gunId);
-        gunData = allGuns.Find(x => x.gunID ==  gunId);
 
         return isUnlocked;
+    }
+
+    public GunSo GetGunData(int gunId)
+    {
+        if (gunDictionary.ContainsKey(gunId))
+            return gunDictionary[gunId];
+        return null;
     }
     public List<int> GetUnlockedGunsId()
     {
@@ -113,22 +131,55 @@ public class GunManager : MonoBehaviour
 
     }
 
-    private void SwitchGunOne(InputAction.CallbackContext context)
+    private void SetUpMagazine()
     {
-        Debug.Log("Triggered Test");
 
-        currentGunId = (currentGunId + 1) % unlockedGunsId.Count;
-        SetCurrentGun(currentGunId);
+        while (magazineSocket.childCount > 0)
+        {
+            magazineSocket.GetChild(0).gameObject.transform.DOKill();
+
+            DestroyImmediate(magazineSocket.GetChild(0).gameObject);
+        }
+
+        foreach (var gun in allGuns)
+        {
+            if (gun.gunMagazinePrefab != null)
+            {
+                MagazineManager newMagazineManager;
+                GameObject newMagazine = Instantiate(gun.gunMagazinePrefab, magazineSocket);
+                newMagazineManager = newMagazine.GetComponent<MagazineManager>();
+                magazineDisctionary[gun.gunID] = newMagazineManager;
+                newMagazineManager.SetManager(this);
+                newMagazineManager.gameObject.SetActive(false);
+            }
+        }
     }
 
-    public void SetCurrentGun(int gunId)
+    
+    public void SetCurrentGun(int gunId, bool isInstant = false, bool shouldReload = true, bool useBulletsFromAnotherMagazine = false)
     {
-        GunSo gun;
+        StartCoroutine(SetCurrentGunCo(gunId, isInstant, shouldReload, useBulletsFromAnotherMagazine));
+    }
 
+    private IEnumerator SetCurrentGunCo(int gunId, bool isInstant = false, bool shouldReload = true, bool useBulletsFromAnotherMagazine = false)
+    {
+        int saftylimit = 250;
+        while (isShooting || saftylimit <= 0)
+        {   
+            yield return null;
+            yield return new WaitForSeconds(currentGunData.rapitShootingDelay);
+            saftylimit--;
+            if (saftylimit <= 1)
+                Debug.Log("LimitBreak");
+        }
+
+        isShooting = false;
+        GunSo gun;
         if (gunDictionary.ContainsKey(gunId))
         {
             gun = gunDictionary[gunId];
-        } else
+        }
+        else
         {
             gun = gunDictionary[0];
         }
@@ -137,26 +188,39 @@ public class GunManager : MonoBehaviour
 
         currentGunId = gunId;
 
-        SetupMagazine(gun);
+        int currentAmo;
 
+        if (shouldReload)
+            if (useBulletsFromAnotherMagazine)
+                currentAmo = magazineManager.currentAmo;
+            else
+                currentAmo = -1;
+        else
+            currentAmo = -1;
+
+        ActivateMagazine(gun, isInstant, shouldReload, currentAmo);
     }
 
-    private void SetupMagazine(GunSo gun)
+    private void ActivateMagazine(GunSo gun, bool isInstant,bool shouldReload, int currentAmo)
     {
-        while (magazineSocket.childCount > 0)
-        {
-            DestroyImmediate(magazineSocket.GetChild(0).gameObject);
-        }
 
-        GameObject newMagazine = Instantiate(gun.gunMagazinePrefab, magazineSocket);
-        magazineManager = newMagazine.GetComponent<MagazineManager>();
-        magazineManager.PutMagazineInSocket(changeGunTime);
+        foreach(var mag in magazineDisctionary)
+            mag.Value.gameObject.SetActive(false);
+
+        magazineManager = magazineDisctionary[gun.gunID];
+        magazineManager.gameObject.SetActive(true);
+
+        magazineManager.PutMagazineInSocket(changeGunTime, isInstant, shouldReload, currentAmo);
     }
 
     public List<HitData> GunShot(Vector2 shotAim)
     {
         if (magazineManager.isReloading)
             return null;
+
+        if (isShooting) return null;
+
+        isShooting = true;
 
         List<HitData> hitDatas = GatherHitData(shotAim);
 
@@ -166,6 +230,7 @@ public class GunManager : MonoBehaviour
         if (OnShotHit(hitDatas))
             return hitDatas;
 
+        isShooting = false;
         return null;
     }
 
@@ -196,8 +261,10 @@ public class GunManager : MonoBehaviour
 
     private bool OnShotHit(List<HitData> hitDatas)
     {
+
         if (hitDatas == null) return false;
         if (hitDatas.Count == 0) return false;
+
         foreach (var hit in hitDatas)
         {
             if (hit == null)
@@ -213,7 +280,7 @@ public class GunManager : MonoBehaviour
         HitData magaizne = hitDatas.Find(x => x.hitTYpe == EHitType.Magazine);
         if (magaizne != null)
         {
-            magazineManager.OnReloadBullets();
+            Reload();
             return false;
         }
 
@@ -225,7 +292,7 @@ public class GunManager : MonoBehaviour
         else
             PlayGunShotSfx();
 
-        StartCoroutine(GunFireCo(hitDatas));
+        fireCo = StartCoroutine(GunFireCo(hitDatas));
 
         return true;
     }
@@ -234,6 +301,7 @@ public class GunManager : MonoBehaviour
     {
         bool isShootingBullet = magazineManager.ConsumeAmmo(1);
         yield return new WaitForSeconds(currentGunData.rapitShootingDelay);
+        isShooting = false;
 
     }
 
@@ -273,7 +341,9 @@ public class GunManager : MonoBehaviour
                 player.HandleShot(hitData);
             }
             yield return new WaitForSeconds(currentGunData.rapitShootingDelay);
-        }      
+        }
+
+        isShooting = false;
     }
 
     private void DefaultSfxVfxHandler(HitData hitData)
@@ -315,31 +385,86 @@ public class GunManager : MonoBehaviour
         AudioManager.instance.PlaySfx(gunEmptyShotSfx, true);
     }
 
-    public void Reload()
+    public void Reload(bool instantReload = false, int reloadAmount = -1)
     {
         if (magazineSocket != null)
             magazineManager.OnReloadBullets();
+
+        isShooting = false;
     }
 
+    
+
+    [ContextMenu("Reset The Gun")]
     public void ResetTheGun()
     {
+        Debug.Log("reseted the gun");
+
         SetCurrentGun(0);
+        SetNewMainWeapon(0);
+        RemoveSecondaryWeapon();
+        isShooting = false;
     }
-    private void OnEnable()
+
+
+    public void SetNewMainWeapon(int gunId)
     {
-        // Initialize and setup controls here
-        if (controls == null)
-            controls = new TouchControls();
-
-        controls.TouchScreen.Test.performed += SwitchGunOne;
-        controls.Enable();
+        mainWeaponId = gunId;
     }
-
-    private void OnDisable()
+    public void SetNewScondaryWeapon(int gunId)
     {
-        controls.TouchScreen.Test.performed -= SwitchGunOne;
-        controls.Disable();
+        bool usingSecondaryGun = currentGun.gunID == secondaryWeaponId;
+
+
+        secondaryWeaponId = gunId;
+
+        magazineDisctionary[gunId].CanReload(true);
+        magazineDisctionary[gunId].OnReloadBullets(true);
+        magazineDisctionary[gunId].CanReload(false);
+
+        hasSecondaryWeapon = true;
+
+
+        if (usingSecondaryGun)
+            SetCurrentGun(gunId, true, false);
+
+        Reload(true);
     }
 
+    public void RemoveSecondaryWeapon()
+    {
+        if (currentGun.gunID == secondaryWeaponId)
+            SetCurrentGun(mainWeaponId, false, false);
+
+        hasSecondaryWeapon = false;
+        secondaryWeaponId = 0;
+        player.OnRemoveSecondaryWeapon();
+    }
+
+    public void SwitchWeapon()
+    {
+        if (currentGun.gunID == mainWeaponId)
+        {
+            SetCurrentGun(secondaryWeaponId, false, false);
+        }
+        else
+        {
+            SetCurrentGun(mainWeaponId, false, false);
+        }
+    }
+
+    public void ResetRewards()
+    {
+        if (currentGun.gunID != 0)
+        {
+            SetCurrentGun(0, true, true, false);
+        }
+
+        SetNewMainWeapon(0);
+
+        RemoveSecondaryWeapon();
+
+       
+    }
 
 }

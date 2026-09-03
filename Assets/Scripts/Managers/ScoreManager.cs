@@ -156,7 +156,6 @@ public class ScoreManager : MonoBehaviour
         currentHostageKilled++;
 
         ResetCombo();
-        rewardManager.Penalty();
 
         if (currentHostageKilled >= hostageKillAllowed)
         {
@@ -216,6 +215,7 @@ public class ScoreManager : MonoBehaviour
     {
         isOnCombo = false;
         currentCombo = 0;
+        rewardManager.Penalty();
 
         inGameUi.CashPoints(currentCashPoints);
 

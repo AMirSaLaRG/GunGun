@@ -14,6 +14,8 @@ public class MagazineManager : MonoBehaviour
     [SerializeField] private EMagazinesType type;
     [SerializeField] private Transform bulletHolderSet;
 
+    private GunManager myManager;
+    
 
     private UiInGame inGameUi;
     
@@ -31,6 +33,7 @@ public class MagazineManager : MonoBehaviour
     private Vector3 bulletHolderSetStartPos;
 
     private float zdifTwoBulletInStang;
+    private bool canReload = true;
 
     private void Awake()
     {
@@ -71,6 +74,13 @@ public class MagazineManager : MonoBehaviour
 
         isReloading = true;
 
+    }
+
+   
+
+    public void SetManager(GunManager manager)
+    {
+        myManager = manager;
     }
 
     public void OnShotBullet()
@@ -126,41 +136,59 @@ public class MagazineManager : MonoBehaviour
 
         currentBulletIndex %= bulletHolders.Length;
 
-        inGameUi.AmoChange(currentAmo);
 
     }
 
-    [ContextMenu("Test")]
 
-    public void OnReloadBullets()
+    public void OnReloadBullets(bool instantReload = false, int reloadAmount = -1)
     {
-        if (currentAmo == GetAmoCap())
+        if (canReload == false)
             return;
 
-        isReloading = true;
-        currentAmo = GetAmoCap();
-        AudioManager.instance.PlaySfx(reloadSfx, true);
+        if (currentAmo != GetAmoCap())
+            AudioManager.instance.PlaySfx(reloadSfx, true);
 
-   
+
+        int rAmount = reloadAmount;
+        if ( reloadAmount == -1)
+            rAmount = GetAmoCap();
+
+        isReloading = true;
+
+        currentAmo = rAmount;
+
+        Debug.Log(currentAmo);
+
+
+        float rTime = instantReload ? 0 : reloadTime;
+
+        transform.DOKill();
+
         if (type == EMagazinesType.RevolverCylinder)
         {
-            transform.DORotate(startRotation.eulerAngles, reloadTime).OnComplete(() => isReloading = false);
-            transform.DOMove(startPosition, reloadTime);
+            transform.DORotate(startRotation.eulerAngles, rTime).OnComplete(() => isReloading = false);
+            transform.DOMove(startPosition, rTime);
 
             for (int i = 0; i < bulletHolders.Length; i++)
             {
                 Transform bullet = mybullets[i];
-                if (bullet.localPosition != Vector3.zero)
+                bullet.DOKill();
+                mybulletsRb[i].isKinematic = true;
+                bullet.parent = bulletHolders[i];
+
+
+                bullet.localPosition = new Vector3(0, -3, 0);
+                bullet.localRotation = Quaternion.Euler(0, 0, 0);
+                bullet.DOLocalMove(Vector3.zero, rTime);
+
+                if (rAmount <= i)
                 {
-                    mybulletsRb[i].isKinematic = true;
-                    bullet.parent = bulletHolders[i];
-
-
-                    bullet.localPosition = new Vector3(0, -3, 0);
-                    bullet.localRotation = Quaternion.Euler(0, 0, 0);
-                    bullet.DOLocalMove(Vector3.zero, reloadTime);
+                    bullet.gameObject.SetActive(false);
                 }
-
+                else
+                {
+                    bullet.gameObject.SetActive(true);
+                }
 
             }
 
@@ -195,9 +223,9 @@ public class MagazineManager : MonoBehaviour
 
         currentBulletIndex = 0;
 
-       
 
-  
+
+
 
         inGameUi.OnReload(currentAmo);
 
@@ -207,7 +235,8 @@ public class MagazineManager : MonoBehaviour
 
     public bool ConsumeAmmo(int v)
     {
-        if (IsEmpty()) return false;
+        if (IsEmpty())             
+            return false;
 
         int newAmo;
         newAmo = currentAmo - v;
@@ -219,40 +248,84 @@ public class MagazineManager : MonoBehaviour
             inGameUi.GiveLowAmoWarning();
 
         OnShotBullet();
+        inGameUi.AmoChange(currentAmo);
+
+        if (currentAmo == 0 && canReload == false)
+            myManager.RemoveSecondaryWeapon();
+
         return true;
     }
 
     public bool IsEmpty() => currentAmo <= 0;
 
-    internal void PutMagazineInSocket(float changeGunTime)
+    internal void PutMagazineInSocket(float changeGunTime, bool isInstant, bool shouldReload, int requestedAmo = -1)
     {
         Vector3 StartPos = transform.position;
         Vector3 startRot = transform.rotation.eulerAngles;
 
-        isReloading = true;
 
-        foreach (var bullet in mybullets)
-            bullet.position = Vector3.forward * -1000;
+        if (shouldReload)
+        {
+            isReloading = true;
 
+            foreach (var bullet in mybullets)
+                bullet.position = Vector3.forward * -1000;
+        }
+     
 
         if (GameManager.instance != null)
             if (GameManager.instance.gameState != EGameState.InGame)
                 changeGunTime = 0;
 
-        transform.position = StartPos - transform.right * 4;
-        transform.rotation = Quaternion.Euler(Vector3.zero);
-
-        transform.DORotate(startRot, changeGunTime);
-        transform.DOMove(StartPos, changeGunTime).SetEase(Ease.OutElastic).OnComplete(() =>
+        if (isInstant)
         {
-            isReloading = false;
-            OnReloadBullets();
+            transform.position = StartPos;
 
-        });
-      
 
+
+            if (shouldReload)
+                OnReloadBullets(true, requestedAmo);
+            else
+                isReloading = false;
+
+
+        }
+        else
+        {
+            transform.position = StartPos - transform.right * 4;
+            transform.rotation = Quaternion.Euler(Vector3.zero);
+
+            transform.DORotate(startRot, changeGunTime);
+            transform.DOMove(StartPos, changeGunTime).SetEase(Ease.OutElastic).OnComplete(() =>
+            {
+                if (shouldReload)
+                    OnReloadBullets(false , requestedAmo);
+                else
+                    isReloading = false;
+
+            });
+        }
 
     }
+
+    public void CanReload(bool canReload)
+    {
+        this.canReload = canReload;
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var bullet in mybullets)
+        {
+            if (bullet != null)
+            {
+                bullet.gameObject.transform.DOKill();
+                Destroy(bullet.gameObject);
+            }
+        }
+    }
+
+
 }
 
 

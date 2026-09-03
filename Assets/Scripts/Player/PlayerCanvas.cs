@@ -17,6 +17,10 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mainMsgText;
     private Coroutine mainTextCo;
 
+    [Header("SecondaryWeapon")]
+    [SerializeField] private Button switchWeaponBtn;
+    [SerializeField] private Image gunIcon;
+
     [Header("ScaleSetup")]
     [SerializeField] private float maxDistance;
     [SerializeField] private float minScale;
@@ -343,7 +347,7 @@ public class PlayerCanvas : MonoBehaviour
         mainMsgText.color = theColor;
     }
 
-    internal void OnImunity(float time)
+    public void OnImunity(float time)
     {
         float startingAlpha = 1;
         float endAlpha = 0;
@@ -355,8 +359,14 @@ public class PlayerCanvas : MonoBehaviour
         ImunityImage.DOFade(endAlpha, time * 5/6);
     }
 
-    internal void OnImunity(object imunityTimeAfterRevive)
+    internal void ShowSwitchBtn(bool enable, Sprite gunIcon)
     {
-        throw new NotImplementedException();
+        switchWeaponBtn.gameObject.SetActive(enable);
+
+        if (gunIcon == null)
+            this.gunIcon.sprite = null;
+        else
+            this.gunIcon.sprite = gunIcon;
+        
     }
 }

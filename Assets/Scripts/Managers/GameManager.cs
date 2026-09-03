@@ -351,8 +351,9 @@ public class GameManager : MonoBehaviour
 
         if (isCompleted)
             if (playerData.levelStars[levelIndex] > 0)
-                if (playerData.unlockedLevel < currentLevelIndex + 1)
-                    playerData.unlockedLevel = currentLevelIndex + 1;
+                if (playerData.unlockedLevel < levelIndex + 1)
+                    playerData.unlockedLevel = levelIndex + 1;
+            
 
         playerData.totalPoints += points;
 
@@ -389,7 +390,7 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        playerData.lastGunId = playerController.gunManager.currentGun.gunID;
+        //playerData.lastGunId = playerController.gunManager.currentGun.gunID;
 
         SaveManager.instance.Save();
     }

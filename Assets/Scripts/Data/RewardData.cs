@@ -14,6 +14,7 @@ public class GunRewardOnComboData
 {
     public int combo;
     public int gunId;
+    public bool isInstant;
 }
 
 public enum ERewardType { Gun, Soldirecoin, Points}

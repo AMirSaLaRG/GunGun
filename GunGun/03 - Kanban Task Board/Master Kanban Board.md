@@ -101,20 +101,28 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] add penalty for hostage death to reset reward
-- [ ] to each wave add string to display
-- [ ] add light to activators on top
-- [ ] when there is no more level go next get disabled
-- [ ] add reward for combo
-	- [x] in game ui create as place for claim rewards #ui 
-	- [x] need some reward manager #code
-	- [x] i think score manager should handle rewards
-- [ ] gun at start should be basic one
-- [ ] between waves for scene clear wait make combo drop fix that
+- [ ] create a panel line for data that get shows
+- [ ] Rework reward system
+	- [x] it should be instance with out claim request
+	- [x] add switch gun system to use burst fire should be instance as well
+	- [x] penalty should be on drop combo
+	- [x] Add some vfx for reward
+	- [x] Add some sfx for reward
+- [ ] guns should have upgrade like when they're bullet numbers goes up this ones will given to player as reward so they should not has reload time and switch time
 
 
 ## Done
 
+- [ ] between waves for scene clear wait make combo drop fix that
+- [ ] gun at start should be basic one
+- [ ] when there is no more level go next get disabled
+- [ ] add light to activators on top
+- [ ] add reward for combo
+	- [x] in game ui create as place for claim rewards #ui 
+	- [x] need some reward manager #code
+	- [x] i think score manager should handle rewards
+- [ ] to each wave add string to display
+- [ ] add penalty for hostage death to reset reward
 - [ ] [[RespawnBox| View box]] miss for target as edge cases should get handled
 - [ ] on try again a set of activator main door was closed but it was active
 - [ ] design first level

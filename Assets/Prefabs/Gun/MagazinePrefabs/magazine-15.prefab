@@ -1284,7 +1284,7 @@ Transform:
   m_GameObject: {fileID: 6863006100831239060}
   serializedVersion: 2
   m_LocalRotation: {x: 0.068881184, y: 0.9710148, z: -0.22830561, w: -0.016192807}
-  m_LocalPosition: {x: -0.067, y: 1.048, z: 0.098}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 16.83, y: 16.83, z: 16.83}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1380,7 +1380,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7458009637074585011, guid: 07f7be2721ca5ea44b0d92ff7ada5cdf, type: 3}
   switchTIme: 0.3
   reloadTime: 0.6
-  chnageGunTime: 1.1
   reloadSfx: {fileID: 4143561459811675822}
   warningMax: 1
   type: 1

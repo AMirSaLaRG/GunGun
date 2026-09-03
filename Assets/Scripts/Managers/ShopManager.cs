@@ -70,7 +70,7 @@ public class ShopManager : MonoBehaviour
         playerData.unlockedWeapons = unlockedWeapons;
 
 
-        playerController.EquipNewWeapon(gun.gunID);
+        //playerController.EquipNewWeapon(gun.gunID);
 
         return true;
     }

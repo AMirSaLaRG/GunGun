@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -28,7 +29,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
 
 
-    public WeaponData currentGun { private set; get; }
     public Camera mainCamera {  get; private set; }
 
     private bool gameStarted = false;
@@ -135,10 +135,59 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     }
 
-    public void EquipNewWeapon(int gunId)
+    public void EquipNewWeapon(int gunId, bool isInstant = false, bool maxAmo = true, bool asMain = true)
     {
-        gunManager.SetCurrentGun(gunId);
+        gunManager.SetCurrentGun(gunId, isInstant, maxAmo);
+
+        if (asMain)
+            gunManager.SetNewMainWeapon(gunId);
+        else
+            gunManager.SetNewScondaryWeapon(gunId);
     }
+
+    [ContextMenu("Switch Weapon")]
+
+    public void SwitchWeapon()
+    {
+        Sprite gunIcon;
+
+        gunIcon = gunManager.GetGunData(gunManager.currentGun.gunID).gunIcon;
+
+        gunManager.SwitchWeapon();
+
+
+        myCanvas.ShowSwitchBtn(true, gunIcon);
+
+    }
+    internal void SetSecondaryWeapon(int gunId)
+    {
+        gunManager.SetNewScondaryWeapon(gunId);
+
+        Sprite gunIcon = gunManager.GetGunData(gunId).gunIcon;
+
+        myCanvas.ShowSwitchBtn(true, gunIcon);
+    }
+    public void OnRemoveSecondaryWeapon()
+    {
+        myCanvas.ShowSwitchBtn(false, null);
+
+
+    }
+
+    [ContextMenu("Set secondary weapon")]
+    public void SetSecondaryWeapon()
+    {
+        SetSecondaryWeapon(3);
+    }
+
+    public void ResetRewards()
+    {
+
+        gunManager.ResetRewards();
+        
+        
+    }
+
     internal void WaveChange(WaveData data, string waveNum)
     {
         myCanvas.waveChange(data, waveNum);
@@ -153,5 +202,5 @@ public class PlayerController : MonoBehaviour, IDamagable
         controls.Disable();
     }
 
-  
+    
 }

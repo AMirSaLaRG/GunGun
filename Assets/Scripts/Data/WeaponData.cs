@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponData
 {
     [Header("Basic Info")]
+    public int gunID;
     public string gunName;
     public GunShotType gunShotType;
 
