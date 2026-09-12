@@ -6,12 +6,9 @@ public class PlayerData
     public string name;
     public float totalPoints;
     public int soldirCoins;
-    public int[] levelStars;      // stars per level
-    public float[] levelPoints;     // points per level
-    public int unlockedLevel = 1;
+    public PlayersLevelData[] playerLevelsData = new PlayersLevelData[0];
     public int[] unlockedWeapons;
     public float musicVolume;
     public float sfxVolume;
     public int lastGunId = 0;
-    
 }

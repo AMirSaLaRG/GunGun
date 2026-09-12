@@ -16,7 +16,7 @@ public class UiPopUp : MonoBehaviour
 
     private void OnEnable()
     {
-        popUpText.text = "";
+        popUpText.text = "Spend 1 medal of honor to revive";
         popUpBtn.gameObject.SetActive(true);
     }
 

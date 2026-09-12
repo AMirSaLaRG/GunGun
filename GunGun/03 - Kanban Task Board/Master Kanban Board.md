@@ -6,6 +6,7 @@ kanban-plugin: board
 
 ## Backlog
 
+- [ ] voice goes over each other should get fixed
 - [ ] make survival mode for first level
 	- [ ] Create survival manager
 	- [ ] Create survival difficulty
@@ -13,6 +14,7 @@ kanban-plugin: board
 - [ ] need to put some reward on middle of level with time or wave
 	updating reward manager #code
 - [ ] fix bug of Retry i try it but do not happens again
+- [ ] add some animation on building transform
 
 
 ## Mehrdad feedback
@@ -101,18 +103,27 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] create a panel line for data that get shows
+- [ ] rework ui compeletely
+- [ ] Loading building and wire up building manager
+- [ ] changed ui background added leader board to dynamic ui s
+- [ ] generate voices for game
+	- [x] voice for combo
+	- [x] voice for rewards
+	- [x] voice for game start
+	- [x] voice for wave change
+	- [x] voice for combo breaks
+
+
+## Done
+
+- [ ] guns should have upgrade like when they're bullet numbers goes up this ones will given to player as reward so they should not has reload time and switch time
 - [ ] Rework reward system
 	- [x] it should be instance with out claim request
 	- [x] add switch gun system to use burst fire should be instance as well
 	- [x] penalty should be on drop combo
 	- [x] Add some vfx for reward
 	- [x] Add some sfx for reward
-- [ ] guns should have upgrade like when they're bullet numbers goes up this ones will given to player as reward so they should not has reload time and switch time
-
-
-## Done
-
+- [ ] create a panel line for data that get shows
 - [ ] between waves for scene clear wait make combo drop fix that
 - [ ] gun at start should be basic one
 - [ ] when there is no more level go next get disabled
@@ -227,6 +238,7 @@ kanban-plugin: board
 - [ ] after retry
 	spawn boxes get buged
 	a set of respawn box of windows both items are de active the box is active the enemy spawned
+- [ ] a bug of not reloading
 
 
 ## fixed but not sure
@@ -241,6 +253,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,true,true,true,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,false,true,true,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%

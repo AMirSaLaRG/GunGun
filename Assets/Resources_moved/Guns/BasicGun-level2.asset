@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0498c37e7951dec4d8b303f671dbf2b4, type: 3}
   m_Name: BasicGun-level2
   m_EditorClassIdentifier: Assembly-CSharp::GunSo
-  gunIcon: {fileID: 21300000, guid: da70e78411687134a8559148657261e0, type: 3}
+  gunIcon: {fileID: 21300000, guid: 0b1715eb7f7d8574185eb5a0907a1b67, type: 3}
   aboutGun: first upgrade of basic gun with better reload and more amo cap
   WeaponData:
+    gunID: 0
     gunName: BasicGun_level2
     gunShotType: 0
     gunDamage: 1
@@ -24,6 +25,8 @@ MonoBehaviour:
     gunForce: 350
     gunReloadTime: 2
     magazineAmoCap: 7
+    rapitShootingDelay: 0
+    accuracy: 1
     pointMultiplier: 1
     comboMultiplier: 1
     gunShotClip: {fileID: 8300000, guid: c2a9c10cdb5212b409eb9d961e31da8b, type: 3}

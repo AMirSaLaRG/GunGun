@@ -13,7 +13,6 @@ public class UiManager : MonoBehaviour
 
     [Header("Panels")]
     [SerializeField] private GameObject mainMenu;
-    [SerializeField] private GameObject settings;
     [SerializeField] private GameObject credits;
     [SerializeField] private GameObject levelSelection;
     [SerializeField] private GameObject ready;
@@ -21,16 +20,27 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject pause;
     [SerializeField] private GameObject victory;
     [SerializeField] private GameObject gameOver;
-    [SerializeField] private GameObject LeaderBoard;
     [SerializeField] private GameObject lastChance;
+    [SerializeField] private GameObject LeaderBoard;
+
 
     [Header("MenuDynamicOnTop")]
     [SerializeField] private GameObject onTopInMenu;
+    [SerializeField] private GameObject onTopInfoInMenu;
     [SerializeField] private TextMeshProUGUI playersPoints;
+    [SerializeField] private TextMeshProUGUI playersGems;
 
 
     [Header("DynamicPanels")]
     [SerializeField] private GameObject mainPageArmory;
+    [SerializeField] private GameObject LeaderBoardD;
+    [SerializeField] private GameObject levels;
+    [SerializeField] private GameObject quitConfirm;
+    [SerializeField] private GameObject settingsPopup;
+    [SerializeField] private GameObject achievements;
+    [SerializeField] private GameObject tasks;
+    [SerializeField] private GameObject ads;
+    [SerializeField] private GameObject dailyReward;
 
     [Header("VisualHelper")]
     [SerializeField] private GameObject fadePanel;
@@ -41,7 +51,6 @@ public class UiManager : MonoBehaviour
     public void SetPanel(EPanel panel)
     {
         mainMenu?.SetActive(panel == EPanel.MainMenu);
-        settings?.SetActive(panel == EPanel.Settings);
         credits?.SetActive(panel == EPanel.Credits);
         ready?.SetActive(panel == EPanel.Ready);
         levelSelection?.SetActive(panel == EPanel.LevelSelection);
@@ -53,19 +62,29 @@ public class UiManager : MonoBehaviour
         lastChance?.SetActive(panel == EPanel.LastChance);
 
         onTopInMenu?.SetActive(panel != EPanel.InGame);
+        onTopInfoInMenu?.SetActive(panel != EPanel.InGame);
 
 
         currentPanel = panel;
 
-        UpdateTotalPoints();
+        UpdatePoints();
     }
 
     public void PopDynamicPanel(EDPanel panel)
     {
         mainPageArmory?.SetActive(panel == EDPanel.Armory);
+        LeaderBoardD?.SetActive(panel == EDPanel.LeaderBoard);
+        levels?.SetActive(panel == EDPanel.Levels);
+        quitConfirm?.SetActive(panel == EDPanel.Quit);
+        settingsPopup?.SetActive(panel == EDPanel.Settings);
+        achievements?.SetActive(panel == EDPanel.Achievements);
+        tasks?.SetActive(panel == EDPanel.Tasks);
+        ads?.SetActive(panel == EDPanel.Ads);
+        dailyReward?.SetActive(panel == EDPanel.DailyReward);
+
     }
 
-    public void ExitArmory()
+    public void ExitDynamicUi()
     {
         PopDynamicPanel(EDPanel.None);
 
@@ -74,13 +93,46 @@ public class UiManager : MonoBehaviour
     {
         PopDynamicPanel(EDPanel.Armory);
     }
+    public void OpenLeaderBoard()
+    {
+        PopDynamicPanel(EDPanel.LeaderBoard);
+    }
+    public void OpenLevels()
+    {
+        PopDynamicPanel(EDPanel.Levels);
+    }
+    public void OpenSettings()
+    {
+        PopDynamicPanel(EDPanel.Settings);
+    }
+    public void OpenAchievements()
+    {
+        PopDynamicPanel(EDPanel.Achievements);
+    }
+    public void OpenTasks()
+    {
+        PopDynamicPanel(EDPanel.Tasks);
+    }
+    public void OpenAds()
+    {
+        PopDynamicPanel(EDPanel.Ads);
+    }
+    public void OpenDailyReward()
+    {
+        PopDynamicPanel(EDPanel.DailyReward);
+    }
+    public void OpenQuitConfirm()
+    {
+        PopDynamicPanel(EDPanel.Quit);
+    }
+
 
     public GameObject GetPanel(EPanel panel)
     {
         switch (panel)
         {
             case EPanel.MainMenu: return mainMenu;
-            case EPanel.Settings: return settings;
+            //case EPanel.Settings: return settings;
             case EPanel.Credits: return credits;
             case EPanel.Ready: return ready;
             case EPanel.LevelSelection: return levelSelection;
@@ -111,14 +163,18 @@ public class UiManager : MonoBehaviour
         });
     }
 
-    internal void UpdateTotalPoints()
+    public void UpdatePoints()
     {
         if (GameManager.instance == null) return;
         int currentPoints = 0;
+        int currentGems = 0;
 
         if (GameManager.instance.playerData != null)
             currentPoints = Mathf.FloorToInt(GameManager.instance.playerData.totalPoints);
+        if (GameManager.instance.playerData != null)
+            currentGems = Mathf.FloorToInt(GameManager.instance.playerData.soldirCoins);
 
-        playersPoints.text = $"$ {currentPoints}";
+        playersPoints.text = $"{currentPoints}";
+        playersGems.text = $"{currentGems}";
     }
 }

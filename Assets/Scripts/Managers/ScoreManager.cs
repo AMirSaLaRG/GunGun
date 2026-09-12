@@ -18,11 +18,19 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private float comboToPointMultiplier = 0.25f;
     [SerializeField] private int hostageKillAllowed = 3;
 
+    [Header("Sfx")]
+    [SerializeField] private AudioSource tenComboSfx;
+    [SerializeField] private AudioSource twentyFiveComboSfx;
+    [SerializeField] private AudioSource fiftyComboSfx;
+    [SerializeField] private AudioSource oneStar;
+    [SerializeField] private AudioSource twoStar;
+    [SerializeField] private AudioSource threeStar;
 
 
 
     // ===== PROPERTIES =====
     public float points { get; private set; }
+    public float currentStars { get; private set; }
     public int currentKills { get; private set; }
     public int currentCombo { get; private set; }
     public int currentHostageKilled { get; private set; }
@@ -200,6 +208,13 @@ public class ScoreManager : MonoBehaviour
         UpdateUi();
 
         rewardManager.CheckForComboReward(currentCombo);
+
+        if (currentCombo == 10)
+            AudioManager.instance.PlaySfx(tenComboSfx);
+        else if (currentCombo == 25)
+            AudioManager.instance.PlaySfx(twentyFiveComboSfx);
+        else if (currentCombo == 50)
+            AudioManager.instance.PlaySfx(fiftyComboSfx);
     }
 
     public void ExtandComboTime(float time)
@@ -213,6 +228,8 @@ public class ScoreManager : MonoBehaviour
 
     public void ResetCombo()
     {
+        if (GameManager.instance.gameState != EGameState.InGame) return;
+
         isOnCombo = false;
         currentCombo = 0;
         rewardManager.Penalty();
@@ -221,6 +238,8 @@ public class ScoreManager : MonoBehaviour
 
         currentCashPoints = 0;
         UpdateUi();
+
+   
 
     }
 
@@ -253,6 +272,7 @@ public class ScoreManager : MonoBehaviour
         khalasShotCount = 0;
         lastKill = null;
         lastComboTime = 0;
+        currentStars = 0;
 
         UpdateUi();
     }
@@ -278,6 +298,24 @@ public class ScoreManager : MonoBehaviour
         {
             if (time > 0)
                 inGameUi.SetComboTimer(time);
+        }
+
+        if (points >= LevelManager.instance.currentLevelStarPoints[0] && currentStars < 1)
+        {
+            currentStars = 1;
+            AudioManager.instance.PlaySfx(oneStar);
+        }
+        if (points >= LevelManager.instance.currentLevelStarPoints[1] && currentStars < 2)
+        {
+            currentStars = 2;
+            AudioManager.instance.PlaySfx(twoStar);
+
+        }
+        if (points >= LevelManager.instance.currentLevelStarPoints[2] && currentStars < 3)
+        {
+            currentStars = 3;
+            AudioManager.instance.PlaySfx(threeStar);
+
         }
     }
 

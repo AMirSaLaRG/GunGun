@@ -130,7 +130,7 @@ public class UiArmory : MonoBehaviour
         bool bought = shopManager.GunPurchase(lookingGun);
         if (bought)
         {
-            popupWarningText.text = "SUCCESSFUL\nYou bought the Gun \n Congratulation";
+            popupWarningText.text = "SUCCESSFUL\nCongratulation";
             PopUpBtnFadeEffect();
 
             PapulateGunItems();
@@ -138,7 +138,7 @@ public class UiArmory : MonoBehaviour
         else
         {
             popupWarningText.color = Color.red;
-            popupWarningText.text = "FAILED\nYou dont have Requirement to purchase this Gun";
+            popupWarningText.text = "FAILED";
 
             BuyBtn.transform.DOShakePosition(.5f);
             PopUpBtnFadeEffect();
@@ -173,6 +173,7 @@ public class UiArmory : MonoBehaviour
 
     private void OnEnable()
     {
+        purchPage.SetActive(false);
         PapulateGunItems();
     }
 

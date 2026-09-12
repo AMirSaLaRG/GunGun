@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0498c37e7951dec4d8b303f671dbf2b4, type: 3}
   m_Name: BasicGun
   m_EditorClassIdentifier: Assembly-CSharp::GunSo
-  gunIcon: {fileID: 21300000, guid: c4b2a9d8973fbf34f9db56b45866a635, type: 3}
+  gunIcon: {fileID: 21300000, guid: f824ba76668d11c44b03050a739e2abe, type: 3}
   aboutGun: Basic Gun with 6 bullets.
   WeaponData:
+    gunID: 0
     gunName: Basic Gun
     gunShotType: 0
     gunDamage: 1
@@ -24,6 +25,8 @@ MonoBehaviour:
     gunForce: 250
     gunReloadTime: 2
     magazineAmoCap: 6
+    rapitShootingDelay: 0
+    accuracy: 1
     pointMultiplier: 1
     comboMultiplier: 1
     gunShotClip: {fileID: 8300000, guid: c2a9c10cdb5212b409eb9d961e31da8b, type: 3}
@@ -32,3 +35,4 @@ MonoBehaviour:
     defaultHitVfx: {fileID: 22480150734997295, guid: c6847f47a8dd73d41802cf36a4cffca8, type: 3}
     bulletHolePrefab: {fileID: 1389250963964583849, guid: 0634b4b1bef120c438f79939c3ad821e, type: 3}
   gunMagazinePrefab: {fileID: 8617614874968512798, guid: d32eb90839a1d114abb694d02d41e3b2, type: 3}
+  gunID: 0

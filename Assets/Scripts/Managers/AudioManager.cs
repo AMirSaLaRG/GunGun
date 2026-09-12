@@ -44,4 +44,39 @@ public class AudioManager : MonoBehaviour
             audioToPlay.Play();
         }
     }
+
+    public void PlaySfx(AudioSource audioToPlay, float targetDuration, bool detachAndAutoDestroy = false)
+    {
+        if (audioToPlay.clip == null)
+        {
+            Debug.Log("Could not play " + audioToPlay.gameObject.name + ". There is no audio Clip assigned!");
+            return;
+        }
+
+        if (targetDuration <= 0f)
+        {
+            Debug.LogWarning("Target duration must be greater than zero!");
+            return;
+        }
+
+        if (audioToPlay.isPlaying)
+            audioToPlay.Stop();
+
+        // Calculate pitch speed modifier to fit target duration
+        float calculatedPitch = audioToPlay.clip.length / targetDuration;
+        audioToPlay.pitch = calculatedPitch;
+
+        if (detachAndAutoDestroy)
+        {
+            audioToPlay.transform.parent = null;
+            audioToPlay.Play();
+
+            // Destroy after target duration finishes
+            Destroy(audioToPlay.gameObject, targetDuration);
+        }
+        else
+        {
+            audioToPlay.Play();
+        }
+    }
 }

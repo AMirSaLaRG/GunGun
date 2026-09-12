@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public void TogleTestMode() => isTesting = !isTesting;
 
     public LevelManager levelManager { private set; get;}
+    public BuildingManager buildingManager { private set; get;}
     public UiManager uiManager {private set; get;}
     public ScoreManager scoreManager {private set; get;}
     public MenuTransitionController menuTranstionController {private set; get;}
@@ -28,7 +29,10 @@ public class GameManager : MonoBehaviour
     public bool isVibrateOn = true;
 
     public int currentLeaderBoardRank { private set; get; } = 0;
-
+    [Header("Sfx")]
+    [SerializeField] private AudioSource missionCompeletedSfx;
+    [SerializeField] private AudioSource missionFailedSfx;
+    [SerializeField] private AudioSource reviveSfx;
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -44,6 +48,7 @@ public class GameManager : MonoBehaviour
 
 
         levelManager = FindFirstObjectByType<LevelManager>();
+        buildingManager = FindFirstObjectByType<BuildingManager>();
         uiManager = FindFirstObjectByType<UiManager>();
         menuTranstionController = FindFirstObjectByType<MenuTransitionController>();
         playerController = FindFirstObjectByType<PlayerController>();
@@ -157,6 +162,8 @@ public class GameManager : MonoBehaviour
         scoreManager.ClearHostageKill();
         playerController.ReviveThePlayer();
 
+        AudioManager.instance.PlaySfx(reviveSfx);
+
         OnResume();
     }
 
@@ -167,6 +174,8 @@ public class GameManager : MonoBehaviour
         currentGameStateInProgress = EGameState.inMenu;
 
         playerController.OnGameOver();
+
+        AudioManager.instance.PlaySfx(missionFailedSfx);
 
         SaveGameResults();
 
@@ -181,6 +190,8 @@ public class GameManager : MonoBehaviour
         uiManager?.SetPanel(EPanel.None);
         currentPanelOnProgress = EPanel.Victory;
         currentGameStateInProgress = EGameState.inMenu;
+
+        AudioManager.instance.PlaySfx(missionCompeletedSfx);
 
         SaveGameResults(true);
 
@@ -272,7 +283,7 @@ public class GameManager : MonoBehaviour
 
         if (levelManager.LoadNextLevel() == false)
         {
-            LevelSelection();
+            MainMenuFromLevelScene();
             return;
         }
 
@@ -288,19 +299,19 @@ public class GameManager : MonoBehaviour
         OnMenuTransitionFinished();
     }
 
-    public void OnSettingClick()
-    {
-        uiManager?.SetPanel(EPanel.None);
-        currentPanelOnProgress = EPanel.Settings;
+    //public void OnSettingClick()
+    //{
+    //    uiManager?.SetPanel(EPanel.None);
+    //    currentPanelOnProgress = EPanel.Settings;
 
-        if (menuTranstionController != null && gameState == EGameState.inMenu)
-        {
-            menuTranstionController.ChangeSideViewAnimation();
-            return;
-        }
+    //    if (menuTranstionController != null && gameState == EGameState.inMenu)
+    //    {
+    //        menuTranstionController.ChangeSideViewAnimation();
+    //        return;
+    //    }
 
-        OnMenuTransitionFinished();
-    }
+    //    OnMenuTransitionFinished();
+    //}
 
     public void OnLeaderBoardClick()
     {
@@ -341,25 +352,39 @@ public class GameManager : MonoBehaviour
     {
         float points = scoreManager.points;
         int levelIndex = levelManager.currentLevelIndex;
+        EBuilding building = buildingManager.currentBuilding;
+        int buildingStage = buildingManager.currentBuildingStage;
 
-        if (playerData.levelPoints[levelIndex] < points)
-            playerData.levelPoints[levelIndex] = points;
-
+        // Calculate stars earned on this run
         int earnedStars = CheckLevelStarsEarned();
-        if (playerData.levelStars[levelIndex] < earnedStars)
-            playerData.levelStars[levelIndex] = earnedStars;
 
-        if (isCompleted)
-            if (playerData.levelStars[levelIndex] > 0)
-                if (playerData.unlockedLevel < levelIndex + 1)
-                    playerData.unlockedLevel = levelIndex + 1;
-            
+        // 1. Save or update progress for the current level (points and stars)
+        SaveManager.instance.SaveLevelProgress(building, buildingStage, levelIndex, earnedStars, points);
 
-        playerData.totalPoints += points;
+        // 2. Unlock the next level index if this level was completed with at least 1 star
+        if (isCompleted && earnedStars > 0)
+        {
+            int nextLevelIndex = levelIndex + 1;
 
+            // Unlocks the next level index in the same building stage
+            SaveManager.instance.UnlockLevel(building, buildingStage, nextLevelIndex);
+        }
+
+        // 3. Add to total career points
+        SaveManager.instance.data.totalPoints += points;
+
+        // 4. Save changes to disk
         SaveManager.instance.Save();
-        SaveManager.instance.AddLeaderBoardEntry(playerData.name, points,
-            scoreManager.currentKills, levelManager.GetLevelName(levelIndex), out int rank);
+
+        // 5. Leaderboard entry submission
+        SaveManager.instance.AddLeaderBoardEntry(
+            SaveManager.instance.data.name,
+            points,
+            scoreManager.currentKills,
+            levelManager.GetLevelName(levelIndex),
+            out int rank
+        );
+
         currentLeaderBoardRank = rank;
     }
 

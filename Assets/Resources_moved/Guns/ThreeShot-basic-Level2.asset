@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0498c37e7951dec4d8b303f671dbf2b4, type: 3}
   m_Name: ThreeShot-basic-Level2
   m_EditorClassIdentifier: Assembly-CSharp::GunSo
-  gunIcon: {fileID: 21300000, guid: 3d9ff74a0e24796419241ae99f5e5645, type: 3}
+  gunIcon: {fileID: 21300000, guid: 8a7dfb69df2801b4cb8894813adbd1a1, type: 3}
   aboutGun: shots 3 bullet at same time
   WeaponData:
+    gunID: 0
     gunName: 3-round burst Level 2
     gunShotType: 1
     gunDamage: 1

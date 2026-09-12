@@ -55,7 +55,7 @@ public class UiLastChance : MonoBehaviour
         }
         else
         {
-            popUpText.text = "You don't have enough Soldir Coins to revive. Please collect more coins to continue playing.";
+            popUpText.text = "Sorry!\nNot Enough Medal of honor";
             ReviveBtn.gameObject.SetActive(false);
         }
     }

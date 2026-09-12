@@ -22,7 +22,7 @@ public class ShopManager : MonoBehaviour
         playerData.totalPoints += points;
         SaveManager.instance.Save();
 
-        uiManager.UpdateTotalPoints();
+        uiManager.UpdatePoints();
     }
     private void ChangePlayersSoldirCoin(int coins)
     {
@@ -32,7 +32,7 @@ public class ShopManager : MonoBehaviour
         playerData.totalPoints += coins;
         SaveManager.instance.Save();
 
-        uiManager.UpdateTotalPoints();
+        uiManager.UpdatePoints();
     }
 
     public bool AnotherChanceRequest()

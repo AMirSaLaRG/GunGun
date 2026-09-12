@@ -18,8 +18,26 @@ public class LevelItem : MonoBehaviour
         levelIndex = index;
         levelNameText.text = data.levelName;
         thumbnailImage.sprite = data.thumbnail;
-        scoreText.text = $"Score: {SaveManager.instance.GetPoints(index)}";
-        SetStars(SaveManager.instance.GetStarts(index));
+
+        // Fetch score using Building, Stage, and Level Index
+        float currentPoints = SaveManager.instance.GetPoints(data.Building, data.buildingStage, index);
+        scoreText.text = $"{currentPoints}";
+
+        // Fetch stars using Building, Stage, and Level Index
+        int earnedStars = SaveManager.instance.GetStars(data.Building, data.buildingStage, index);
+        SetStars(earnedStars);
+
+        // Optional: Lock / Unlock visual state check
+        PlayersLevelData saveProgress = SaveManager.instance.GetLevelData(data.Building, data.buildingStage, index);
+
+        // If no save data exists yet, default to the preset isLock value in LevelItemData
+        bool isLocked = saveProgress != null ? saveProgress.isLock : data.isLock;
+
+        // Update button interactable or overlay depending on lock status
+        if (GetComponent<UnityEngine.UI.Button>() != null)
+        {
+            GetComponent<UnityEngine.UI.Button>().interactable = !isLocked;
+        }
     }
 
     void SetStars(int earned)

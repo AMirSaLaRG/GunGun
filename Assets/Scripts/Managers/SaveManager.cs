@@ -38,22 +38,66 @@ public class SaveManager : MonoBehaviour
         } else
         {
             data = new PlayerData();
-            data.unlockedLevel = 0;
-            data.levelStars = new int[100];
-            data.levelPoints = new float[100];
+            data.name = "Player";
+            data.totalPoints = 0;
+            data.soldirCoins = 0;
+            data.playerLevelsData = new PlayersLevelData[0];
+            data.unlockedWeapons = new int[] { 0 };
+            data.musicVolume = 1f;
+            data.sfxVolume = 1f;
+            data.lastGunId = 0;
+
+            Save();
         }
     }
 
-    public int GetStarts(int levelIndex) => data.levelStars[levelIndex];
-    public float GetPoints(int levelIndex) => data.levelPoints[levelIndex];
+    public PlayersLevelData GetLevelData(EBuilding building, int stage, int levelIndex)
+    {
+        if (data.playerLevelsData == null) return null;
+
+        foreach (var level in data.playerLevelsData)
+        {
+            if (level != null &&
+                level.Building == building &&
+                level.buildingStage == stage &&
+                level.levelIndex == levelIndex)
+            {
+                return level;
+            }
+        }
+        return null;
+    }
+
+    public int GetStars(EBuilding building, int stage, int levelIndex)
+    {
+        var level = GetLevelData(building, stage, levelIndex);
+        return level != null ? level.stars : 0;
+    }
+    public float GetPoints(EBuilding building, int stage, int levelIndex)
+    {
+        var level = GetLevelData(building, stage, levelIndex);
+        return level != null ? level.points : 0f;
+    }
 
     [ContextMenu("DeleteSave")]
     private void DeleteSave()
     {
-        data = new PlayerData();
-        data.unlockedLevel = 0;
-        data.levelStars = new int[100];
-        data.levelPoints = new float[100];
+        if (File.Exists(savePath))
+        {
+            File.Delete(savePath);
+        }
+
+        data = new PlayerData
+        {
+            name = "Player",
+            totalPoints = 0,
+            soldirCoins = 0,
+            playerLevelsData = new PlayersLevelData[0],
+            unlockedWeapons = new int[] { 0 }, // Default starting weapon
+            musicVolume = 1.0f,
+            sfxVolume = 1.0f,
+            lastGunId = 0
+        };
 
         Save();
     }
@@ -120,5 +164,54 @@ public class SaveManager : MonoBehaviour
     {
         leaderBoardDataList.Clear();
         SaveLeaderBoard();
+    }
+
+    public void SaveLevelProgress(EBuilding building, int stage, int levelIndex, int starsEarned, float score)
+    {
+        PlayersLevelData level = GetLevelData(building, stage, levelIndex);
+
+        if (level == null)
+        {
+            level = new PlayersLevelData
+            {
+                Building = building,
+                buildingStage = stage,
+                levelIndex = levelIndex,
+                isLock = false
+            };
+
+            Array.Resize(ref data.playerLevelsData, data.playerLevelsData.Length + 1);
+            data.playerLevelsData[data.playerLevelsData.Length - 1] = level;
+        }
+
+        if (score > level.points) level.points = score;
+        if (starsEarned > level.stars) level.stars = starsEarned;
+
+        Save();
+    }
+
+    public void UnlockLevel(EBuilding building, int stage, int levelIndex)
+    {
+        PlayersLevelData level = GetLevelData(building, stage, levelIndex);
+
+        if (level != null)
+        {
+            level.isLock = false;
+        }
+        else
+        {
+            PlayersLevelData newLevel = new PlayersLevelData
+            {
+                Building = building,
+                buildingStage = stage,
+                levelIndex = levelIndex,
+                isLock = false
+            };
+
+            Array.Resize(ref data.playerLevelsData, data.playerLevelsData.Length + 1);
+            data.playerLevelsData[data.playerLevelsData.Length - 1] = newLevel;
+        }
+
+        Save();
     }
 }

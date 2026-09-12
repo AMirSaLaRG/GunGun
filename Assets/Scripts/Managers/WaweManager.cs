@@ -11,6 +11,7 @@ public class WaweManager : MonoBehaviour
     private RespawnManager respawnManager;
     private PlayerController player;
     private ScoreManager scoreManager;
+    private LevelManager myManager;
 
   
     [Header ("Setup")]
@@ -32,6 +33,8 @@ public class WaweManager : MonoBehaviour
     private int currentSqsIndex = 0;
 
     private bool isSaftyAtEndTriggered = false;
+
+    private AudioSource waveChangeSfx;
 
     private void Awake()
     {
@@ -89,6 +92,12 @@ public class WaweManager : MonoBehaviour
 
         respawnManager.SetupRandom(data);
         string waveNum = GetCurrentWaveText();
+        if (currentWaveIndex == 0)
+            AudioManager.instance.PlaySfx(myManager.GetLevelStartSfx());
+        else if (currentWaveIndex == wawesData.Count - 1)
+            AudioManager.instance.PlaySfx(myManager.GetFinalWaveSfx());
+        else
+            AudioManager.instance.PlaySfx(myManager.GetWaveChangeSfx());
 
         player.WaveChange(data, waveNum);
         scoreManager.ExtandComboTime(data.startingDelay);
@@ -168,7 +177,7 @@ public class WaweManager : MonoBehaviour
         return true;
     }
 
-    public void StartWaves()
+    public void StartWaves(LevelManager manager)
     {
 
         isStarted = true;
@@ -177,6 +186,7 @@ public class WaweManager : MonoBehaviour
         isTimeForNextWawe = true;
 
         waweStartTime = Time.time;
+        myManager = manager;
     }
 
     public void StopWaves()

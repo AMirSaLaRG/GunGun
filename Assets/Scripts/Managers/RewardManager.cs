@@ -15,10 +15,13 @@ public class RewardManager : MonoBehaviour
     [SerializeField] private Transform vfxPos;
     [SerializeField] private AudioSource gunRewardSfx;
     [SerializeField] private AudioSource gunPenaltySfx;
+    [SerializeField] private AudioSource SecondaryUnlockedSfx;
 
     private UiRewardItem gunReward;
 
     private int lastComboRewardGiven = 0;
+
+    private bool isFirstTimeSecondaryWeaponUnlocked = true;
 
     private void Start()
     {
@@ -54,12 +57,23 @@ public class RewardManager : MonoBehaviour
     public void GiveGunReward(GunRewardOnComboData reward)
     {
         if (reward.isInstant == true)
+        {
             playerController.EquipNewWeapon(reward.gunId, true);
+            AudioManager.instance.PlaySfx(gunRewardSfx);
+        }
         else
+        {
+            if (isFirstTimeSecondaryWeaponUnlocked)
+                AudioManager.instance.PlaySfx(SecondaryUnlockedSfx);
+            else
+                AudioManager.instance.PlaySfx(gunRewardSfx);
+
+            isFirstTimeSecondaryWeaponUnlocked = false;
+
             playerController.SetSecondaryWeapon(reward.gunId);
+        }
 
         Instantiate(GunRewardVfx, vfxPos.position, Quaternion.identity);
-        AudioManager.instance.PlaySfx(gunRewardSfx);
     }
 
     public void ResetRewards()
@@ -73,7 +87,9 @@ public class RewardManager : MonoBehaviour
         if (gunReward != null)
             Destroy(gunReward.gameObject);
         gunReward = null;
-        
+
+        isFirstTimeSecondaryWeaponUnlocked = true;
+
     }
 
     public void Penalty()
