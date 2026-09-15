@@ -6,15 +6,58 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] voice goes over each other should get fixed
+- [ ] remove horizental view it should has same ratio
+- [ ] add some animation on building transform
+- [ ] add bgm
+	fix the setting sound section
+- [ ] - [ ] Add more [[Enemy|enemy]]
+		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
+		- [x] [[EnemyHostageTaker|Hostage Taker]]
+		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
+		- [ ] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
+		- [ ]
+- [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
+		- [ ] Handle the target by sequences
+		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
+- [ ] - [ ] Achivements 15/8 #art #code #ui 
+		- [ ] kills
+		- [ ] powerup
+		- [ ] combo
+- [ ] - [ ] Daily and weekly Tasks #art #code #ui 
+		- [ ] In Game user Interface shows
+- [ ] rework leader board
+- [ ] Add Ability System to the Player.
+	- [ ] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [ ] General watch : Get Double points
+- [ ] Add power up and bonus targets
+	- [ ] power ups the items that shooting them will activate ability
+	- [ ] bonus item 
+		- [ ] items with points
+		- [ ] secret items 
+		- [ ] achive items
+	- [ ] handle respawn and movement
+	- [ ] create visuals for it
 - [ ] make survival mode for first level
 	- [ ] Create survival manager
 	- [ ] Create survival difficulty
 - [ ] write some history for game #writing
 - [ ] need to put some reward on middle of level with time or wave
 	updating reward manager #code
-- [ ] fix bug of Retry i try it but do not happens again
-- [ ] add some animation on building transform
+- [ ] Create Levels
+	- [ ] Create Level 1
+	- [ ] Create Level 2
+	- [ ] Create Level 3
+	- [ ] Create Level 4
+	- [ ] Create Level 5
+- [ ] - [ ] ObjectPool #code
+- [ ] document the game
+- [ ] - [ ] Shop 10/8 #art #code #ui
+		- [x] weapons
+		- [ ] enemy Prefab
+		- [ ] enemy Warning Sign
+		- [ ] hit sprites
 
 
 ## Mehrdad feedback
@@ -50,51 +93,6 @@ kanban-plugin: board
 
 ## To Do
 
-- [ ] Add skill system for player
-- [ ] Refactor the eleveator shit from game manager+
-- [ ] Add Enemy projectiles to the targets
-- [ ] change view tracker to respawn stand
-- [ ] - [ ] Shop 10/8 #art #code #ui
-		- [x] weapons
-		- [ ] enemy Prefab
-		- [ ] enemy Warning Sign
-		- [ ] hit sprites
-- [ ] add combo bonus something like call of
-- [ ] when reviving the scar sprite should disipear faster
-- [ ] shop popup can be dedicated to shop manager
-- [ ] - [ ] Achivements 15/8 #art #code #ui 
-		- [ ] kills
-		- [ ] powerup
-		- [ ] combo
-- [ ] - [ ] Daily and weekly Tasks #art #code #ui 
-		- [ ] In Game user Interface shows
-- [ ] Create [[Enemy|enemy launcher]]
-- [ ] move damage to hitData
-- [ ] Add power up and bonus targets
-	- [ ] power ups the items that shooting them will activate ability
-	- [ ] bonus item 
-		- [ ] items with points
-		- [ ] secret items 
-		- [ ] achive items
-	- [ ] handle respawn and movement
-	- [ ] create visuals for it
-- [ ] - [ ] ObjectPool #code
-- [ ] Add Ability System to the Player.
-	- [ ] Adrenaline rush : time get slow 
-	- [ ] Supper gun : Get a supper gun
-	- [ ] Sniper Squad : helps to kill enemies.
-	- [ ] General watch : Get Double points
-- [ ] - [ ] Lightning managment #art #render
-- [ ] - [ ] Add more [[Enemy|enemy]]
-		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
-		- [x] [[EnemyHostageTaker|Hostage Taker]]
-		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
-		- [ ] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
-		- [ ]
-- [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
-		- [ ] Handle the target by sequences
-		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
-- [ ] - [ ] Create [[02 - Asset/Level1|level one asset]] #art #blender
 
 
 ## In Progress
@@ -103,20 +101,20 @@ kanban-plugin: board
 
 ## Done Before Comit
 
-- [ ] rework ui compeletely
-- [ ] Loading building and wire up building manager
-- [ ] changed ui background added leader board to dynamic ui s
+
+
+## Done
+
 - [ ] generate voices for game
 	- [x] voice for combo
 	- [x] voice for rewards
 	- [x] voice for game start
 	- [x] voice for wave change
 	- [x] voice for combo breaks
-
-
-## Done
-
+- [ ] changed ui background added leader board to dynamic ui s
+- [ ] rework ui compeletely
 - [ ] guns should have upgrade like when they're bullet numbers goes up this ones will given to player as reward so they should not has reload time and switch time
+- [ ] Loading building and wire up building manager
 - [ ] Rework reward system
 	- [x] it should be instance with out claim request
 	- [x] add switch gun system to use burst fire should be instance as well
@@ -235,6 +233,8 @@ kanban-plugin: board
 
 ## Bugs
 
+- [ ] fix bug of Retry i try it but do not happens again
+- [ ] voice goes over each other should get fixed
 - [ ] after retry
 	spawn boxes get buged
 	a set of respawn box of windows both items are de active the box is active the enemy spawned
@@ -253,6 +253,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,true,true,false,false,false,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,true,true,false,true,true,true,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%
