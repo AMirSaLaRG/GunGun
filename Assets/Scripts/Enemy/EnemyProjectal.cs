@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyProjectal : MonoBehaviour
 {
     [Header("setup")]
-    [SerializeField] private ParticleSystem onHitVfx;
+    [SerializeField] protected ParticleSystem onHitVfx;
     [SerializeField] private float disFromCameraToHit = 3f;
     private float speed;
     private int damage;
@@ -30,7 +30,7 @@ public class EnemyProjectal : MonoBehaviour
             targetZ = target.position.z + disFromCameraToHit;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
 
@@ -42,13 +42,22 @@ public class EnemyProjectal : MonoBehaviour
 
         if (isDistanceEnough)
         {
-            HitData hitData = new HitData();
-            hitData.hitPos = transform.position;
-
-            Instantiate(onHitVfx.gameObject, transform.position, Quaternion.identity, null);
-            player.TakeDamage(damage, hitData);
-            Destroy(gameObject);
+            OnHitPlayer();
         }
+    }
+
+    private void OnHitPlayer()
+    {
+        HitData hitData = new HitData();
+        hitData.hitPos = transform.position;
+
+        player.TakeDamage(damage, hitData);
+        DestroyTheProjectile();
+    }
+
+    protected virtual void PlayVfx()
+    {
+        Instantiate(onHitVfx.gameObject, transform.position, Quaternion.identity, null);
     }
 
     public void SetUP(float speed, int damage, PlayerController player)
@@ -56,5 +65,11 @@ public class EnemyProjectal : MonoBehaviour
         this.speed = speed;
         this.player = player;
         this.damage = damage;
+    }
+
+    public void DestroyTheProjectile()
+    {
+        PlayVfx();
+        Destroy(gameObject);
     }
 }

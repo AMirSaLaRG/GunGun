@@ -172,6 +172,14 @@ public class HitDitector : MonoBehaviour
             else
                 return EHitType.Hostage;
         }
+        else if (target.TryGetComponent(out TargetableProjectile rocket))
+        {
+            
+            return EHitType.EnemyProjectile;
+    
+        }
+
+      
 
         return EHitType.None;
 

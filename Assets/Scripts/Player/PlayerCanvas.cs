@@ -50,6 +50,9 @@ public class PlayerCanvas : MonoBehaviour
     [Space]
     [SerializeField] private string onKhalasText;
     [SerializeField] private Color onKhalasColor;
+    [Space]
+    [SerializeField] private string onProjectileHitText;
+    [SerializeField] private Color onProjectileHitColor;
 
 
     [Header("OnCombo")]
@@ -265,6 +268,10 @@ public class PlayerCanvas : MonoBehaviour
             case EHitType.Khalas:
                 color = onKhalasColor;
                 text = onKhalasText;
+                break;
+            case EHitType.EnemyProjectile:
+                color = onProjectileHitColor;
+                text = onProjectileHitText;
                 break;
 
             default:

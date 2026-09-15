@@ -17,6 +17,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+
     public void PlaySfx(AudioSource audioToPlay, bool randomPitch = false, bool detachAndAutoDestroy = false)
     {
         if (audioToPlay.clip == null)

@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public bool isVibrateOn = true;
 
+    private bool pausedBySystem = false;
     public int currentLeaderBoardRank { private set; get; } = 0;
     [Header("Sfx")]
     [SerializeField] private AudioSource missionCompeletedSfx;
@@ -218,11 +219,17 @@ public class GameManager : MonoBehaviour
         currentPanelOnProgress = EPanel.Pause;
         currentGameStateInProgress = EGameState.pause;
 
+        AudioListener.pause = true;
+
+
         OnMenuTransitionFinished();
     }
 
     public void OnResume()
     {
+        pausedBySystem = false;
+        AudioListener.pause = false;
+
         currentPanelOnProgress = EPanel.InGame;
         currentGameStateInProgress = EGameState.InGame;
 
@@ -420,5 +427,48 @@ public class GameManager : MonoBehaviour
         SaveManager.instance.Save();
     }
 
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+            HandleAppBackgrounded();
+        else
+            HandleAppForegrounded();
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        // Only trust focus events on mobile; on desktop they fire on alt-tab.
+        if (!Application.isMobilePlatform)
+            return;
+
+        if (!hasFocus)
+            HandleAppBackgrounded();
+        else
+            HandleAppForegrounded();
+    }
+
+    private void HandleAppBackgrounded()
+    {
+        if (pausedBySystem) return;   // already handled, avoid double-fire
+
+        // Safety save: OS may kill us while backgrounded
+        SaveManager.instance.Save();
+
+        // Only pause if we're actually in gameplay
+        if (gameState == EGameState.InGame)
+        {
+            pausedBySystem = true;
+            OnPause();                // shows Pause panel, sets timeScale = 0
+        }
+
+        // Freeze audio regardless of state
+        AudioListener.pause = true;
+    }
+
+    private void HandleAppForegrounded()
+    {
+        AudioListener.pause = false;
+        // Do NOT auto-resume — player taps Resume.
+    }
 
 }

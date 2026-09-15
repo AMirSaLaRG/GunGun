@@ -21,7 +21,7 @@ public class Target : MonoBehaviour, IDamagable
     [SerializeField] protected AudioSource onDeadTargetGetShotSfx;
 
     [Header("Target Type")]
-    [SerializeField] private bool isStatic = false;
+    [SerializeField] protected bool isStatic = false;
 
 
     [Header("Visuals")]
@@ -203,7 +203,7 @@ public class Target : MonoBehaviour, IDamagable
             if (healthPoint <= 0)
             {
                 if (onDeathSfx != null)
-                    AudioManager.instance.PlaySfx(onDeathSfx, true);
+                    AudioManager.instance.PlaySfx(onDeathSfx, true, true);
 
                 Die();
             }

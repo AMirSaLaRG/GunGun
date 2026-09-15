@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Analytics.IAnalytic;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -71,6 +72,10 @@ public class ScoreManager : MonoBehaviour
                 ProcessMovingEnemyHit(hitData);
                 break;
 
+            case EHitType.EnemyProjectile:
+                ProcessEnemyProjectileHit(hitData);
+                break;
+
             case EHitType.Shield:
                 ProcessShieldHit(hitData);
                 break;
@@ -86,7 +91,6 @@ public class ScoreManager : MonoBehaviour
             case EHitType.Missed:
                 ProcessMissHit();
                 break;
-
             default:
                 break;
         }
@@ -127,7 +131,20 @@ public class ScoreManager : MonoBehaviour
         currentKills++;
         AddCombo(enemy.GetComboValue());
     }
+    private void ProcessEnemyProjectileHit(HitData hitData)
+    {
+        TargetableProjectile tProjectile = hitData.hitedTarget as TargetableProjectile;
 
+        if (tProjectile == null) return;
+
+        float basePoints = tProjectile.GetTargetPoints();
+
+        AddPoints(basePoints);
+
+        AddCombo(tProjectile.GetComboValue());
+
+
+    }
     private void ProcessShieldHit(HitData hitData)
     {
         EnemyShield shield = hitData.hitedTarget as EnemyShield;
@@ -180,6 +197,8 @@ public class ScoreManager : MonoBehaviour
         ResetCombo();
 
     }
+
+   
 
     // ==========================================
     // ===== POINTS =====

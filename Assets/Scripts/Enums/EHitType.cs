@@ -12,4 +12,5 @@ public enum EHitType
     None = 7,
     Player = 8,
     Air = 9,
+    EnemyProjectile = 10,
 }

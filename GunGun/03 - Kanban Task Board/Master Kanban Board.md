@@ -6,16 +6,9 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] remove horizental view it should has same ratio
 - [ ] add some animation on building transform
 - [ ] add bgm
 	fix the setting sound section
-- [ ] - [ ] Add more [[Enemy|enemy]]
-		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
-		- [x] [[EnemyHostageTaker|Hostage Taker]]
-		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
-		- [ ] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
-		- [ ]
 - [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
 		- [ ] Handle the target by sequences
 		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
@@ -58,6 +51,7 @@ kanban-plugin: board
 		- [ ] enemy Prefab
 		- [ ] enemy Warning Sign
 		- [ ] hit sprites
+- [ ] Add earning of honor
 
 
 ## Mehrdad feedback
@@ -101,10 +95,17 @@ kanban-plugin: board
 
 ## Done Before Comit
 
+- [ ] when on phone it get minimize or out of main app should get pause
+- [ ] - [x] Add more [[Enemy|enemy]]
+		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
+		- [x] [[EnemyHostageTaker|Hostage Taker]]
+		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
+		- [x] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
 
 
 ## Done
 
+- [ ] remove horizental view it should has same ratio
 - [ ] generate voices for game
 	- [x] voice for combo
 	- [x] voice for rewards
@@ -253,6 +254,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,true,true,false,true,true,true,false,false],"show-checkboxes":false,"tag-colors":[]}
+{"kanban-plugin":"board","list-collapse":[false,true,true,false,true,false,true,false,false],"show-checkboxes":false,"tag-colors":[]}
 ```
 %%
