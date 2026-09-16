@@ -140,7 +140,7 @@ public class MagazineManager : MonoBehaviour
     }
 
 
-    public void OnReloadBullets(bool instantReload = false, int reloadAmount = -1)
+    public void OnReloadBullets(bool instantReload = false, int reloadAmount = -1, float reloadTimeScale = 1)
     {
         if (canReload == false)
             return;
@@ -160,7 +160,7 @@ public class MagazineManager : MonoBehaviour
         Debug.Log(currentAmo);
 
 
-        float rTime = instantReload ? 0 : reloadTime;
+        float rTime = instantReload ? 0 : reloadTime * reloadTimeScale;
 
         transform.DOKill();
 
@@ -197,7 +197,7 @@ public class MagazineManager : MonoBehaviour
         {
             Vector3 targetPos = transform.position + (transform.forward * -8f);
 
-            transform.DOMove(targetPos, reloadTime / 2).OnComplete(() => {
+            transform.DOMove(targetPos, rTime / 2).OnComplete(() => {
 
                 bulletHolderSet.localPosition = Vector3.zero;
 
@@ -217,7 +217,7 @@ public class MagazineManager : MonoBehaviour
 
                 }
 
-                transform.DOMove(startPosition, reloadTime / 2).OnComplete(() => isReloading = false);
+                transform.DOMove(startPosition, rTime / 2).OnComplete(() => isReloading = false);
                 });
         }
 

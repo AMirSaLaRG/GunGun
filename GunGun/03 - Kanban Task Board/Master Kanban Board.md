@@ -6,6 +6,11 @@ kanban-plugin: board
 
 ## Backlog
 
+- [ ] Add Ability System to the Player.
+	- [ ] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [ ] General watch : Get Double points
 - [ ] add some animation on building transform
 - [ ] add bgm
 	fix the setting sound section
@@ -19,11 +24,6 @@ kanban-plugin: board
 - [ ] - [ ] Daily and weekly Tasks #art #code #ui 
 		- [ ] In Game user Interface shows
 - [ ] rework leader board
-- [ ] Add Ability System to the Player.
-	- [ ] Adrenaline rush : time get slow 
-	- [ ] Supper gun : Get a supper gun
-	- [ ] Sniper Squad : helps to kill enemies.
-	- [ ] General watch : Get Double points
 - [ ] Add power up and bonus targets
 	- [ ] power ups the items that shooting them will activate ability
 	- [ ] bonus item 

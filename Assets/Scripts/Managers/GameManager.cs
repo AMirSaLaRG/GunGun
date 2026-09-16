@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
 
     private bool pausedBySystem = false;
     public int currentLeaderBoardRank { private set; get; } = 0;
+
+    private float lastTimeScale = 1f;
+
     [Header("Sfx")]
     [SerializeField] private AudioSource missionCompeletedSfx;
     [SerializeField] private AudioSource missionFailedSfx;
@@ -70,12 +73,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ChangeTimescale(float timeScale)
+    {
+        lastTimeScale = timeScale;
+
+        if (currentGameStateInProgress == EGameState.InGame)
+            Time.timeScale = timeScale;
+    }
+
     private void CallGameStart()
     {
         playerController.SetGameStarted(true);
         levelManager.SetGameStart();
         scoreManager.ResetAll();
         rewardManager.ResetRewards();
+        lastTimeScale = 1;
     }
 
     private void CallGameOver()
@@ -107,7 +119,7 @@ public class GameManager : MonoBehaviour
                 gameState = EGameState.inMenu;
                 break;
             case EGameState.InGame:
-                Time.timeScale = 1;
+                Time.timeScale = lastTimeScale;
 
                 if (gameState == EGameState.inMenu)
                     CallGameStart();
@@ -221,6 +233,7 @@ public class GameManager : MonoBehaviour
 
         AudioListener.pause = true;
 
+        playerController.OnPause();
 
         OnMenuTransitionFinished();
     }
@@ -229,6 +242,8 @@ public class GameManager : MonoBehaviour
     {
         pausedBySystem = false;
         AudioListener.pause = false;
+        playerController.OnResume();
+
 
         currentPanelOnProgress = EPanel.InGame;
         currentGameStateInProgress = EGameState.InGame;

@@ -50,6 +50,8 @@ public class GunManager : MonoBehaviour
     private int secondaryWeaponId;
     public bool hasSecondaryWeapon { private set; get; } = false;
 
+    private float reloadTimeScale = 1;
+
     private Coroutine fireCo;
     private async void Start()
     {
@@ -155,6 +157,7 @@ public class GunManager : MonoBehaviour
         }
     }
 
+    public void ChangeReloadTimeScale(float timeScale) => reloadTimeScale = timeScale;
     
     public void SetCurrentGun(int gunId, bool isInstant = false, bool shouldReload = true, bool useBulletsFromAnotherMagazine = false)
     {
@@ -388,7 +391,7 @@ public class GunManager : MonoBehaviour
     public void Reload(bool instantReload = false, int reloadAmount = -1)
     {
         if (magazineSocket != null)
-            magazineManager.OnReloadBullets();
+            magazineManager.OnReloadBullets(instantReload, reloadAmount, reloadTimeScale);
 
         isShooting = false;
     }
@@ -404,6 +407,7 @@ public class GunManager : MonoBehaviour
         SetNewMainWeapon(0);
         RemoveSecondaryWeapon();
         isShooting = false;
+        reloadTimeScale = 1;
     }
 
 

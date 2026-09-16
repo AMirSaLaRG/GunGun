@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     private TouchControls controls;
     public GunManager gunManager {private set; get; }   
     public ScoreManager scoreManager {  get; private set; }
+    public PlayerSkills skills {  get; private set; }
 
     [Header("Uis")]
     [SerializeField] private PlayerCanvas myCanvas;
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         mainCamera = Camera.main;
         controls = new TouchControls();
         gunManager = GetComponent<GunManager>();
+        skills = GetComponent<PlayerSkills>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
 
         controls.TouchScreen.Shoot.performed += ctx => OnTap(ctx);
@@ -130,6 +133,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         this.gameStarted = gameStarted;
         isDead = !gameStarted;
         canTakeDamage = gameStarted;
+        skills.ResetSkills();
         if (gameStarted)
             gunManager.ResetTheGun();
 
@@ -202,5 +206,20 @@ public class PlayerController : MonoBehaviour, IDamagable
         controls.Disable();
     }
 
-    
+    public void ScaleReloadTime(float scale)
+    {
+        gunManager.ChangeReloadTimeScale(scale);
+    }
+
+
+    public void OnPause()
+    {
+        skills.OnPause();
+    }
+
+    public void OnResume()
+    {
+        skills.OnResume();
+    }
+  
 }
