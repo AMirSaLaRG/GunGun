@@ -83,6 +83,9 @@ public class GameManager : MonoBehaviour
 
     private void CallGameStart()
     {
+        AudioListener.pause = false;
+        AudioManager.instance.StopAllSfxInScene();
+
         playerController.SetGameStarted(true);
         levelManager.SetGameStart();
         scoreManager.ResetAll();
@@ -157,6 +160,7 @@ public class GameManager : MonoBehaviour
         SaveGameResults();
         CallGameOver();
         CallGameStart();
+
 
         OnMenuTransitionFinished();
     }

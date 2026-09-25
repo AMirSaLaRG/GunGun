@@ -6,11 +6,14 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] Add Ability System to the Player.
-	- [ ] Adrenaline rush : time get slow 
-	- [ ] Supper gun : Get a supper gun
-	- [ ] Sniper Squad : helps to kill enemies.
-	- [ ] General watch : Get Double points
+- [ ] Add power up and bonus targets
+	- [x] power ups the items that shooting them will activate ability
+	- [ ] bonus item 
+		- [ ] items with points
+		- [ ] secret items 
+		- [ ] achive items
+	- [x] handle respawn and movement
+	- [x] create visuals for it
 - [ ] add some animation on building transform
 - [ ] add bgm
 	fix the setting sound section
@@ -24,14 +27,6 @@ kanban-plugin: board
 - [ ] - [ ] Daily and weekly Tasks #art #code #ui 
 		- [ ] In Game user Interface shows
 - [ ] rework leader board
-- [ ] Add power up and bonus targets
-	- [ ] power ups the items that shooting them will activate ability
-	- [ ] bonus item 
-		- [ ] items with points
-		- [ ] secret items 
-		- [ ] achive items
-	- [ ] handle respawn and movement
-	- [ ] create visuals for it
 - [ ] make survival mode for first level
 	- [ ] Create survival manager
 	- [ ] Create survival difficulty
@@ -95,6 +90,12 @@ kanban-plugin: board
 
 ## Done Before Comit
 
+- [ ] Add Ability System to the Player.
+	- [x] Adrenaline rush : time get slow 
+	- [ ] Supper gun : Get a supper gun
+	- [ ] Sniper Squad : helps to kill enemies.
+	- [x] General watch : Get Double points
+	- [x] extra shield
 - [ ] when on phone it get minimize or out of main app should get pause
 - [ ] - [x] Add more [[Enemy|enemy]]
 		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]

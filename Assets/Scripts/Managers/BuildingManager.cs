@@ -134,4 +134,12 @@ public class BuildingManager : MonoBehaviour
 
         return null;
     }
+
+    public PowerUpWayPointsSet GetCurrentWayPointSet()
+    {
+        Building targetData = buildings.Find(b => b.building == currentBuilding && b.stage == currentBuildingStage);
+        if (targetData != null && targetData.powerUpWayPoints != null)
+            return targetData.powerUpWayPoints;
+        return null;
+    }
 }

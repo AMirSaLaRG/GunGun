@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private bool isDead;
     private bool canTakeDamage = true;
+    private bool shieldSkill = false;
 
     private void Awake()
     {
@@ -97,7 +98,14 @@ public class PlayerController : MonoBehaviour, IDamagable
         if (GameManager.instance.isTesting)
             return;
 
+        if (shieldSkill)
+        {
+            skills.DeActiveShield();
+            return;
+        }
+
         healthPoint -= damage;
+        skills.ResetSkills();
         myCanvas.OnTakingDamage(mainCamera.WorldToScreenPoint(hitedData.hitPos));
 
         if (healthPoint <= 0)
@@ -221,5 +229,9 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         skills.OnResume();
     }
-  
+
+    public void ActiveShield(bool enable)
+    {
+        shieldSkill = enable;
+    }
 }

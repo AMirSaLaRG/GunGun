@@ -428,7 +428,6 @@ public class GunManager : MonoBehaviour
 
         hasSecondaryWeapon = true;
 
-
         if (usingSecondaryGun)
             SetCurrentGun(gunId, true, false);
 
@@ -437,8 +436,11 @@ public class GunManager : MonoBehaviour
 
     public void RemoveSecondaryWeapon()
     {
-        if (currentGun.gunID == secondaryWeaponId)
+        if (currentGun.gunID != 0 && currentGun.gunID == secondaryWeaponId)
+        {
+
             SetCurrentGun(mainWeaponId, false, false);
+        }
 
         hasSecondaryWeapon = false;
         secondaryWeaponId = 0;
@@ -447,12 +449,15 @@ public class GunManager : MonoBehaviour
 
     public void SwitchWeapon()
     {
+        
         if (currentGun.gunID == mainWeaponId)
         {
+
             SetCurrentGun(secondaryWeaponId, false, false);
         }
         else
         {
+
             SetCurrentGun(mainWeaponId, false, false);
         }
     }

@@ -96,7 +96,7 @@ public class MagazineManager : MonoBehaviour
         if (type == EMagazinesType.RevolverCylinder)
         {
             Quaternion currentRotation = transform.localRotation;
-            transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic);
+            transform.DOLocalRotate(currentRotation.eulerAngles + (Vector3.up * 360 / bulletHolders.Length), switchTIme).SetEase(Ease.OutElastic).SetUpdate(true);
 
             if (currentBullet.localPosition != Vector3.zero)
                 return;
@@ -129,7 +129,7 @@ public class MagazineManager : MonoBehaviour
                 currentBullet.parent = null;
             });
 
-            bulletHolderSet.DOLocalMoveZ(bulletHolderSet.localPosition.z + zdifTwoBulletInStang, switchTIme / 3);
+            bulletHolderSet.DOLocalMoveZ(bulletHolderSet.localPosition.z + zdifTwoBulletInStang, switchTIme / 3).SetUpdate(true);
         }
 
         currentBulletIndex++;
@@ -262,6 +262,7 @@ public class MagazineManager : MonoBehaviour
     {
         Vector3 StartPos = transform.position;
         Vector3 startRot = transform.rotation.eulerAngles;
+
 
 
         if (shouldReload)

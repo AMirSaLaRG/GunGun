@@ -42,6 +42,7 @@ public class ScoreManager : MonoBehaviour
     public int khalasShotCount { get; private set; }
     private Enemy lastKill;
     private float lastComboTime;
+    private float pointMultiPlyer = 1;
 
     private void Start()
     {
@@ -66,6 +67,9 @@ public class ScoreManager : MonoBehaviour
         {
             case EHitType.Enemy:
                 ProcessEnemyHit(hitData);
+                break;
+            case EHitType.Target:
+                ProcessTargetHit(hitData);
                 break;
 
             case EHitType.MovingEnemy:
@@ -117,6 +121,22 @@ public class ScoreManager : MonoBehaviour
 
         // Add combo
         AddCombo(enemy.GetComboValue());
+    }
+    private void ProcessTargetHit(HitData hitData)
+    {
+        Target target = hitData.hitedTarget as Enemy;
+        if (target == null) return;
+
+        float basePoints = target.GetTargetPoints();
+
+        // Reset khalas
+        ResetKhalas();
+
+        // Add points with combo bonus
+        AddPoints(basePoints);
+
+        // Add combo
+        AddCombo(target.GetComboValue());
     }
 
     private void ProcessMovingEnemyHit(HitData hitData)
@@ -207,6 +227,8 @@ public class ScoreManager : MonoBehaviour
     {
         float bonus = basePoints * currentCombo * comboToPointMultiplier;
         float total = basePoints + bonus;
+
+        total *= pointMultiPlyer;
 
         points += total;
         currentCashPoints += total;
@@ -338,5 +360,8 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-   
+    public void AddBonusePointMuiltiplier(float additionalMultiplier)
+    {
+        pointMultiPlyer += additionalMultiplier;
+    }
 }

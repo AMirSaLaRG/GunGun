@@ -8,5 +8,6 @@ public class Building : MonoBehaviour
     [SerializeField] public GameObject[] items;
     [SerializeField] public LevelItemData[] levels;
     [SerializeField] public bool isLock = true;
+    [SerializeField] public PowerUpWayPointsSet powerUpWayPoints;
 
 }

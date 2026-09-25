@@ -12,12 +12,17 @@ public class WaweManager : MonoBehaviour
     private PlayerController player;
     private ScoreManager scoreManager;
     private LevelManager myManager;
+    private PowerUpManager powerUpManager;
 
   
     [Header ("Setup")]
-
+    [Header("WaveSetup")]
     [SerializeField] private List<WaveData> wawesData;
     //private List<WaveData> waweData = new List<WaveData>();
+    [Space]
+    [Header ("PowerUpSetup")]
+    [SerializeField] private List<PowerUpData> powerUpsData;
+    [SerializeField] private Vector2 powerUpRespawnsInterval;
     private bool isStarted = false;
 
     private bool isWaweEnded = true;
@@ -41,6 +46,7 @@ public class WaweManager : MonoBehaviour
         respawnManager = FindFirstObjectByType<RespawnManager>();
         player = FindFirstObjectByType<PlayerController>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        powerUpManager = FindFirstObjectByType<PowerUpManager>();
     }
 
     private void Start()
@@ -71,6 +77,8 @@ public class WaweManager : MonoBehaviour
 
     private void Update()
     {
+   
+
         if (isStarted == false)
             return;
 
@@ -180,6 +188,9 @@ public class WaweManager : MonoBehaviour
     public void StartWaves(LevelManager manager)
     {
 
+        Debug.Log("Started Wave");
+
+
         isStarted = true;
 
         isWaweEnded = true;
@@ -187,12 +198,16 @@ public class WaweManager : MonoBehaviour
 
         waweStartTime = Time.time;
         myManager = manager;
+
+        powerUpManager.SetWaveManager(this);
+
     }
 
     public void StopWaves()
     {
         ClearScene();
         respawnManager.BreakRespawn();
+        powerUpManager.WaveStoped();
     }
     private void ResetWaweManager()
     {
@@ -200,6 +215,7 @@ public class WaweManager : MonoBehaviour
         currentWaveIndex = 0;
         currentSqsIndex = 0;
         isStarted = false;
+        powerUpManager.WaveStoped();
     }
     private bool isTimeForEvent()
     {
@@ -319,4 +335,6 @@ public class WaweManager : MonoBehaviour
         respawnManager.ClearScene();
     }
 
+    public List<PowerUpData> GetPowerUpData() => powerUpsData;
+    public Vector2 GetPowerUpRespawnInterval() => powerUpRespawnsInterval;
 }

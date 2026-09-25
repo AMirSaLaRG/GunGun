@@ -181,7 +181,7 @@ public class HitDitector : MonoBehaviour
 
       
 
-        return EHitType.None;
+        return EHitType.Target;
 
     }
 

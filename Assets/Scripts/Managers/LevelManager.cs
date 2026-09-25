@@ -117,6 +117,8 @@ public class LevelManager : MonoBehaviour
 
         respawnManager.SetupBoxes(levelToLoad.respawnBoxHolder);
 
+
+
         threeStarPoint = levelToLoad.pointsForthreeStar;
 
         foreach(var level in levels)
@@ -172,7 +174,7 @@ public class LevelManager : MonoBehaviour
 
         currentWaves.StartWaves(this);
     }
-    
+
     public void SetGameEnd()
     {
         currentWaves.StopWaves();

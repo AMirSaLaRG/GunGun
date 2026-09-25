@@ -80,4 +80,18 @@ public class AudioManager : MonoBehaviour
             audioToPlay.Play();
         }
     }
+
+    public void StopAllSfxInScene()
+    {
+        AudioSource[] allSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+
+        foreach (AudioSource src in allSources)
+        {
+            //if (src.outputAudioMixerGroup == sfxGroup && src.isPlaying)
+            //    src.Stop();
+            if ( src.isPlaying)
+                src.Stop();
+        }
+    }
+
 }

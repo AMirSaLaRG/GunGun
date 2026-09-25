@@ -425,7 +425,8 @@ public class Target : MonoBehaviour, IDamagable
         if (anim != null)
             anim?.SetBool(boolAnimRunKeyWord, false);
 
-        rb.constraints = RigidbodyConstraints.None;
+        if (rb != null)
+            rb.constraints = RigidbodyConstraints.None;
 
         isMoving = false;
 
