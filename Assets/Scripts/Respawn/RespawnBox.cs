@@ -113,14 +113,9 @@ public class RespawnBox : MonoBehaviour
 
     public void DeActivateThisBox(bool isImediate = false)
     {
+
         isActive = false;
         myActivateItem.CheckCloseRequsts(isImediate);
-    }
-
-    public void ImediateDeActivate()
-    {
-        isActive = false;
-        myActivateItem.CheckCloseRequsts();
     }
 
     public void SetPlayer(PlayerController player) => this.player = player;

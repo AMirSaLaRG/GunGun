@@ -47,6 +47,10 @@ public class UiManager : MonoBehaviour
 
     public EPanel currentPanel { private set; get; } = EPanel.MainMenu;
 
+    private void Start()
+    {
+        settingsPopup.GetComponent<UiSettings>().StartingSetup();
+    }
 
     public void SetPanel(EPanel panel)
     {

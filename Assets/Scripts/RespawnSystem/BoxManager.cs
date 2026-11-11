@@ -15,6 +15,7 @@ public class BoxManager : MonoBehaviour
     private List<RespawnBox> activeEmptyBoxesDoubleRespawn = new List<RespawnBox>();
 
     private List<RespawnBox> deActiveBoxes = new List<RespawnBox>();
+    public int boxesNum { private set; get; }
 
     public float currentActiveTime { private set; get; } = 0;
     public bool ManagingBoxes { private set; get; } = false;
@@ -29,6 +30,7 @@ public class BoxManager : MonoBehaviour
         ResetBoxes();
 
         myRespawnBoxes.AddRange(boxHolder.GetComponentsInChildren<RespawnBox>());
+        boxesNum = myRespawnBoxes.Count;
 
         if (myRespawnBoxes == null || myRespawnBoxes.Count == 0)
         {

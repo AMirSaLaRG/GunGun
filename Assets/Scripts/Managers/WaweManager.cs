@@ -337,4 +337,12 @@ public class WaweManager : MonoBehaviour
 
     public List<PowerUpData> GetPowerUpData() => powerUpsData;
     public Vector2 GetPowerUpRespawnInterval() => powerUpRespawnsInterval;
+
+    public List<WaveData> GetWaveData() => wawesData;
+
+    public void SetWaveData(List<WaveData> newWaveData)
+    {
+        wawesData.Clear();
+        wawesData.AddRange(newWaveData);
+    }
 }

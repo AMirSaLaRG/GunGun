@@ -5,9 +5,11 @@ public class Building : MonoBehaviour
     [Header ("Setup")]
     [SerializeField] public EBuilding building;
     [SerializeField] public int stage = 0;
+    [SerializeField] public TransformBoxHolder boxHolder;
     [SerializeField] public GameObject[] items;
     [SerializeField] public LevelItemData[] levels;
     [SerializeField] public bool isLock = true;
     [SerializeField] public PowerUpWayPointsSet powerUpWayPoints;
+    [Range(1, 10)][SerializeField] public int survivalDifficulty;
 
 }

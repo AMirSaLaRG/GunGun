@@ -23,7 +23,7 @@ public class UnitManager : MonoBehaviour
         return isSceneClear;
     }
 
-    public RespawnData GetBasicUnitData(RespawnType type)
+    public RespawnData GetBasicUnitData(ERespawnType type)
     {
         RespawnData DataToReturn = basicRespawnUnitInfo.Find(x => x.respawnType == type);
 

@@ -34,6 +34,8 @@ public class Enemy : Target
 
     protected string triggerAnimAttackKeyWord = "Shoot";
 
+    protected Hostage myHostage;
+
     protected override void Start()
     {
         base.Start();
@@ -49,10 +51,10 @@ public class Enemy : Target
 
         switch (myType)
         {
-            case RespawnType.BaseEnemy:
+            case ERespawnType.BaseEnemy:
                 ActivateShields(0);
                 break;
-            case RespawnType.ShieldedEnemy:
+            case ERespawnType.ShieldedEnemy:
                 ActivateShields(1);
                 break;
         }
@@ -73,6 +75,9 @@ public class Enemy : Target
     protected override void AtDieAction()
     {
         base.AtDieAction();
+
+        if (myHostage != null)
+            myHostage.TriggerAtEndOfDuration();
 
         StopWarningSign();
     }
@@ -179,5 +184,6 @@ public class Enemy : Target
             StopCoroutine(shootingWarningSignCo);
     }
 
+    public void SetupMyHostage (Hostage newHostage) => myHostage = newHostage;
     
 }

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "dcddaf177c567662",
+        "id": "e43c303e733ebdd3",
         "type": "tabs",
         "children": [
           {
-            "id": "93763eac79b391e0",
+            "id": "89a266b1f5ed8784",
             "type": "leaf",
             "state": {
               "type": "kanban",
@@ -200,10 +200,14 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "93763eac79b391e0",
+  "active": "89a266b1f5ed8784",
   "lastOpenFiles": [
-    "03 - Kanban Task Board/Master Kanban Board 1.md",
+    "Untitled.md",
     "03 - Kanban Task Board/Master Kanban Board.md",
+    "2026-09-29.md",
+    "Untitled",
+    "Untitled.canvas",
+    "03 - Kanban Task Board/Master Kanban Board 1.md",
     "01 - GDD/WarningSign.md",
     "01 - GDD/WaveManager.md",
     "Untitled.base",
@@ -236,14 +240,10 @@
     "Screenshot 2026-05-21 170529.png",
     "project_capture_17.png",
     "02 - Asset/Level1.md",
-    "Untitled.canvas",
     "TargetEntity.md",
     "02 - Asset /Enemy",
     "02 - Asset ",
     "Gun Gun Project/01 - GDD/01 - index/PlayerController.md",
-    "Gun Gun Project/01 - GDD/01 - index",
-    "Gun Gun Project/01 - index/PlayerController.md",
-    "Gun Gun Project/01 - index",
-    "Gun Gun Project/PlayerController.md"
+    "Gun Gun Project/01 - GDD/01 - index"
   ]
 }

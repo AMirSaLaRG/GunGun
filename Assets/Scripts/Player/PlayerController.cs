@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour, IDamagable
         
     }
 
-    internal void WaveChange(WaveData data, string waveNum)
+    public void WaveChange(WaveData data, string waveNum)
     {
         myCanvas.waveChange(data, waveNum);
     }

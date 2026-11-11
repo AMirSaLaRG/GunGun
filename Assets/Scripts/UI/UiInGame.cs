@@ -49,6 +49,11 @@ public class UiInGame : MonoBehaviour
     [Header ("UiManager")]
     [SerializeField] private UiManager uiManager;
 
+    private float baseDynamicPoints = 250;
+    private int multiplierDynamicPoints = 2;
+    private float dynamicPoints;
+    private bool isDynamicPoints;
+
     private void Awake()
     {
         
@@ -176,8 +181,20 @@ public class UiInGame : MonoBehaviour
 
         if (points == 0)
         {
+            float maxPoints = LevelManager.instance.threeStarPoint;
+            if (maxPoints > 0)
+            {
+                pointsSlider.maxValue = LevelManager.instance.threeStarPoint;
+                isDynamicPoints = false;
+            }
+            else
+            {
+                maxPoints = baseDynamicPoints;
+                dynamicPoints = baseDynamicPoints;
+                isDynamicPoints = true;
+                pointsSlider.maxValue = dynamicPoints;
+            }
 
-            pointsSlider.maxValue = LevelManager.instance.threeStarPoint;
             oneStarIcon.localScale = Vector3.zero;
             twoStarIcon.localScale = Vector3.zero;
             threeStarIcon.localScale = Vector3.zero;
@@ -186,10 +203,18 @@ public class UiInGame : MonoBehaviour
 
         }
 
-
+        if (isDynamicPoints)
+            if (points > dynamicPoints)
+            {
+                dynamicPoints *= multiplierDynamicPoints;
+                pointsSlider.maxValue = dynamicPoints;
+            }
         if (pointSliderCo != null)
             StopCoroutine(pointSliderCo);
         pointSliderCo = StartCoroutine(slideAnimationCo(points, pointsSlider));
+
+        if (isDynamicPoints)
+            return;
 
         if (points >= LevelManager.instance.currentLevelStarPoints[0] && oneStarIcon.localScale == Vector3.zero)
         {

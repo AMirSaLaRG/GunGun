@@ -328,7 +328,7 @@ public class PlayerCanvas : MonoBehaviour
         mainMsgText.color = textC;
 
 
-        ClearMainText(data.startingDelay);
+        ClearMainText(data.startingDelay == 0 ? 0.5f : data.startingDelay); 
     }
 
     private void ClearMainText(float displayTime)

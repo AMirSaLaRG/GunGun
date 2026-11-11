@@ -32,5 +32,6 @@ public enum EBuilding
 {
     None,
     PentHouse,
+    StreetApartman,
     BasicTest,
 }

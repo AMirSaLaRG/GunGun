@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class RespawnData
 {
-    public RespawnType respawnType;
+    public ERespawnType respawnType;
     public GameObject prefab;
     public Sprite icon;
     [Range(0, 1)] public float respawnProb;
@@ -20,7 +20,7 @@ public class RespawnData
     }
 }
 
-public enum RespawnType
+public enum ERespawnType
 {
     BaseEnemy = 0,
     Hostage = 1,

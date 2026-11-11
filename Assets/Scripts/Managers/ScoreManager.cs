@@ -341,6 +341,9 @@ public class ScoreManager : MonoBehaviour
                 inGameUi.SetComboTimer(time);
         }
 
+        if (LevelManager.instance.isSurvival)
+            return;
+
         if (points >= LevelManager.instance.currentLevelStarPoints[0] && currentStars < 1)
         {
             currentStars = 1;

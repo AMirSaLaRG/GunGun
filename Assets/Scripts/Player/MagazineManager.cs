@@ -157,9 +157,6 @@ public class MagazineManager : MonoBehaviour
 
         currentAmo = rAmount;
 
-        Debug.Log(currentAmo);
-
-
         float rTime = instantReload ? 0 : reloadTime * reloadTimeScale;
 
         transform.DOKill();

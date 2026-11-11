@@ -26,7 +26,7 @@ public class RespawnManager : MonoBehaviour
     private int CountDown = 10;
     private bool shouldCountDown = true;
     public bool isSummonAll { private set; get; } = false;
-    private RespawnType countDownType = RespawnType.BaseEnemy;
+    private ERespawnType countDownType = ERespawnType.BaseEnemy;
 
     private float nextTimeToRespawn = 0;
 
@@ -226,24 +226,45 @@ public class RespawnManager : MonoBehaviour
         isSceenClear = true;
     }
 
-    private void RespawnTargetRandomly(RespawnData respawnData)
+    private Target RespawnTargetRandomly(RespawnData respawnData)
     {
         if (shouldCountDown)
             CheckForCountDown(respawnData.respawnType);
 
-        bool isTakerWithHostage = respawnData.respawnType == RespawnType.TakerWithHostage;
+        bool isTakerWithHostage = respawnData.respawnType == ERespawnType.TakerWithHostage;
 
         RespawnBox box = boxManager.GetBox(isTakerWithHostage);
         if (box == null)
-            return;
+        {
+            if (isTakerWithHostage)
+                RespawnTargetRandomly(unitManager.GetBasicUnitData(ERespawnType.Hostage));
+            return null;
+        }
         Target newTarget = RespawnTargetOn(respawnData, box);
 
-        if (respawnData.respawnType == RespawnType.Hostage)
-            RespawnTargetRandomly(unitManager.GetBasicUnitData(RespawnType.BaseEnemy));
+        if (respawnData.respawnType == ERespawnType.Hostage)
+        {
+            SetUpSoloHostage(newTarget);
+
+        }
 
         if (isTakerWithHostage)
             SetUpHostageTaker(box, newTarget);
+
+        return newTarget;
         
+    }
+
+    private void SetUpSoloHostage(Target hostage)
+    {
+        Target enemy = RespawnTargetRandomly(unitManager.GetBasicUnitData(ERespawnType.BaseEnemy));
+        if (enemy == null)
+            return;
+
+        Enemy bindedEnemy = enemy.GetComponent<Enemy>();
+
+
+        bindedEnemy.SetupMyHostage(hostage.GetComponent<Hostage>());
     }
 
     private void SetUpHostageTaker(RespawnBox box, Target newTarget)
@@ -251,7 +272,7 @@ public class RespawnManager : MonoBehaviour
         EnemyWithHostage taker = newTarget.GetComponent<EnemyWithHostage>();
         
 
-        RespawnData hostageData = currentRespawnInfo.Find(x => x.respawnType == RespawnType.Hostage);
+        RespawnData hostageData = currentRespawnInfo.Find(x => x.respawnType == ERespawnType.Hostage);
 
 
         Hostage newHostage = RespawnTargetOn(hostageData, box).GetComponent<Hostage>();
@@ -282,7 +303,7 @@ public class RespawnManager : MonoBehaviour
         return newTarget;
     }   
 
-    private void CheckForCountDown(RespawnType type)
+    private void CheckForCountDown(ERespawnType type)
     {
         if (countDownType == type)
             CountDown--;
@@ -345,7 +366,7 @@ public class RespawnManager : MonoBehaviour
             minMaxAvailableRespawns = new Vector2Int(1, 1);
     }
 
-    private void CheckAndSetRespawnBase(int newCountDown, RespawnType newCountDownType)
+    private void CheckAndSetRespawnBase(int newCountDown, ERespawnType newCountDownType)
     {
         if (newCountDown == 0)
         {

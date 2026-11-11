@@ -1,13 +1,27 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingManager : MonoBehaviour
 {
     private LevelManager levelManager;
 
+    [Header("LoadingAimationSetup")]
+    [SerializeField] private float animationOffsetY = 50f;
+    [SerializeField] private float animationTIme = 1f;
+    [SerializeField] private AudioSource animSound;
+
+    [SerializeField] private TextMeshProUGUI nameDisplay;
+    [SerializeField] private Button nextBtn;
+    [SerializeField] private Button pervBtn;
+    [SerializeField] private Button pickBtn;
+
     [SerializeField] private List<Building> buildings = new List<Building>();
     [SerializeField] private List<Sprite> buildingsImage = new List<Sprite>();
+
 
     public EBuilding currentBuilding { private set; get; }
     public int currentBuildingStage { private set; get; }
@@ -15,15 +29,25 @@ public class BuildingManager : MonoBehaviour
     private List<EBuilding> availableBuildings = new List<EBuilding>();
     private int currentBuildingIndex = 0;
 
+    Vector3 startingPos;
+
     private void Awake()
     {
         levelManager = FindFirstObjectByType<LevelManager>();
+
+        foreach (var b in buildings)
+            if (b != null)
+                b.gameObject.SetActive(true);
+
+        startingPos = transform.position;
+
     }
 
     private void Start()
     {
         foreach (var building in buildings)
         {
+            if (building == null) continue;
             if (building.stage == 0)
                 availableBuildings.Add(building.building);
         }
@@ -49,6 +73,51 @@ public class BuildingManager : MonoBehaviour
 
         currentBuilding = building;
         currentBuildingStage = stage;
+        currentBuildingIndex = availableBuildings.IndexOf(currentBuilding);
+
+        nameDisplay.text = currentBuilding.ToString();
+
+        LoadAnimation();
+
+        CheckForLastOrFirstLevel();
+    }
+
+    private void CheckForLastOrFirstLevel()
+    {
+        nextBtn.gameObject.SetActive(true);
+        pervBtn.gameObject.SetActive(true);
+
+        if (IsThisLastLevel())
+        {
+            nextBtn.gameObject.SetActive(false);
+        } else if (IsThisFirstLevel())
+        {
+            pervBtn.gameObject.SetActive(false);
+        } 
+    }
+
+    private bool IsThisFirstLevel()
+    {
+        return currentBuildingIndex == 0;
+    }
+
+    private bool IsThisLastLevel()
+    {
+        return currentBuildingIndex == buildings.Count - 1;
+    }
+
+    private void LoadAnimation()
+    {
+        transform.DOKill();
+
+
+        Vector3 animPos = transform.position + new Vector3(0, animationOffsetY, 0);
+
+        transform.position = animPos;
+
+        transform.DOMove(startingPos, animationTIme).SetEase(Ease.OutBack);
+
+        AudioManager.instance.PlaySfx(animSound, true);
     }
 
     [ContextMenu("Load PentHouse Stage 0")]
@@ -91,7 +160,8 @@ public class BuildingManager : MonoBehaviour
 
         if (targetIndex < availableBuildings.Count)
         {
-            Building targetData = buildings.Find(b => b.building == availableBuildings[targetIndex] && b.stage == 0);
+            Building building = buildings.Find(b => b.building == availableBuildings[targetIndex] && b.stage == 0);
+            Building targetData = building;
             if (targetData.isLock)
             {
                 Debug.Log("Target building is locked.");
@@ -101,8 +171,7 @@ public class BuildingManager : MonoBehaviour
                 LoadBuilding(availableBuildings[targetIndex], 0);
                 SetLevelsForBuilding();
                 return true;
-            }
-                
+            }     
         }
         else
         {
@@ -122,8 +191,9 @@ public class BuildingManager : MonoBehaviour
     {
         Building targetData = buildings.Find(b => b.building == currentBuilding && b.stage == currentBuildingStage);
         LevelItemData[] levels = targetData.levels;
+        int survivalDif = targetData.survivalDifficulty;
 
-        levelManager.SetLevels(levels);
+        levelManager.SetLevels(levels, survivalDif);
     }
 
     public Sprite GetBuildingSprite(EBuilding building)
@@ -141,5 +211,13 @@ public class BuildingManager : MonoBehaviour
         if (targetData != null && targetData.powerUpWayPoints != null)
             return targetData.powerUpWayPoints;
         return null;
+    }
+
+    public Building GetCurrentBuilding()
+    {
+        Building building = buildings.Find(b => b.building == availableBuildings[currentBuildingIndex] && b.stage == 0);
+
+        return building;
+            
     }
 }

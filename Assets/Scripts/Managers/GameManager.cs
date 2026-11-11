@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
 
     private float lastTimeScale = 1f;
 
+    private bool isSurvival;
+
     [Header("Sfx")]
     [SerializeField] private AudioSource missionCompeletedSfx;
     [SerializeField] private AudioSource missionFailedSfx;
@@ -87,7 +89,11 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.StopAllSfxInScene();
 
         playerController.SetGameStarted(true);
-        levelManager.SetGameStart();
+
+
+        levelManager.StartLevel();
+
+
         scoreManager.ResetAll();
         rewardManager.ResetRewards();
         lastTimeScale = 1;
@@ -110,6 +116,8 @@ public class GameManager : MonoBehaviour
                 {
                     Time.timeScale = 1;
                     CallGameOver();
+                    Debug.Log("Called Game Over");
+
                 }
 
                 else if (gameState == EGameState.InGame)
@@ -119,8 +127,10 @@ public class GameManager : MonoBehaviour
                     Time.timeScale = 1;
                     CallGameOver();
                 }
+
                 gameState = EGameState.inMenu;
                 break;
+
             case EGameState.InGame:
                 Time.timeScale = lastTimeScale;
 
@@ -160,7 +170,6 @@ public class GameManager : MonoBehaviour
         SaveGameResults();
         CallGameOver();
         CallGameStart();
-
 
         OnMenuTransitionFinished();
     }
@@ -284,8 +293,17 @@ public class GameManager : MonoBehaviour
     }
     public void MainMenuFromLevelScene()
     {
-        
         uiManager?.SetPanel(EPanel.MainMenu);
+        currentPanelOnProgress = EPanel.MainMenu;
+        currentGameStateInProgress= EGameState.inMenu;
+
+        if (menuTranstionController != null && gameState == EGameState.inMenu)
+        {
+            menuTranstionController.LevelView();
+            return;
+        }
+
+        OnMenuTransitionFinished();
     }
     public void MainMenuFromSideView()
     {

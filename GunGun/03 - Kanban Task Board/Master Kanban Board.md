@@ -6,20 +6,16 @@ kanban-plugin: board
 
 ## Backlog
 
-- [ ] Add power up and bonus targets
-	- [x] power ups the items that shooting them will activate ability
-	- [ ] bonus item 
-		- [ ] items with points
-		- [ ] secret items 
-		- [ ] achive items
-	- [x] handle respawn and movement
-	- [x] create visuals for it
 - [ ] add some animation on building transform
-- [ ] add bgm
-	fix the setting sound section
-- [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
-		- [ ] Handle the target by sequences
-		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
+	- [x] visual
+	- [x] sound
+	- [x] Text
+	- [ ] add visual for locked building
+- [ ] - [ ] add bgm
+	- [x] fix the setting sound section
+- [ ] make survival mode for first level
+	- [ ] Create survival manager
+	- [ ] Create survival difficulty
 - [ ] - [ ] Achivements 15/8 #art #code #ui 
 		- [ ] kills
 		- [ ] powerup
@@ -27,9 +23,6 @@ kanban-plugin: board
 - [ ] - [ ] Daily and weekly Tasks #art #code #ui 
 		- [ ] In Game user Interface shows
 - [ ] rework leader board
-- [ ] make survival mode for first level
-	- [ ] Create survival manager
-	- [ ] Create survival difficulty
 - [ ] write some history for game #writing
 - [ ] need to put some reward on middle of level with time or wave
 	updating reward manager #code
@@ -47,6 +40,13 @@ kanban-plugin: board
 		- [ ] enemy Warning Sign
 		- [ ] hit sprites
 - [ ] Add earning of honor
+- [ ] before disipuring get a notice like flash on body
+- [ ] setting is not working
+- [ ] Level switch in main menu need animation and some name display\
+- [ ] create lock icon on main menu for lock levels
+- [ ] - [ ] Add dynamic [[RespawnBox| Respawn Box]]  #art #code 
+		- [ ] Handle the target by sequences
+		- [ ] comes to the scene and get added the [[01 - GDD/ BoxManager|Box Manager]]
 
 
 ## Mehrdad feedback
@@ -90,6 +90,16 @@ kanban-plugin: board
 
 ## Done Before Comit
 
+- [ ] when from game pause and going to main menu then starting new level the sound and wave do not works
+- [ ] when from middle of level building switching level waves will not reset
+- [ ] Add power up and bonus targets
+	- [x] power ups the items that shooting them will activate ability
+	- [ ] bonus item 
+		- [ ] items with points
+		- [ ] secret items 
+		- [ ] achive items
+	- [x] handle respawn and movement
+	- [x] create visuals for it
 - [ ] Add Ability System to the Player.
 	- [x] Adrenaline rush : time get slow 
 	- [ ] Supper gun : Get a supper gun
@@ -99,7 +109,7 @@ kanban-plugin: board
 - [ ] when on phone it get minimize or out of main app should get pause
 - [ ] - [x] Add more [[Enemy|enemy]]
 		- [x] [[01 - GDD/ Enemy/EnemyBasic|basic enemy]]
-		- [x] [[EnemyHostageTaker|Hostage Taker]]
+		- [ ] [[EnemyHostageTaker|Hostage Taker]]
 		- [x] [[01 - GDD/ Enemy/ShieldedEnemy|Shielded enemy]]
 		- [x] [[01 - GDD/ Enemy/LuncherEnemy|Luncher enemy]]
 

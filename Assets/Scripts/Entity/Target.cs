@@ -56,7 +56,7 @@ public class Target : MonoBehaviour, IDamagable
     [SerializeField] private ParticleSystem atPositionWarningSign;
     private bool isatPositionWarningSignGiven = false;
 
-    protected RespawnType myType;
+    protected ERespawnType myType;
 
     protected RespawnBox myBox;
     protected RespawnManager myRespawnManager;
@@ -157,7 +157,7 @@ public class Target : MonoBehaviour, IDamagable
 
 
 
-    public void SetUpTarget(PlayerController player, RespawnManager respawnManager, RespawnBox myNewBox, RespawnType myNewType)
+    public void SetUpTarget(PlayerController player, RespawnManager respawnManager, RespawnBox myNewBox, ERespawnType myNewType)
     {
         this.player = player;
         this.myRespawnManager = respawnManager;

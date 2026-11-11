@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyWithHostage : Enemy
 {
-    protected Hostage myHostage;
     protected ScoreManager scoreManager;
     [Header("EnemyWIthHostageSetup")]
     [SerializeField] protected float distanceByHostage;
@@ -58,3 +57,4 @@ public class EnemyWithHostage : Enemy
     private bool DistanceCheckBy(Transform target) => Vector3.Distance(transform.position, target.position) > distanceByHostage;
     
 }
+//s

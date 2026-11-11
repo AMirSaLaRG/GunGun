@@ -23,6 +23,8 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
     public bool isActive { protected set; get; } = false;
     private int NumberOfCloseRequests;
 
+    private Sequence openSequence;
+
     protected virtual void Awake()
     {
    
@@ -64,7 +66,7 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
         myActivateItemCollider.enabled = false;
 
         // Create a sequence to animate all transforms together
-        Sequence openSequence = DOTween.Sequence();
+        openSequence = DOTween.Sequence();
 
         // Scale
         openSequence.Join(transform.DOScale(openScale, duration).SetEase(ActivateEase));
@@ -87,12 +89,28 @@ public class EntityActivator : MonoBehaviour, IBoxActivator
 
     public virtual void SetDeActive(bool isReseting = false)
     {
-        if (isActive == false) return;
-
         float duration = activateTransitionTime;
 
+
         if (isReseting)
-            duration = 0;
+        {
+            transform.DOKill(true);
+            if (openSequence != null)
+                openSequence.Kill();
+
+            transform.localScale = closeScale;
+            transform.localPosition = closePos;
+            transform.localRotation = closeQuaternion;
+
+            if (onlyEnable)
+                gameObject.SetActive(false);
+
+            isActive = false;
+
+            return;
+
+        }
+        else if (isActive == false) return;
 
         if (onlyEnable)
         {

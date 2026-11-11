@@ -14,7 +14,7 @@ public class WaveData
 
     public float durationIfTimeBase;
     public int respawnNumIfRespawnBase;
-    public RespawnType respawnTypeIfRespawnBase;
+    public ERespawnType respawnTypeIfRespawnBase;
     public float startingDelay = 2f;
     public int ActiveBoxes;
 

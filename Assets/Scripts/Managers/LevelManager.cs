@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     public RespawnManager respawnManager;
     public BuildingManager buildingManager;
     public UiManager uiManager;
+    public SurvivalManager survivalManager;
 
     public GameObject levelItemPrefab;
     public Transform contentParent; // Assign the Content object
@@ -27,6 +28,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private AudioSource waveChangeSfx;
     [SerializeField] private AudioSource finalWaveSfx;
 
+    public bool isSurvival { private set; get; }
+
     private void Awake()
     {
         if (instance == null)
@@ -37,6 +40,7 @@ public class LevelManager : MonoBehaviour
         respawnManager = FindFirstObjectByType<RespawnManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
         uiManager = FindFirstObjectByType<UiManager>();
+        survivalManager = FindFirstObjectByType<SurvivalManager>();
     }
 
     private void Start()
@@ -104,6 +108,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnLevelSelected(int index)
     {
+        isSurvival = false;
         LoadLevel(index);
 
     }
@@ -139,6 +144,14 @@ public class LevelManager : MonoBehaviour
         
     }
 
+    public void LoadSurvival()
+    {
+        LoadLevel(0);
+        threeStarPoint = -1;
+        isSurvival = true;
+        
+    }
+
     public bool LoadNextLevel()
     {
         currentLevelIndex++;
@@ -168,11 +181,23 @@ public class LevelManager : MonoBehaviour
         currentLevelStarPoints[2] = levelToLoad.pointsForthreeStar;
     }
 
-    public void SetGameStart()
+    public void StartLevel()
     {
-        respawnManager.SetupBoxes(levels[currentLevelIndex].respawnBoxHolder);
+        if (isSurvival)
+            SetSurvivalMode();
+        else
+            respawnManager.SetupBoxes(levels[currentLevelIndex].respawnBoxHolder);
 
         currentWaves.StartWaves(this);
+    }
+
+
+
+    public void SetSurvivalMode()
+    {
+        survivalManager.InitiateSurvival();
+        currentWaves = survivalManager.generatedWaveManager;
+        respawnManager.SetupBoxes(survivalManager.boxHolder.transform);
     }
 
     public void SetGameEnd()
@@ -186,10 +211,11 @@ public class LevelManager : MonoBehaviour
     public AudioSource GetWaveChangeSfx() => waveChangeSfx;
     public AudioSource GetFinalWaveSfx() => finalWaveSfx;
 
-    internal void SetLevels(LevelItemData[] levels)
+    internal void SetLevels(LevelItemData[] levels, int survivalDif)
     {
         this.levels.Clear();
         this.levels.AddRange(levels);
+
     }
 
     public bool IsAllLevelsCompeleted()
@@ -199,5 +225,10 @@ public class LevelManager : MonoBehaviour
 
 
         return start > 0;
+    }
+
+    public void SetNewWaveManager(WaweManager generatedWaveManager)
+    {
+        currentWaves = generatedWaveManager;
     }
 }

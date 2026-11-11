@@ -13,8 +13,12 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField] private GameObject dronePrefab;
     [SerializeField] private float StartAfter = 15f;
 
+    [SerializeField] private int ChanceRampMaxAttempts = 20;
+
+    private int currentMissedAttempts = 0;
 
     private List<PowerUpData> powerUpsData;
+    public List<PowerUpData> dynamicPowerUpsData;
     private Vector2 powerUpRespawnsInterval;
 
 
@@ -48,7 +52,7 @@ public class PowerUpManager : MonoBehaviour
 
         ESkillType powerUpType = CheckPowerUp();
 
-        Debug.Log("Respawning" + powerUpType);
+       
 
         RespawnPowerUp(powerUpType);
 
@@ -136,14 +140,53 @@ public class PowerUpManager : MonoBehaviour
     {
         float currentItemChance = 0f;
 
-        foreach (var powerUp in powerUpsData)
+        foreach (var powerUp in dynamicPowerUpsData)
         {
             currentItemChance += powerUp.powerUpChance;
             if (currentItemChance > chance)
+            {
+                if (powerUp.powerUpSkill == ESkillType.None)
+                    ApplyChanceIncrease();
+                else
+                    ResetAttempts();
                 return powerUp.powerUpSkill;
+            }
         }
 
+        ApplyChanceIncrease();
+
         return ESkillType.None;
+    }
+
+    private void ResetAttempts()
+    {
+        currentMissedAttempts = 0;
+        ResetDynamicData();
+    }
+
+    private void ApplyChanceIncrease()
+    {
+        currentMissedAttempts++;
+
+        PowerUpData noneData = dynamicPowerUpsData.Find(powerup => powerup.powerUpSkill == ESkillType.None);
+
+        if (noneData == null)
+        {
+            Debug.Log("There is no None");
+            return; // Safety check if None doesn't exist
+        }
+
+        float notRespawnChance = noneData.powerUpChance;
+
+        for (int i = 0; i < dynamicPowerUpsData.Count; i++)
+        {
+            if (dynamicPowerUpsData[i].powerUpSkill == ESkillType.None)
+                continue;
+            float powerUpRatio = powerUpsData[i].powerUpChance / (1 - notRespawnChance);
+            float attemptRatio = ((float)currentMissedAttempts / (float)ChanceRampMaxAttempts);
+
+            dynamicPowerUpsData[i].powerUpChance += attemptRatio * powerUpRatio;
+        }
     }
 
     internal void SetWaveManager(WaweManager waveManager)
@@ -152,8 +195,25 @@ public class PowerUpManager : MonoBehaviour
         powerUpsData = waveManager.GetPowerUpData();
         powerUpRespawnsInterval = waveManager.GetPowerUpRespawnInterval();
         ClearChances();
+        ResetDynamicData();
     }
 
+    private void ResetDynamicData()
+    {
+        dynamicPowerUpsData = new List<PowerUpData>();
+
+        foreach (PowerUpData powerUpData in powerUpsData)
+        {
+            dynamicPowerUpsData.Add(new PowerUpData
+            {
+                powerUpChance = powerUpData.powerUpChance,
+                powerUpSkill = powerUpData.powerUpSkill,
+                myColor = powerUpData.myColor
+            });
+        }
+
+
+    }
     private void ClearChances()
     {
         float totalChance = 0f;
