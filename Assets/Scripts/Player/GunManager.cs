@@ -39,6 +39,20 @@ public class GunManager : MonoBehaviour
     [SerializeField] private float holeLifetime;
     [SerializeField] private float changeGunTime = 0.05f;
 
+    [Header ("bullet trail")]
+    [SerializeField] private GameObject bulletLinePrefab;
+    [SerializeField] private Transform bulletLinesHolder;
+    [SerializeField] private float bulletLineShowTime = .2f;
+
+    public Vector3 StartingPos0bulletTrail { get; private set; }
+
+
+    private int reserveBulletLineNum = 20;
+    private int currentBulletLineIndex = 0;
+    private List<LineRenderer> bulletLinesList;
+
+    
+
     [Header ("Sfx")]
     [SerializeField] private AudioSource defaultHitSfx;
     [SerializeField] private AudioSource gunShotSfx;
@@ -53,6 +67,8 @@ public class GunManager : MonoBehaviour
     private float reloadTimeScale = 1;
 
     private Coroutine fireCo;
+    private Coroutine bulletLineCo;
+
     private async void Start()
     {
         await LoadAllGuns();
@@ -75,7 +91,10 @@ public class GunManager : MonoBehaviour
         currentGunId = GameManager.instance.playerData.lastGunId;
 
         ResetTheGun();
+        CreateReserveBulletLines();
     }
+
+
 
     async System.Threading.Tasks.Task LoadAllGuns()
     {
@@ -230,14 +249,77 @@ public class GunManager : MonoBehaviour
         if (hitDatas == null) return null;
         if (hitDatas.Count == 0) return null;
 
-        if (OnShotHit(hitDatas))
+
+        if (shotConnected(hitDatas))
             return hitDatas;
+
 
         isShooting = false;
         return null;
     }
+    private void CreateReserveBulletLines()
+    {
+        bulletLinesList = new List<LineRenderer>();
+        bulletLinesList.Clear();
+
+        for (int i = 0; i < reserveBulletLineNum; i++)
+        {
+            LineRenderer newBulletLine = Instantiate(bulletLinePrefab, bulletLinesHolder).GetComponent<LineRenderer>();
+            bulletLinesList.Add(newBulletLine);
+        }
+
+        StartingPos0bulletTrail = bulletLinesList[0].GetPosition(0);
+    }
+    private void activeBulletLIne(List<HitData> hitDatas)
+    {
+        
+
+        foreach (var hitData in hitDatas)
+        {
+            currentBulletLineIndex = (currentBulletLineIndex +1 ) % (reserveBulletLineNum - 1);
+            StartCoroutine(activeBulletLIneCo(hitData.hitPos));
+            
+        }
+    }
+    private void activeBulletLIneAirHit(List<HitData> hitDatas)
+    {
+        
+
+        foreach (var hitData in hitDatas)
+        {
+            Debug.Log(hitData.hitPos);
+            currentBulletLineIndex = (currentBulletLineIndex +1 ) % (reserveBulletLineNum - 1);
+            StartCoroutine(activeBulletLIneCo(hitData.hitPos));
+            
+        }
+    }
+
+    private IEnumerator activeBulletLIneCo(Vector3 hitPos)
+    {
+        LineRenderer bulletLineRenderer = bulletLinesList[currentBulletLineIndex];
+        
+
+        bulletLineRenderer.SetPosition(0, StartingPos0bulletTrail);
+        bulletLineRenderer.SetPosition(1, hitPos);
+
+        float elaps = 0;
+        while (elaps < bulletLineShowTime)
+        {
+            yield return null;
+            elaps += Time.deltaTime;
+            
+            float t = (elaps /  bulletLineShowTime);
 
 
+
+            bulletLineRenderer.SetPosition(0, Vector3.Lerp(StartingPos0bulletTrail, hitPos, t));
+        }
+
+        bulletLineRenderer.SetPosition(0, StartingPos0bulletTrail);
+        bulletLineRenderer.SetPosition(1, StartingPos0bulletTrail);
+
+
+    }
 
     private List<HitData> GatherHitData(Vector2 shotAim)
     {
@@ -262,7 +344,7 @@ public class GunManager : MonoBehaviour
         return resault;
     }
 
-    private bool OnShotHit(List<HitData> hitDatas)
+    private bool shotConnected(List<HitData> hitDatas)
     {
 
         if (hitDatas == null) return false;
@@ -274,6 +356,9 @@ public class GunManager : MonoBehaviour
             {
                 PlayGunShotSfx();
                 StartCoroutine(OnFreeSHotAirCo());
+
+                activeBulletLIneAirHit(hitDatas);
+
                 return false;
             }
 
@@ -296,6 +381,7 @@ public class GunManager : MonoBehaviour
             PlayGunShotSfx();
 
         fireCo = StartCoroutine(GunFireCo(hitDatas));
+        activeBulletLIne(hitDatas);
 
         return true;
     }
@@ -363,6 +449,14 @@ public class GunManager : MonoBehaviour
 
     private void MakeHoleOnHit(HitData hit)
     {
+        Debug.Log(hit.hitTYpe);
+
+        if (hit.hitTYpe == EHitType.Air)
+        {
+            hit.hitTYpe = EHitType.Missed;
+            return;
+        }
+
         Vector3 placePos = hit.hitPos + (hit.hitNorm * 0.002f);
         Quaternion rotation = Quaternion.LookRotation(hit.hitNorm);
 
@@ -396,6 +490,10 @@ public class GunManager : MonoBehaviour
         isShooting = false;
     }
 
+    public void ReloadBtn()
+    {
+        Reload(false, -1);  
+    }
     
 
     [ContextMenu("Reset The Gun")]

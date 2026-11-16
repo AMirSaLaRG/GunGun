@@ -108,7 +108,9 @@ public class PlayerCanvas : MonoBehaviour
             if (GameManager.instance.isVibrateOn)
             {
                 Debug.Log("Vibrate");
-                Handheld.Vibrate();
+#if !UNITY_WEBGL
+    Handheld.Vibrate();
+#endif
             }
 
             StartCoroutine(DeadSpriteAnimation());
@@ -134,7 +136,7 @@ public class PlayerCanvas : MonoBehaviour
         while (true)
         {
 
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSecondsRealtime(.2f);
             if (GameManager.instance.gameState == EGameState.inMenu)
                 break;
             saftyCheck++;
@@ -145,8 +147,8 @@ public class PlayerCanvas : MonoBehaviour
             }
         }
 
-        DieVisualImage.DOFade(0f, takingDamageUiTime);
-        screenPanel.DOFade(0f, takingDamageUiTime);
+        DieVisualImage.DOFade(0f, takingDamageUiTime).SetUpdate(true);
+        screenPanel.DOFade(0f, takingDamageUiTime).SetUpdate(true);
 
 
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class Enemy : Target
 {
@@ -21,6 +22,7 @@ public class Enemy : Target
     [SerializeField] private Animator uiSignsCanvas;
     [SerializeField] private AudioSource ShootingWarningSfx;
     [SerializeField] private float warningSecondsBeforShoot;
+    [SerializeField] private SliderCountUpHelperUi aimingSlider;
     private Coroutine shootingWarningSignCo;
 
     private Vector3 startingRotation;
@@ -139,6 +141,7 @@ public class Enemy : Target
  
     protected void GiveShootingWarningSign(float NextShotTimeFromNow)
     {
+        aimingSlider.StartSliderCount(NextShotTimeFromNow);
 
         float timeToGiveSign = NextShotTimeFromNow - warningSecondsBeforShoot;
 
@@ -168,6 +171,7 @@ public class Enemy : Target
 
     private void StopWarningSign()
     {
+        aimingSlider.StartSliderCount(0);
         if (ShootingWarningSignVfx != null)
         {
             ShootingWarningSignVfx.gameObject.SetActive(false);

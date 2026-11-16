@@ -29,6 +29,12 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject onTopInfoInMenu;
     [SerializeField] private TextMeshProUGUI playersPoints;
     [SerializeField] private TextMeshProUGUI playersGems;
+    [SerializeField] private RectTransform soldirCoingIcon;
+    [SerializeField] private RectTransform coinAnimationCenter;
+    [SerializeField] private float coinMoveToCenterDuration = 0.45f;
+    [SerializeField] private float coinMoveBackDuration = 0.45f;
+    [SerializeField] private float coinPunchDuration = 0.3f;
+    [SerializeField] private AudioSource CoinGainSfx;
 
 
     [Header("DynamicPanels")]
@@ -41,15 +47,25 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject tasks;
     [SerializeField] private GameObject ads;
     [SerializeField] private GameObject dailyReward;
+    [SerializeField] private GameObject playerForm;
 
     [Header("VisualHelper")]
     [SerializeField] private GameObject fadePanel;
+    [SerializeField] private float coinAnimationDuration = 0.35f;
 
     public EPanel currentPanel { private set; get; } = EPanel.MainMenu;
 
     private void Start()
     {
         settingsPopup.GetComponent<UiSettings>().StartingSetup();
+
+        if (SaveManager.instance != null)
+        {
+            SaveManager.instance.SoldirCoinsChanged +=
+                OnSoldirCoinsChanged;
+        }
+
+        UpdatePoints();
     }
 
     public void SetPanel(EPanel panel)
@@ -68,8 +84,12 @@ public class UiManager : MonoBehaviour
         onTopInMenu?.SetActive(panel != EPanel.InGame);
         onTopInfoInMenu?.SetActive(panel != EPanel.InGame);
 
-
         currentPanel = panel;
+
+        if (panel == EPanel.MainMenu)
+        {
+            GameManager.instance.ResetLeaderBoardRank();
+        }
 
         UpdatePoints();
     }
@@ -85,7 +105,7 @@ public class UiManager : MonoBehaviour
         tasks?.SetActive(panel == EDPanel.Tasks);
         ads?.SetActive(panel == EDPanel.Ads);
         dailyReward?.SetActive(panel == EDPanel.DailyReward);
-
+        playerForm?.SetActive(panel == EDPanel.PlayerForm);
     }
 
     public void ExitDynamicUi()
@@ -93,6 +113,7 @@ public class UiManager : MonoBehaviour
         PopDynamicPanel(EDPanel.None);
 
     }
+
     public void OpenArmory()
     {
         PopDynamicPanel(EDPanel.Armory);
@@ -130,7 +151,10 @@ public class UiManager : MonoBehaviour
         PopDynamicPanel(EDPanel.Quit);
     }
 
-
+    public void OpenPlayerForm()
+    {
+        PopDynamicPanel(EDPanel.PlayerForm);
+    }
     public GameObject GetPanel(EPanel panel)
     {
         switch (panel)
@@ -169,16 +193,103 @@ public class UiManager : MonoBehaviour
 
     public void UpdatePoints()
     {
-        if (GameManager.instance == null) return;
-        int currentPoints = 0;
-        int currentGems = 0;
+        if (SaveManager.instance == null ||
+            SaveManager.instance.data == null)
+        {
+            return;
+        }
 
-        if (GameManager.instance.playerData != null)
-            currentPoints = Mathf.FloorToInt(GameManager.instance.playerData.totalPoints);
-        if (GameManager.instance.playerData != null)
-            currentGems = Mathf.FloorToInt(GameManager.instance.playerData.soldirCoins);
+        if (playersPoints != null)
+        {
+            playersPoints.text =
+                Mathf.FloorToInt(
+                    SaveManager.instance.data.totalPoints).ToString();
+        }
 
-        playersPoints.text = $"{currentPoints}";
-        playersGems.text = $"{currentGems}";
+        if (playersGems != null)
+        {
+            playersGems.text =
+                SaveManager.instance.data.soldirCoins.ToString();
+        }
+    }
+
+    private void OnSoldirCoinsChanged(
+        int previousAmount,
+        int currentAmount)
+    {
+        UpdatePoints();
+
+        if (soldirCoingIcon == null)
+        {
+            Debug.LogWarning(
+                "Soldir coin icon is not assigned in UiManager.");
+
+            return;
+        }
+
+        if (coinAnimationCenter == null)
+        {
+            Debug.LogWarning(
+                "Coin animation center is not assigned in UiManager.");
+
+            return;
+        }
+
+        soldirCoingIcon.DOKill();
+
+        Vector3 originalPosition = soldirCoingIcon.position;
+
+        Sequence coinSequence = DOTween.Sequence();
+
+        coinSequence.Append(
+            soldirCoingIcon
+                .DOMove(
+                    coinAnimationCenter.position,
+                    coinMoveToCenterDuration)
+                .SetEase(Ease.InOutQuad));
+
+        coinSequence.AppendInterval(0.1f);
+
+        coinSequence.Append(
+            soldirCoingIcon
+                .DOMove(
+                    originalPosition,
+                    coinMoveBackDuration)
+                .SetEase(Ease.InOutQuad));
+
+        coinSequence.AppendCallback(() =>
+        {
+            if (AudioManager.instance != null &&
+                CoinGainSfx != null)
+            {
+                AudioManager.instance.PlaySfx(CoinGainSfx);
+            }
+        });
+
+        coinSequence.Append(
+            soldirCoingIcon
+                .DOPunchScale(
+                    Vector3.one * 0.3f,
+                    coinPunchDuration,
+                    2,
+                    0.5f));
+        
+        coinSequence.OnComplete(() =>
+        {
+            soldirCoingIcon.position = originalPosition;
+            soldirCoingIcon.localScale = Vector3.one;
+        });
+
+        Debug.Log(
+            $"Soldir coins changed: {previousAmount} -> {currentAmount}");
+    }
+
+    private void OnDestroy()
+    {
+        if (SaveManager.instance != null)
+        {
+            SaveManager.instance.SoldirCoinsChanged -=
+                OnSoldirCoinsChanged;
+        }
     }
 }

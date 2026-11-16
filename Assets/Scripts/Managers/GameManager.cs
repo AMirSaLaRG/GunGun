@@ -101,7 +101,6 @@ public class GameManager : MonoBehaviour
 
     private void CallGameOver()
     {
-
         playerController.SetGameStarted(false);
         levelManager.SetGameEnd();
     }
@@ -112,30 +111,37 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case EGameState.inMenu:
-                if (gameState == EGameState.pause)
+{
+                if (gameState == EGameState.pause ||
+                    gameState == EGameState.InGame)
                 {
-                    Time.timeScale = 1;
+                    Time.timeScale = 1f;
                     CallGameOver();
-                    Debug.Log("Called Game Over");
 
-                }
-
-                else if (gameState == EGameState.InGame)
-                {
-                    Debug.Log("This Should Never Happens now !!!");
-
-                    Time.timeScale = 1;
-                    CallGameOver();
                 }
 
                 gameState = EGameState.inMenu;
+
+                if (AudioManager.instance != null)
+                    {
+                        AudioListener.pause = false;
+                        AudioManager.instance.StopAllSfxInScene();
+                        AudioManager.instance.PlayRandomBGM(EGameState.inMenu);
+                    }
+                
+
                 break;
+            }
 
             case EGameState.InGame:
                 Time.timeScale = lastTimeScale;
 
                 if (gameState == EGameState.inMenu)
+                {
                     CallGameStart();
+                    AudioManager.instance.PlayRandomBGM(state);
+
+                }
 
                 gameState = EGameState.InGame;
                 break;
@@ -176,6 +182,8 @@ public class GameManager : MonoBehaviour
 
     public void OnLastChance()
     {
+        if (isTesting)
+            return;
         uiManager.SetPanel(EPanel.None);
         currentPanelOnProgress = EPanel.LastChance;
         currentGameStateInProgress = EGameState.pause;
@@ -340,6 +348,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        StartGame();
         OnMenuTransitionFinished();
     }
 
@@ -399,37 +408,133 @@ public class GameManager : MonoBehaviour
         EBuilding building = buildingManager.currentBuilding;
         int buildingStage = buildingManager.currentBuildingStage;
 
-        // Calculate stars earned on this run
-        int earnedStars = CheckLevelStarsEarned();
-
-        // 1. Save or update progress for the current level (points and stars)
-        SaveManager.instance.SaveLevelProgress(building, buildingStage, levelIndex, earnedStars, points);
-
-        // 2. Unlock the next level index if this level was completed with at least 1 star
-        if (isCompleted && earnedStars > 0)
+        if (LevelManager.instance == null)
         {
-            int nextLevelIndex = levelIndex + 1;
-
-            // Unlocks the next level index in the same building stage
-            SaveManager.instance.UnlockLevel(building, buildingStage, nextLevelIndex);
+            Debug.LogError("Cannot save game results because LevelManager.instance is missing.");
+            return;
         }
 
-        // 3. Add to total career points
-        SaveManager.instance.data.totalPoints += points;
+        if (SaveManager.instance == null)
+        {
+            Debug.LogError("Cannot save game results because SaveManager.instance is missing.");
+            return;
+        }
 
-        // 4. Save changes to disk
-        SaveManager.instance.Save();
+        bool isSurvival = LevelManager.instance.isSurvival;
 
-        // 5. Leaderboard entry submission
+        if (isSurvival)
+        {
+            SaveToLeaderBoard();
+
+        }
+        else
+        {
+            int earnedStars = CheckLevelStarsEarned();
+
+            SaveManager.instance.SaveLevelProgress(
+                building,
+                buildingStage,
+                levelIndex,
+                earnedStars,
+                points
+            );
+
+            if (isCompleted && earnedStars > 0)
+            {
+                int nextLevelIndex = levelIndex + 1;
+
+                SaveManager.instance.UnlockLevel(
+                    building,
+                    buildingStage,
+                    nextLevelIndex
+                );
+            }
+
+            SaveManager.instance.data.totalPoints += points;
+            SaveManager.instance.Save();
+        }
+
+        
+    }
+    internal void UpdateNameChangeLeaderBoard()
+    {
+        if (SaveManager.instance == null)
+        {
+            Debug.LogError("Cannot update leaderboard because SaveManager.instance is missing.");
+            return;
+        }
+
+        if (currentLeaderBoardRank <= 0)
+        {
+            Debug.LogWarning("Cannot update leaderboard because the saved rank is invalid.");
+            return;
+        }
+
+        string playerName = SaveManager.instance.data.name;
+
+        if (string.IsNullOrWhiteSpace(playerName))
+        {
+            Debug.LogWarning("Player name is empty. Not updating leaderboard.");
+            OpenPlayerForm();
+            return;
+        }
+
+        SaveManager.instance.RemoveLeaderBoardEntry(currentLeaderBoardRank);
+
+        currentLeaderBoardRank = 0;
+        SaveToLeaderBoard();
+    }
+    public void SaveToLeaderBoard()
+    {
+
+        if (SaveManager.instance == null)
+        {
+            Debug.LogError("Cannot save game results because SaveManager.instance is missing.");
+            return;
+        }
+
+        float points = scoreManager.points;
+
+        if (points <= 0)
+        {
+            Debug.LogWarning("Points are zero or negative. Not saving to leaderboard.");
+            return;
+        }
+
+
+
         SaveManager.instance.AddLeaderBoardEntry(
-            SaveManager.instance.data.name,
-            points,
-            scoreManager.currentKills,
-            levelManager.GetLevelName(levelIndex),
-            out int rank
-        );
+                        SaveManager.instance.data.name,
+                        points,
+                        scoreManager.currentKills,
+                        buildingManager.currentBuilding.ToString(),
+                        out int rank
+                    );
 
         currentLeaderBoardRank = rank;
+
+        SaveManager.instance.data.totalPoints += points;
+        SaveManager.instance.Save();
+
+        uiManager?.PopDynamicPanel(EDPanel.LeaderBoard);
+
+    }
+
+    private void OpenPlayerForm()
+    {
+        uiManager?.PopDynamicPanel(EDPanel.PlayerForm);
+    }
+
+    public void OnPlayerFormSubmitted(string playerName)
+    {
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("Player name is empty. Not saving to leaderboard.");
+            return;
+        }
+        SaveManager.instance.data.name = playerName;
+        SaveManager.instance.Save();
+        SaveToLeaderBoard();
     }
 
     public int CheckLevelStarsEarned()
@@ -508,4 +613,10 @@ public class GameManager : MonoBehaviour
         // Do NOT auto-resume — player taps Resume.
     }
 
+    public void ResetLeaderBoardRank()
+    {
+        currentLeaderBoardRank = 0;
+    }
 }
+
+

@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
+
 
 public class LeaderBoardContentUi : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class LeaderBoardContentUi : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private TextMeshProUGUI dateText;
+    [SerializeField] private Image rowBackground;
+
+
+    [Header("Highlight")]
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color currentPlayerColor = Color.yellow;
 
 
     public void Setup(int rank, string name, float score, string levelName, string date)
@@ -19,6 +26,8 @@ public class LeaderBoardContentUi : MonoBehaviour
         scoreText.text = score.ToString();
         levelNameText.text = levelName;
         dateText.text = date;
+
+        rowBackground.gameObject.SetActive(false);
 
     }
 
@@ -33,5 +42,11 @@ public class LeaderBoardContentUi : MonoBehaviour
         scoreText.text = "SCORE";
         levelNameText.text = "LEVEL NAME";
         dateText.text = "DATE";
+    }
+
+    public void GetHighlighted()
+    {
+        Debug.Log("Highlighting current player row");
+        rowBackground.gameObject.SetActive(true);
     }
 }

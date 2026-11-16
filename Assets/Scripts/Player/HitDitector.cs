@@ -26,25 +26,25 @@ public class HitDitector : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~whatIsUntargetable))
             return OnHit(hit);
 
-        if (hit.collider == null)
-            return AirHit();
+        //if (hit.collider == null)
+        //    return AirHit();
 
 
         return null;
     }
 
-    private HitData AirHit()
-    {
-        HitData hit = new HitData()
-        {
-            hitTYpe = EHitType.Missed,
-            hitPos = new Vector3(-99999, -999999, -999999),
+    //private HitData AirHit()
+    //{
+    //    HitData hit = new HitData()
+    //    {
+    //        hitTYpe = EHitType.Missed,
+    //        hitPos = new Vector3(-99999, -999999, -999999),
 
-        };
+    //    };
 
-        return hit;
+    //    return hit;
 
-    }
+    //}
 
     public List<HitData> MultiShot(Vector2 shotAim, float acuracy, int shots)
     {
@@ -130,6 +130,11 @@ public class HitDitector : MonoBehaviour
 
         if (hit.collider.TryGetComponent(out MagazineManager magazine) == true)
             hitData.hitTYpe = EHitType.Magazine;
+        else if (hit.collider.TryGetComponent(out AirPlane airPlane) == true)
+        {
+            hitData.hitTYpe = EHitType.Air;
+        }
+
         else if (hit.collider.TryGetComponent(out Target target) == false)
             hitData.hitTYpe = EHitType.Missed;
         else

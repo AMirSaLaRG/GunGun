@@ -5,4 +5,5 @@ public enum EGameState
     inMenu = 0,
     InGame = 1,
     pause = 2,
+    None = 3,
 }

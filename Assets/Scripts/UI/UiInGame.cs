@@ -181,18 +181,16 @@ public class UiInGame : MonoBehaviour
 
         if (points == 0)
         {
-            float maxPoints = LevelManager.instance.threeStarPoint;
-            if (maxPoints > 0)
+            if (LevelManager.instance.isSurvival)
             {
-                pointsSlider.maxValue = LevelManager.instance.threeStarPoint;
-                isDynamicPoints = false;
+                pointsSlider.maxValue = baseDynamicPoints;
+                dynamicPoints = baseDynamicPoints;
+                isDynamicPoints = true;
             }
             else
             {
-                maxPoints = baseDynamicPoints;
-                dynamicPoints = baseDynamicPoints;
-                isDynamicPoints = true;
-                pointsSlider.maxValue = dynamicPoints;
+                pointsSlider.maxValue = LevelManager.instance.threeStarPoint;
+                isDynamicPoints = false;
             }
 
             oneStarIcon.localScale = Vector3.zero;

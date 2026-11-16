@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b8c042d96e26b418bbcc1855f6eb4b, type: 3}
   m_Name: NewEventSequence
   m_EditorClassIdentifier: Assembly-CSharp::LevelEventSequenceSo
-  sequenceName: 
+  sequenceName: Tutorial
   description: 
   startTime: 0
   shouldOtherEventsGoTORest: 0
@@ -20,8 +20,45 @@ MonoBehaviour:
   - eventType: 0
     startTimeAfterEventStarted: 0
     duration: 0
-    respawnBoxName: 
+    respawnBoxName: RespawnBox_9
+    respawnData:
+      respawnType: 0
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+  - eventType: 0
+    startTimeAfterEventStarted: 0
+    duration: 0
+    respawnBoxName: RespawnBox_13
     respawnData:
       respawnType: 1
       prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+  - eventType: 0
+    startTimeAfterEventStarted: 0
+    duration: 0
+    respawnBoxName: RespawnBox_14
+    respawnData:
+      respawnType: 2
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+  - eventType: 0
+    startTimeAfterEventStarted: 0
+    duration: 0
+    respawnBoxName: RespawnBox_26
+    respawnData:
+      respawnType: 3
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
+      respawnProb: 0
+  - eventType: 0
+    startTimeAfterEventStarted: 0
+    duration: 0
+    respawnBoxName: RespawnBox_25
+    respawnData:
+      respawnType: 4
+      prefab: {fileID: 0}
+      icon: {fileID: 0}
       respawnProb: 0

@@ -137,11 +137,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectal_Rocket
   onHitVfx: {fileID: 3441715483743385788, guid: d3951da633fb2894080648bcafa0ba7c, type: 3}
-  disFromCameraToHit: 3
+  disFromCameraToHit: 4.5
   projectile: {fileID: 8410033412145290566}
   sfx: {fileID: 4216393145826295308}
   orbitRadius: 1
-  orbitSpeed: 250
+  orbitSpeed: 225
   orbitAxis: {x: 0, y: 0, z: 1}
 --- !u!1 &5787488701791383991
 GameObject:

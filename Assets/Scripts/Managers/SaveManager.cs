@@ -9,9 +9,12 @@ public class SaveManager : MonoBehaviour
     public PlayerData data;
     private string leaderBoardSavePath;
     public List<LeaderBoardData> leaderBoardDataList = new List<LeaderBoardData>();
-    public int LeaderBoardMaxEnteries = 20;
+    public int LeaderBoardMaxEnteries = 1500;
 
     public static SaveManager instance;
+
+    private const string LeaderBoardVersionKey = "LeaderBoardVersion_1";
+    private const int CurrentSaveVersion = 3;
 
     private void Awake()
     {
@@ -19,8 +22,30 @@ public class SaveManager : MonoBehaviour
 
         savePath = Application.persistentDataPath + "/PlayerData.json";
         leaderBoardSavePath = Application.persistentDataPath + "/LeaderBoardData.json";
+
         Load();
+        ResetLeaderBoardForNewVersion();
         LoadLeaderBoard();
+    }
+
+    private void ResetLeaderBoardForNewVersion()
+    {
+        string currentVersion = Application.version;
+        string savedVersion = PlayerPrefs.GetString(LeaderBoardVersionKey, string.Empty);
+
+        if (savedVersion == currentVersion)
+        {
+            return;
+        }
+
+        if (File.Exists(leaderBoardSavePath))
+        {
+            File.Delete(leaderBoardSavePath);
+        }
+
+        PlayerPrefs.SetString(LeaderBoardVersionKey, currentVersion);
+        PlayerPrefs.Save();
+
     }
 
     public void Save()
@@ -35,20 +60,39 @@ public class SaveManager : MonoBehaviour
         {
             string json = File.ReadAllText(savePath);
             data = JsonUtility.FromJson<PlayerData>(json);
-        } else
-        {
-            data = new PlayerData();
-            data.name = "Player";
-            data.totalPoints = 0;
-            data.soldirCoins = 0;
-            data.playerLevelsData = new PlayersLevelData[0];
-            data.unlockedWeapons = new int[] { 0 };
-            data.musicVolume = 1f;
-            data.sfxVolume = 1f;
-            data.lastGunId = 0;
 
-            Save();
+            if (data == null || data.saveVersion != CurrentSaveVersion)
+            {
+                Debug.Log(
+                    $"Old save detected. Resetting save to version {CurrentSaveVersion}.",
+                    this);
+
+                ResetPlayerData();
+            }
+
+            return;
         }
+
+        ResetPlayerData();
+    }
+
+    private void ResetPlayerData()
+    {
+        data = new PlayerData
+        {
+            saveVersion = CurrentSaveVersion,
+            name = "",
+            totalPoints = 0,
+            soldirCoins = 0,
+            playerLevelsData = new PlayersLevelData[0],
+            unlockedWeapons = new int[] { 0 },
+            musicVolume = 1f,
+            sfxVolume = 1f,
+            lastGunId = 0,
+            completedTutorial = false
+        };
+
+        Save();
     }
 
     public PlayersLevelData GetLevelData(EBuilding building, int stage, int levelIndex)
@@ -89,7 +133,7 @@ public class SaveManager : MonoBehaviour
 
         data = new PlayerData
         {
-            name = "Player",
+            name = "",
             totalPoints = 0,
             soldirCoins = 0,
             playerLevelsData = new PlayersLevelData[0],
@@ -213,5 +257,68 @@ public class SaveManager : MonoBehaviour
         }
 
         Save();
+    }
+
+    internal void RemoveLeaderBoardEntry(int currentLeaderBoardRank)
+    {
+        if (currentLeaderBoardRank < 1 ||
+           currentLeaderBoardRank > leaderBoardDataList.Count)
+        {
+            return;
+        }
+
+        leaderBoardDataList.RemoveAt(currentLeaderBoardRank - 1);
+        SaveLeaderBoard();
+    }
+
+    public event Action<int, int> SoldirCoinsChanged;
+
+    public void AddSoldirCoins(int amount)
+    {
+        if (data == null)
+        {
+            Debug.LogError(
+                "Cannot add soldier coins because PlayerData is missing.");
+
+            return;
+        }
+
+        if (amount == 0)
+            return;
+
+        int previousAmount = data.soldirCoins;
+        data.soldirCoins += amount;
+
+        Save();
+
+        SoldirCoinsChanged?.Invoke(
+            previousAmount,
+            data.soldirCoins);
+    }
+
+    public void SetSfxVolume(float volume)
+    {
+        if (data == null)
+            return;
+
+        data.sfxVolume = Mathf.Clamp01(volume);
+        Save();
+    }
+}
+
+public class sfxVolumeSlider : MonoBehaviour
+{
+    [SerializeField] private UnityEngine.UI.Slider sfxSlider;
+
+    private void Start()
+    {
+        if (SaveManager.instance == null ||
+            SaveManager.instance.data == null)
+        {
+            return;
+        }
+
+        sfxSlider.SetValueWithoutNotify(
+            SaveManager.instance.data.sfxVolume);
     }
 }

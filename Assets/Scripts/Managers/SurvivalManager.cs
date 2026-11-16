@@ -103,9 +103,13 @@ public class SurvivalManager : MonoBehaviour
         }
 
         float waveTime = Mathf.Lerp(minMaxWaveTime.y, minMaxWaveTime.x, (float)currentDif / (float)maxdifficulty);
+        
 
         for (int i = 0; i < numOfWaves; i++)
         {
+            if (i == numOfWaves - 1)
+                waveTime = float.PositiveInfinity;
+
             float progress = numOfWaves == 1
             ? 0f
             : (float)i / (numOfWaves - 1);
@@ -124,14 +128,15 @@ public class SurvivalManager : MonoBehaviour
                 intervalDifficulty = Mathf.Max(0f, baseDifficulty - 0.1f);
             }
 
-            Debug.Log(
-                $"Wave {i}: " +
-                $"base difficulty {baseDifficulty:F2}, " +
-                $"count difficulty {countDifficulty:F2}, " +
-                $"interval difficulty {intervalDifficulty:F2}");
+            //Debug.Log(
+            //    $"Wave {i}: " +
+            //    $"base difficulty {baseDifficulty:F2}, " +
+            //    $"count difficulty {countDifficulty:F2}, " +
+            //    $"interval difficulty {intervalDifficulty:F2}");
 
             waveData.Add(
                 GenerateNewWaveData(
+                    baseDifficulty,
                     countDifficulty,
                     intervalDifficulty,
                     waveTime,
@@ -154,6 +159,7 @@ public class SurvivalManager : MonoBehaviour
     
 
     private WaveData GenerateNewWaveData(
+        float baseDifficulty,
         float countDifficulty,
         float intervalDifficulty,
         float waveTime,
@@ -166,7 +172,7 @@ public class SurvivalManager : MonoBehaviour
         waveData.Type = WaveType.TimeBase;
         waveData.waveText = "Get Ready";
 
-        waveData.respawns = GenerateRespawnsDataByDif(countDifficulty);
+        waveData.respawns = GenerateRespawnsDataByDif(baseDifficulty);
 
         waveData.minMaxNumSummon =
         GenerateRespawnCountByDif(countDifficulty, out int maxNum);

@@ -118,8 +118,8 @@ public class ScoreManager : MonoBehaviour
 
         // Add kill
         currentKills++;
+        DailyTaskManager.instance?.RecordKill();
 
-        // Add combo
         AddCombo(enemy.GetComboValue());
     }
     private void ProcessTargetHit(HitData hitData)
@@ -246,6 +246,9 @@ public class ScoreManager : MonoBehaviour
         currentCombo += value;
         isOnCombo = true;
         lastComboTime = Time.time;
+
+        DailyTaskManager.instance?.RecordCombo(currentCombo);
+
         UpdateUi();
 
         rewardManager.CheckForComboReward(currentCombo);

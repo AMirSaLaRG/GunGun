@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour
     public Transform contentParent; // Assign the Content object
     public List<LevelItemData> levels = new List<LevelItemData>();
     public LevelItem perviewData;
+    public GameObject survivalBanner;
 
 
     private WaweManager currentWaves;
@@ -118,7 +119,19 @@ public class LevelManager : MonoBehaviour
         LevelItemData levelToLoad = levels[index];
 
         uiManager.ExitDynamicUi();
-        perviewData.SetupLevel(levels[index], index);
+        if (isSurvival == false)
+        {
+            perviewData.gameObject.SetActive(true);
+            survivalBanner.SetActive(false);
+
+            perviewData.SetupLevel(levels[index], index);
+        }
+        else
+        {
+            Debug.Log("Loading Survival Mode");
+            perviewData.gameObject.SetActive(false);
+            survivalBanner.SetActive(true);
+        }
 
         respawnManager.SetupBoxes(levelToLoad.respawnBoxHolder);
 
@@ -146,10 +159,11 @@ public class LevelManager : MonoBehaviour
 
     public void LoadSurvival()
     {
-        LoadLevel(0);
-        threeStarPoint = -1;
         isSurvival = true;
-        
+        threeStarPoint = -1;
+
+
+        LoadLevel(0);
     }
 
     public bool LoadNextLevel()

@@ -45,7 +45,8 @@ public class EnemyWithHostage : Enemy
     protected override void AtDieAction()
     {
         base.AtDieAction();
-        myHostage.TriggerAtEndOfDuration();
+        if (myHostage != null)
+            myHostage.TriggerAtEndOfDuration();
     }
 
 

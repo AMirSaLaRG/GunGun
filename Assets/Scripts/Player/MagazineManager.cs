@@ -140,13 +140,23 @@ public class MagazineManager : MonoBehaviour
     }
 
 
-    public void OnReloadBullets(bool instantReload = false, int reloadAmount = -1, float reloadTimeScale = 1)
+    public void OnReloadBullets(
+    bool instantReload = false,
+    int reloadAmount = -1,
+    float reloadTimeScale = 1)
     {
+        if (type == EMagazinesType.STANAG && bulletHolderSet != null)
+        {
+            bulletHolderSet.DOKill();
+        }
+
         if (canReload == false)
             return;
 
         if (currentAmo != GetAmoCap())
+        {
             AudioManager.instance.PlaySfx(reloadSfx, true);
+        }
 
 
         int rAmount = reloadAmount;

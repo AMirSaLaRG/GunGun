@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 92c615c7e007047d38511e43d4746901
+AssetOrigin:
+  serializedVersion: 1
+  productId: 97983
+  packageName: The Rogue - Orchestral Trailer Music
+  packageVersion: 1.0
+  assetPath: Assets/The Rogue/The Rogue.wav
+  uploadId: 196044
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 8
+  defaultSettings:
+    serializedVersion: 2
+    loadType: 2
+    sampleRateSetting: 2
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 0.29999998
+    conversionMode: 0
+    preloadAudioData: 1
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  loadInBackground: 1
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

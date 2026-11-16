@@ -13,13 +13,13 @@ public class LevelEventSequenceSo : ScriptableObject
 
 
 
-    public List<eventData> eventDatas = new List<eventData>();
+    public List<EventData> eventDatas = new List<EventData>();
 
 
 }
 
 [System.Serializable]
-public class eventData
+public class EventData
 {
     public EventType eventType;
 

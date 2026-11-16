@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RewardManager : MonoBehaviour
@@ -16,6 +17,14 @@ public class RewardManager : MonoBehaviour
     [SerializeField] private AudioSource gunRewardSfx;
     [SerializeField] private AudioSource gunPenaltySfx;
     [SerializeField] private AudioSource SecondaryUnlockedSfx;
+
+    [Header("ReloadReward")]
+    [SerializeField] private GunRewardOnComboData ReloadSecondary;
+
+    [SerializeField] private int reloadComboRepeat = 15;
+
+
+
 
     private UiRewardItem gunReward;
 
@@ -45,15 +54,37 @@ public class RewardManager : MonoBehaviour
         foreach (var gunReward in gunComboRewards)
         {
             if (currentCombo == gunReward.combo)
+            {
                 if (gunManager.IsGunUnlocked(gunReward.gunId))
                 {
                     GiveGunReward(gunReward);
                     lastComboRewardGiven = currentCombo;
+                } else
+                {
+                    playerController.gunManager.Reload(true);
                 }
+
+            }
+            
         }
+
+        CheckReloadReward(currentCombo);
 
 
     }
+
+    private void CheckReloadReward(int currentCombo)
+    {
+        if (currentCombo > gunComboRewards[gunComboRewards.Length - 1].combo)
+        {
+            if ((currentCombo - gunComboRewards[gunComboRewards.Length - 1].combo) % reloadComboRepeat == 0)
+            {
+                if (gunManager.IsGunUnlocked(ReloadSecondary.gunId))
+                    GiveGunReward(ReloadSecondary);
+            }
+        }
+    }
+
     public void GiveGunReward(GunRewardOnComboData reward)
     {
         if (reward.isInstant == true)
@@ -101,4 +132,6 @@ public class RewardManager : MonoBehaviour
         
 
     }
+
+ 
 }

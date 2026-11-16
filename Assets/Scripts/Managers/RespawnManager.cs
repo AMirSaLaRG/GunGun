@@ -179,7 +179,7 @@ public class RespawnManager : MonoBehaviour
         StartCoroutine(EventCo(sq.eventDatas));
     }
 
-    private IEnumerator EventCo(List<eventData> datas)
+    private IEnumerator EventCo(List<EventData> datas)
     {
         isEventEnded = false;
 
@@ -192,7 +192,7 @@ public class RespawnManager : MonoBehaviour
         isEventEnded = true;
     }
 
-    private void ExecuteEventData(eventData data)
+    private void ExecuteEventData(EventData data)
     {
         RespawnBox myBox = boxManager.GetBox(data.respawnBoxName);
 

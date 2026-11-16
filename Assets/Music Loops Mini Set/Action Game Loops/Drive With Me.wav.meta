@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 8fa363c7d448cf34c97e00237b06cf45
+AssetOrigin:
+  serializedVersion: 1
+  productId: 70967
+  packageName: Music Loops Mini Set
+  packageVersion: 2.0
+  assetPath: Assets/Music Loops Mini Set/Action Game Loops/Drive With Me.wav
+  uploadId: 325150
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 8
+  defaultSettings:
+    serializedVersion: 2
+    loadType: 2
+    sampleRateSetting: 2
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 0.31
+    conversionMode: 0
+    preloadAudioData: 1
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  loadInBackground: 1
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

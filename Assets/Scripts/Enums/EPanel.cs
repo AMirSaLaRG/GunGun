@@ -27,4 +27,5 @@ public enum EDPanel
     Tasks = 7,
     Ads = 8,
     DailyReward = 9,
+    PlayerForm = 10,
 }
