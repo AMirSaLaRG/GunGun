@@ -49232,7 +49232,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1126613524}
+  m_Father: {fileID: 865439698}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &606127279
 GameObject:
@@ -69001,7 +69001,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1699157729}
+  - {fileID: 605034548}
   - {fileID: 709904251}
   - {fileID: 813501108}
   - {fileID: 336089481}
@@ -90224,7 +90224,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 605034548}
+  - {fileID: 1699157729}
   m_Father: {fileID: 1810183043}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1127030673
@@ -111684,14 +111684,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   playBgm: 1
   inGameBgm:
-  - {fileID: 1699157730}
   - {fileID: 709904252}
   - {fileID: 813501109}
   - {fileID: 336089482}
   - {fileID: 943647966}
   - {fileID: 794213420}
-  menuBgm:
   - {fileID: 605034547}
+  menuBgm:
+  - {fileID: 1699157730}
 --- !u!4 &1541898540
 Transform:
   m_ObjectHideFlags: 0
@@ -124499,7 +124499,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 865439698}
+  m_Father: {fileID: 1126613524}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1699157730
 AudioSource:
